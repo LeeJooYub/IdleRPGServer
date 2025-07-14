@@ -1,0 +1,30 @@
+# .NET build results
+bin/
+obj/
+00_ServerBin/
+
+# VS Code settings
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Settings
+.vs/
+
+# Logs and temp files
+.log/
+*.log
+*.tmp
+
+# Local environment config
+appsettings.Development.json
+appsettings.json
+
+# OS/IDE files
+*.DS_Store
+Thumbs.db
+
+# 기타
+.github/
