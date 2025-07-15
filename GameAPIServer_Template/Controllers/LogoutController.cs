@@ -24,18 +24,18 @@ public class LogoutController : ControllerBase
     /// 로그아웃 API </br>
     /// 해당 유저의 토큰을 Redis에서 삭제합니다.
     /// </summary>
-    [HttpPost]
-    public async Task<LogoutResponse> DeleteUserToken([FromHeader] Header request)
-    {
-        LogoutResponse response = new();
-        var errorCode = await _memoryDb.DelUserAuthAsync(request.Uid);
-        if (errorCode != ErrorCode.None)
-        {
-            response.Result = errorCode;
-            return response;
-        }
+    // [HttpPost]
+    // public async Task<LogoutResponse> DeleteUserToken([FromHeader] Header request)
+    // {
+    //     LogoutResponse response = new();
+    //     var errorCode = await _memoryDb.DelUserAuthAsync(request.Uid);
+    //     if (errorCode != ErrorCode.None)
+    //     {
+    //         response.Result = errorCode;
+    //         return response;
+    //     }
 
-        _logger.ZLogInformation($"[Logout] Uid : {request.Uid}");
-        return response;
-    }
+    //     _logger.ZLogInformation($"[Logout] Uid : {request.Uid}");
+    //     return response;
+    // }
 }

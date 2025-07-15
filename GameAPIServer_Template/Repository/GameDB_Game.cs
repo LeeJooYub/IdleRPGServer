@@ -69,28 +69,7 @@ public partial class GameDb : IGameDb
             $"[HiveDb.VerifyUser] ErrorCode: {ErrorCode.LoginFailException}, {ex}");
             return (ErrorCode.LoginFailException, 0);
         }
-    }
-        
-
-    public async Task<int> InsertInitMoneyInfo(int uid, IDbTransaction transaction)
-    {
-        return await _queryFactory.Query("user_money").InsertAsync(
-             new
-             {
-                 uid = uid
-             }, transaction);
-    }
-
-    public async Task<int> InsertInitAttendance(int uid, IDbTransaction transaction)
-    {
-        return await _queryFactory.Query("user_attendance").InsertAsync(
-             new
-             {
-                 uid = uid,
-                 recent_attendance_dt = DateTime.Now.AddDays(-1)
-             }, transaction);
-    }
-
+    }       
     
     
 }

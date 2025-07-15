@@ -24,26 +24,6 @@ public class AuthService : IAuthService
         _memoryDb = memoryDb;
     }
 
-    public async Task<ErrorCode> CreateAccount(string userID, string passWord)
-    {
-        var result = await _gameDb.CreateAccount(userID, passWord);
-        return result;
-    }
-    
-    public async Task<(ErrorCode, Int64, string)> Login(string userID, string passWord)
-    {
-        (var result, var uid) = await _gameDb.VerifyUser(userID, passWord);
-        if (result != ErrorCode.None)
-        {
-            return (result, 0, "");
-        }
-
-        var token = Security.CreateAuthToken();
-        result = await _memoryDb.RegistUserAsync(token, uid);
-
-        return (result, uid, token);
-    }
-
     
 
 }

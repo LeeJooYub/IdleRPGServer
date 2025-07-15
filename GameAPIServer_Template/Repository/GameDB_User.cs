@@ -93,10 +93,10 @@ public partial class GameDb : IGameDb
                                                 .IncrementAsync("jewelry", rewardQty);
     }
 
-    public async Task<IEnumerable<RdbUserScoreData>> SelectAllUserScore()
-    {
-        return await _queryFactory.Query("user").Select("uid", "total_bestscore").GetAsync<RdbUserScoreData>();
-    }
+    // public async Task<IEnumerable<RdbUserScoreData>> SelectAllUserScore()
+    // {
+    //     return await _queryFactory.Query("user").Select("uid", "total_bestscore").GetAsync<RdbUserScoreData>();
+    // }
 
     public async Task<int> UpdateMainChar(int uid, int charKey)
     {

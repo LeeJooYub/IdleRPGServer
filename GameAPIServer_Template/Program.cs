@@ -20,13 +20,8 @@ builder.Services.AddTransient<IGameDb, GameDb>();
 builder.Services.AddSingleton<IMemoryDb, MemoryDb>();
 builder.Services.AddSingleton<IMasterDb, MasterDb>();
 builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<IFriendService, FriendService>();
-builder.Services.AddTransient<IGameService, GameService>();
-builder.Services.AddTransient<IItemService, ItemService>();
-builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<IAttendanceService, AttendanceService>();
-builder.Services.AddTransient<IDataLoadService, DataLoadService>();
+
 builder.Services.AddControllers();
 
 SettingLogger();
@@ -41,8 +36,8 @@ if(!await app.Services.GetService<IMasterDb>().Load())
 //log setting
 ILoggerFactory loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
 
-app.UseMiddleware<GameAPIServer.Middleware.VersionCheck>();
-app.UseMiddleware<GameAPIServer.Middleware.CheckUserAuthAndLoadUserData>();
+//app.UseMiddleware<GameAPIServer.Middleware.VersionCheck>();
+//app.UseMiddleware<GameAPIServer.Middleware.CheckUserAuthAndLoadUserData>();
 
 app.UseRouting();
 

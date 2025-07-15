@@ -20,15 +20,15 @@ public class CreateAccountController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost]
-    public async Task<CreateHiveAccountResponse> Create([FromBody]CreateHiveAccountRequest request)
-    {
-        CreateHiveAccountResponse response = new();
+    // [HttpPost]
+    // public async Task<CreateHiveAccountResponse> Create([FromBody]CreateHiveAccountRequest request)
+    // {
+    //     CreateHiveAccountResponse response = new();
 
-        response.Result = await _authService.CreateAccount(request.UserID, request.Password);
+    //     response.Result = await _authService.CreateAccount(request.UserID, request.Password);
 
-        return response;
-    }
+    //     return response;
+    // }
 
     
 

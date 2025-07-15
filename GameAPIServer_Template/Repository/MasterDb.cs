@@ -44,76 +44,17 @@ public class MasterDb : IMasterDb
 
     }
 
+    
+    public async Task<bool> Load()
+    {
+        
+
+        return true;
+    }
+
     public void Dispose()
     {
         Close();
-    }
-
-    public async Task<bool> Load()
-    {
-        try
-        {
-            _version = await _queryFactory.Query($"version").FirstOrDefaultAsync<VersionDAO>();
-            
-            _attendanceRewardList = (await _queryFactory.Query($"master_attendance_reward").GetAsync<AttendanceRewardData>()).ToList();
-            
-            _itemLevelList = (await _queryFactory.Query($"master_item_level").GetAsync<ItemLevelData>()).ToList();
-
-            var gachaRewards = await _queryFactory.Query($"master_gacha_reward").GetAsync<GachaRewardInfo>();
-            
-            _gachaRewardList = new();
-            
-            foreach (var gachaRewardInfo in gachaRewards)
-            {
-                GachaRewardData gachaRewardData = new();
-                gachaRewardData.gachaRewardInfo = gachaRewardInfo;
-                gachaRewardData.gachaRewardList = (await _queryFactory.Query("master_gacha_reward_list")
-                                                   .Where("gacha_reward_key", gachaRewardInfo.gacha_reward_key)
-                                                   .GetAsync<RewardData>())
-                                                   .ToList();
-                _gachaRewardList.Add(gachaRewardData);
-            }
-
-            await LoadUserScore();
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine(e);
-            _logger.ZLogError(e,
-                $"[MasterDb.Load] ErrorCode: {ErrorCode.MasterDB_Fail_LoadData}");
-            return false;
-        }
-
-        if (!ValidateMasterData())
-        {
-            _logger.ZLogError($"[MasterDb.Load] ErrorCode: {ErrorCode.MasterDB_Fail_InvalidData}");
-            return false;
-        }
-
-        return true;
-    }
-
-    public async Task<ErrorCode> LoadUserScore()
-    {
-        var usersScore = await _gameDb.SelectAllUserScore();
-        foreach (var userScore in usersScore)
-        {
-            await _memoryDb.SetUserScore(userScore.uid, userScore.total_bestscore);
-        }
-
-        return ErrorCode.None;
-    }
-
-    bool ValidateMasterData()
-    {
-        if (_version == null || 
-            _attendanceRewardList.Count == 0 ||
-            _gachaRewardList.Count == 0)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     void Open()

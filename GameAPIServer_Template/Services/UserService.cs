@@ -22,69 +22,69 @@ public class UserService : IUserService
         _memoryDb = memoryDb;
     }
 
-    public async Task<(ErrorCode, GdbUserInfo)> GetUserInfo(int uid)
-    {
-        try
-        {
-            return (ErrorCode.None, await _gameDb.GetUserByUid(uid));
-        }
-        catch (Exception e)
-        {
-            _logger.ZLogError(e,
-                $"[User.GetUserInfo] ErrorCode: {ErrorCode.UserInfoFailException}, Uid: {uid}");
-            return (ErrorCode.UserInfoFailException, null);
-        }
-    }
+    // public async Task<(ErrorCode, GdbUserInfo)> GetUserInfo(int uid)
+    // {
+    //     try
+    //     {
+    //         return (ErrorCode.None, await _gameDb.GetUserByUid(uid));
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         _logger.ZLogError(e,
+    //             $"[User.GetUserInfo] ErrorCode: {ErrorCode.UserInfoFailException}, Uid: {uid}");
+    //         return (ErrorCode.UserInfoFailException, null);
+    //     }
+    // }
 
-    public async Task<(ErrorCode, GdbUserMoneyInfo)> GetUserMoneyInfo(int uid)
-    {
-        try
-        {
-            return (ErrorCode.None, await _gameDb.GetUserMoneyById(uid));
-        }
-        catch (Exception e)
-        {
-            _logger.ZLogError(e,
-                $"[User.GetUserMoneyInfo] ErrorCode: {ErrorCode.UserMoneyInfoFailException}, Uid: {uid}");
-            return (ErrorCode.UserMoneyInfoFailException, null);
-        }
-    }
+    // public async Task<(ErrorCode, GdbUserMoneyInfo)> GetUserMoneyInfo(int uid)
+    // {
+    //     try
+    //     {
+    //         return (ErrorCode.None, await _gameDb.GetUserMoneyById(uid));
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         _logger.ZLogError(e,
+    //             $"[User.GetUserMoneyInfo] ErrorCode: {ErrorCode.UserMoneyInfoFailException}, Uid: {uid}");
+    //         return (ErrorCode.UserMoneyInfoFailException, null);
+    //     }
+    // }
 
     
 
-    public async Task<(ErrorCode, OtherUserInfo)> GetOtherUserInfo(int uid)
-    {
-        try
-        {
-            var userInfo = await _gameDb.GetUserByUid(uid);
-            if (userInfo == null)
-            {
-                _logger.ZLogError($"[User.GetOtherUserInfo] ErrorCode: {ErrorCode.UserNotExist}, Uid: {uid}");
-                return (ErrorCode.UserNotExist, null);
-            }
+    // public async Task<(ErrorCode, OtherUserInfo)> GetOtherUserInfo(int uid)
+    // {
+    //     try
+    //     {
+    //         var userInfo = await _gameDb.GetUserByUid(uid);
+    //         if (userInfo == null)
+    //         {
+    //             _logger.ZLogError($"[User.GetOtherUserInfo] ErrorCode: {ErrorCode.UserNotExist}, Uid: {uid}");
+    //             return (ErrorCode.UserNotExist, null);
+    //         }
 
             
-            var (errorCode, rank) = await _memoryDb.GetUserRankAsync(uid);
+    //         var (errorCode, rank) = await _memoryDb.GetUserRankAsync(uid);
 
-            if(errorCode != ErrorCode.None)
-            {
-                _logger.ZLogError($"[User.GetOtherUserInfo] ErrorCode: {errorCode}, Uid: {uid}");
-                return (errorCode, null);
-            }
+    //         if(errorCode != ErrorCode.None)
+    //         {
+    //             _logger.ZLogError($"[User.GetOtherUserInfo] ErrorCode: {errorCode}, Uid: {uid}");
+    //             return (errorCode, null);
+    //         }
 
-            return (ErrorCode.None, new OtherUserInfo
-            {
-                uid = uid,
-                nickname = userInfo.nickname,                    
-                rank = rank,
-            });
+    //         return (ErrorCode.None, new OtherUserInfo
+    //         {
+    //             uid = uid,
+    //             nickname = userInfo.nickname,                    
+    //             rank = rank,
+    //         });
 
-        }
-        catch (Exception e)
-        {
-            _logger.ZLogError(e,
-                $"[User.GetOtherUserInfo] ErrorCode: {ErrorCode.GetOtherUserInfoFailException}, Uid: {uid}");
-            return (ErrorCode.GetOtherUserInfoFailException, null);
-        }
-    }
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         _logger.ZLogError(e,
+    //             $"[User.GetOtherUserInfo] ErrorCode: {ErrorCode.GetOtherUserInfoFailException}, Uid: {uid}");
+    //         return (ErrorCode.GetOtherUserInfoFailException, null);
+    //     }
+    // }
 }
