@@ -1,0 +1,11 @@
+@HiveServer_HostAddress = http://localhost:11501
+
+POST {{HiveServer_HostAddress}}/LoginHive
+Content-Type: application/json
+
+{
+    "Email": "Ddasd",
+    "Password": "1234"
+}
+
+###

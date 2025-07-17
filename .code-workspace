@@ -1,0 +1,27 @@
+{
+  "folders": [
+    { "name": "GameServer", "path": "GameServer" },
+    { "name": "HiveServer", "path": "HiveServer" }
+  ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "▶ GameServer 실행",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build GameServer",
+        "program": "${workspaceFolder:GameServer}/bin/Debug/net9.0/GameAPIServer.dll",
+        "cwd": "${workspaceFolder:GameServer}"
+      },
+      {
+        "name": "▶ HiveServer 실행",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build HiveServer",
+        "program": "${workspaceFolder:HiveServer}/bin/Debug/net9.0/HiveServer.dll",
+        "cwd": "${workspaceFolder:HiveServer}"
+      }
+    ]
+  }
+}

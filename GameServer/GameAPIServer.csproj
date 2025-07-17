@@ -5,11 +5,11 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <OutputPath>..\00_ServerBin\GameAPIServer\</OutputPath>
+        <OutputPath>..\ServerBin\GameServer\</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <OutputPath>..\00_ServerBin\GameAPIServer\</OutputPath>
+        <OutputPath>..\ServerBin\GameServer\</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>
