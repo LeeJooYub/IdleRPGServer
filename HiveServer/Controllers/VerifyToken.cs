@@ -1,36 +1,37 @@
 using System;
 using HiveServer.Model.DTO;
-using HiveServer.Repository;
+using HiveServer.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using HiveServer.Security;
 using Microsoft.Extensions.Configuration;
 using ZLogger;
+using HiveServer.Servcies.Interfaces;
+using HiveServer.Servcies;
 
 
 namespace HiveServer.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class VerifyToken : ControllerBase
+[Route("")]
+public class VerifyTokenController : ControllerBase
 {
     readonly string _saltValue;
-    readonly ILogger<VerifyToken> _logger;
+    readonly ILogger<VerifyTokenController> _logger;
     readonly IHiveDb _hiveDb;
 
-    public VerifyToken(ILogger<VerifyToken> logger, IHiveDb hiveDb, IConfiguration config)
+    public VerifyTokenController(ILogger<VerifyTokenController> logger, IHiveDb hiveDb, IConfiguration config)
     {
         _saltValue = config.GetSection("TokenSaltValue").Value;
         _logger = logger;
         _hiveDb = hiveDb;
     }
 
-    [HttpPost]
-    public VerifyTokenResponse Verify([FromBody] VerifyTokenBody request) {
+    [HttpPost("VerifyToken")]
+    public VerifyTokenResponse Verify([FromBody] VerifyTokenRequest request) {
         VerifyTokenResponse response = new();
 
-        if (EncryptionService.MakeHashingToken(_saltValue, request.PlayerId)!=request.HiveToken)
+        if (Security.MakeHashingToken(_saltValue, request.PlayerId)!=request.HiveToken)
         {
             _logger.ZLogDebug(
                 $"[AccoutDb.CreateAccount] ErrorCode: {ErrorCode.VerifyTokenFail}");

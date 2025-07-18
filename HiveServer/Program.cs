@@ -2,6 +2,9 @@ using System;
 using System.IO;
 using System.Text.Json;
 using HiveServer.Repository;
+using HiveServer.Repository.Interfaces;
+using HiveServer.Servcies;
+using HiveServer.Servcies.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +17,10 @@ using ZLogger;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
 
-//builder.Services.Configure<DbConfig>(configuration.GetSection(nameof(DbConfig)));
-//builder.Services.AddTransient<IHiveDb, HiveDb>();
+builder.Services.Configure<DbConfig>(configuration.GetSection(nameof(DbConfig)));
+builder.Services.AddTransient<IHiveDb, HiveDb>();
+builder.Services.AddTransient<ICreateHiveAccountService, CreateHiveAccountService>();
+builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddControllers();
 
 SettingsLoggers();
