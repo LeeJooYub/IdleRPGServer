@@ -27,7 +27,7 @@ public class CreateHiveAccountController : ControllerBase
         _hiveDb = hiveDb;
     }
 
-    [HttpPost]
+    [HttpPost("")]
     public async Task<CreateHiveAccountResponse> CreateHiveAccount([FromBody] CreateHiveAccountRequest request)
     {
         CreateHiveAccountResponse response = new();
