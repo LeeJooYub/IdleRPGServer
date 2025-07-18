@@ -74,3 +74,16 @@ C#과 .NET을 활용하여 개발한 방치형 액션 RPG 서버 모작 프로�
 자유롭게 참고하실 수 있지만, PR은 받고있지 않습니다.
 
 ---
+
+## 게임 플랫폼 서버 로그인/로그아웃
+
+### UI/UX
+
+![로그인 화면1](login.png)
+![로그인 화면2](login2.png)
+
+
+### 시퀸스 다이어 그램
+
+![Sequence Diagram](authenciationsequencediagram.png)
+
