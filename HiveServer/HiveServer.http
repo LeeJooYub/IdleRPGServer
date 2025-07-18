@@ -1,11 +1,27 @@
 @HiveServer_HostAddress = http://localhost:11501
-
-POST {{HiveServer_HostAddress}}/LoginHive
+### Create Hive Account
+POST http://localhost:11501/CreateHiveAccount
 Content-Type: application/json
 
 {
-    "Email": "Ddasd",
-    "Password": "1234"
+  "Email": "testuser@example.com",
+  "Password": "testpassword"
 }
 
-###
+### Login Hive
+POST http://localhost:11501/LoginHive
+Content-Type: application/json
+
+{
+  "Email": "testuser@example.com",
+  "Password": "testpassword"
+}
+
+### Verify Token
+POST http://localhost:11501/VerifyToken
+Content-Type: application/json
+
+{
+  "PlayerId": 12345,
+  "HiveToken": "sometoken"
+}

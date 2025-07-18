@@ -1,11 +1,14 @@
 using System;
 using System.Threading.Tasks;
+using HiveServer.Model.DTO;
+using HiveServer.Model.Entity;
 
-namespace HiveServer.Repository
+namespace HiveServer.Repository.Interfaces
 {
     public interface IHiveDb : IDisposable
     {
-        public Task<ErrorCode> CreateAccountAsync(string email, string pw);
-        public Task<(ErrorCode, Int64)> VerifyUser(string email, string pw);
+        Task<int> InsertAccountAsync(AccountInfo accountInfo);
+        Task<AccountInfo?> GetAccountByEmailAsync(string email);
+    
     }
 }
