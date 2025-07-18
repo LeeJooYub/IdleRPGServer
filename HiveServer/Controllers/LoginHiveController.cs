@@ -26,7 +26,7 @@ public class LoginHiveController : ControllerBase
         _loginService = loginService;
     }
 
-    [HttpPost]
+    [HttpPost("")]
     public async Task<LoginHiveResponse> Login([FromBody] LoginHiveRequest request)
     {
         LoginHiveResponse response = new();

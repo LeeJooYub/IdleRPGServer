@@ -23,9 +23,9 @@ C#과 .NET을 활용하여 개발한 방치형 액션 RPG 서버 모작 프로�
 
 | 우선순위 | 기능 영역       | 세부 기능                           | 완료 여부 |
 |----------|----------------|------------------------------------|-----------|
-| 1        | 하이브 연동     | 하이브 계정 생성                      | ⬜         |
-|          |                | 하이브 로그인                        | ⬜         |
-|          |                | 하이브 토큰 검증                     | ⬜         |
+| 1        | 하이브 연동     | 하이브 계정 생성                      | ✅         |
+|          |                | 하이브 로그인                        | ✅         |
+|          |                | 하이브 토큰 검증                     | ✅         |
 | 1        | 계정 관리       | 로그인                              | ⬜         |
 |          |                | 로그아웃                             | ⬜         |
 | 1        | 데이터 로드     | 유저 데이터 로드                      | ⬜         |
@@ -64,26 +64,124 @@ C#과 .NET을 활용하여 개발한 방치형 액션 RPG 서버 모작 프로�
 - 친구, 출석, 우편 등 부가 기능 구현
 
 
+
+
 ---
+
+
 
 
 ## 📎 참고 사항
 이 프로젝트는 상업적 목적이 아닌 학습을 위한 모작입니다.
 
 실제 상용 게임과는 구조나 로직이 다를 수 있으며, 일부 기능은 축약 또는 단순화되어 있습니다.
-자유롭게 참고하실 수 있지만, PR은 받고있지 않습니다.
+자유롭게 참고하실 수 있지만, PR은 받고있지 않습니다.  
+  
 
----
 
-## 게임 플랫폼 서버 로그인/로그아웃
+---     
 
-### UI/UX
+
+# 게임 플랫폼 서버 로그인/로그아웃
+
+## UI/UX
 
 ![로그인 화면1](login.png)
-![로그인 화면2](login2.png)
+[로그인 화면2](login2.png)
 
 
-### 시퀸스 다이어 그램
+## 시퀸스 다이어 그램
 
-![Sequence Diagram](authenciationsequencediagram.png)
+[Sequence Diagram](authenciationsequencediagram.png)
 
+## 하이브 회원가입
+**컨텐츠 설명**
+- 하이브에 회원 가입 합니다. 
+
+**로직**
+1. Client가 Email, PW를 보냅니다.
+2. 하이브 서버가 해당 PW를 salt와 hash함수를 통해 암호화 합니다.
+3. Email, Encrypted PW , Salt을 Db에 저장합니다.
+4. 에러 코드를 돌려줍니다. 
+
+**예시**
+```
+POST http://localhost:11501/CreateHiveAccount
+Content-Type: application/json
+
+{
+    "email" : "example@test.com",
+    "password" : "Aslj3kldiu!",
+}
+```
+
+- 응답 예시
+
+```
+{
+    "result": 0,
+}
+```
+
+
+## 하이브 로그인
+**컨텐츠 설명**
+- 하이브에 로그인하고, 토큰을 받습니다.
+
+**로직**
+1. Client가 Email, PW를 보냅니다.
+2. 하이브 서버가 해당 이메일을 통해, DB에서 해당하는 정보를 가져옵니다.
+3. 가져온 Client에서 받은 pw를, db에서 가져온 salt와 함쎄 해쉬를 하고, 이게, db에서 가져온 pw와 같은지 확인합니다.
+4. 같다면, db.id와 token을 위한 salt로 해쉬함수에 넣어, 토큰을 생성합니다.
+5. 토큰을 돌려줍니다.
+
+**예시**
+```
+POST http://localhost:11501/Login
+Content-Type: application/json
+
+{
+    "Email" : "example@test.com",
+    "Password" : "Aslj3kldiu!"
+}
+```
+
+- 응답 예시
+
+```
+{
+    "result": 0,
+    "plyerId" : 13522,
+    "hiveToken" : "abccde"
+}
+```
+
+
+## 하이브 토큰 검증
+
+**컨텐츠 설명**
+- 하이브에 유요한 토큰인지, 확인 받습니다.
+
+**로직**
+1. client로부터 token, playerid를 받습니다.
+2. 하이브 서버가 서버내부 salt와 playerid를 해쉬에 돌려봐서, token과 맞는지 검증합니다.
+3. 결과를 반환합니다.
+
+**예시**
+```
+POST http://localhost:11501/VerifyToken
+Content-Type: application/json
+
+{
+    "hiveToken" : "example@test.com",
+    "playerId" : "Aslj3kldiu!"
+}
+```
+
+- 응답 예시
+
+```
+{
+    "result": 0
+}
+```
