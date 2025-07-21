@@ -6,14 +6,4 @@ Content-Type: application/json
   "PW":"123qwe"
 }
 
-###
-POST http://localhost:11500/CreateAccount
-Content-Type: application/json
-
-{
-  "ID":"jacking751",
-  "PW":"123qwe",
-  "NickName": "aaa"
-}
-
 

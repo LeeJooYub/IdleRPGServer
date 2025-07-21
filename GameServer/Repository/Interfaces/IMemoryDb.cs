@@ -1,5 +1,4 @@
 ﻿using GameAPIServer.Models;
-using GameAPIServer.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,7 +7,8 @@ namespace GameAPIServer.Repository.Interfaces;
 
 public interface IMemoryDb
 {
-    // public Task<ErrorCode> RegistUserAsync(string token, Int64 uid);
+    public Task<ErrorCode> RegistUserAsync(string token, int uid);
+
     // public Task<ErrorCode> CheckUserAuthAsync(string id, string authToken);
     // public Task<(bool, RdbAuthUserData)> GetUserAsync(string id);
     // public Task<bool> LockUserReqAsync(string key);

@@ -1,8 +1,8 @@
 using System.IO;
 using GameAPIServer.Repository;
 using GameAPIServer.Repository.Interfaces;
-using GameAPIServer.Servicies;
-using GameAPIServer.Servicies.Interfaces;
+using GameAPIServer.Services;
+using GameAPIServer.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,6 +47,11 @@ IMasterDb masterDataDB = app.Services.GetRequiredService<IMasterDb>();
 await masterDataDB.Load();
 
 app.Run(configuration["ServerAddress"]);
+
+
+
+
+
 
 void SettingLogger()
 {

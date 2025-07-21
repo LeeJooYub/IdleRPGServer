@@ -25,9 +25,6 @@ public class MasterDb : IMasterDb
     readonly IGameDb _gameDb;
     
     public VersionDAO _version { get; set; }
-    public List<AttendanceRewardData> _attendanceRewardList { get; set; }    
-    public List<GachaRewardData> _gachaRewardList { get; set; }
-    public List<ItemLevelData> _itemLevelList { get; set; }
 
 
     public MasterDb(ILogger<MasterDb> logger, IOptions<DbConfig> dbConfig, IMemoryDb memoryDb, IGameDb gameDb)
@@ -47,8 +44,6 @@ public class MasterDb : IMasterDb
     
     public async Task<bool> Load()
     {
-        
-
         return true;
     }
 

@@ -1,15 +1,11 @@
 ﻿using System.Threading.Tasks;
 using System;
 
-namespace GameAPIServer.Servicies.Interfaces;
+namespace GameAPIServer.Services.Interfaces;
 
 public interface IAuthService
 {
-    // public Task<ErrorCode> CreateAccount(string userID, string passWord);
-        
-    // public Task<(ErrorCode, Int64, string)> Login(string userID, string passWord);
-
-    //public Task<ErrorCode> UpdateLastLoginTime(int uid);
-
-    //public Task<(ErrorCode, string)> RegisterToken(int uid);
+    public Task<ErrorCode> VerifyTokenToHive(Int64 playerId, string hiveToken);
+    public Task<(ErrorCode, int)> VerifyUser(Int64 playerId);
+    public Task<(ErrorCode, string)> RegisterToken(int uid);
 }
