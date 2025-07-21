@@ -1,8 +1,6 @@
-﻿using GameAPIServer.Models.DAO;
-using GameAPIServer.Models.DTO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace GameAPIServer.Servicies.Interfaces;
+namespace GameAPIServer.Services.Interfaces;
 
 public interface IUserService
 {
