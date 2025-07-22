@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using HiveServer.Model.DTO;
+
 using HiveServer.Model.Entity;
 
 namespace HiveServer.Repository.Interfaces
@@ -9,6 +9,5 @@ namespace HiveServer.Repository.Interfaces
     {
         Task<int> InsertAccountAsync(AccountInfo accountInfo);
         Task<AccountInfo?> GetAccountByEmailAsync(string email);
-    
     }
 }

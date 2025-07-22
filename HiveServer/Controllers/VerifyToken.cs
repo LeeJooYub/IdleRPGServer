@@ -1,14 +1,15 @@
-using System;
+
+//using System;
+
 using HiveServer.Model.DTO;
 using HiveServer.Repository.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using ZLogger;
-using HiveServer.Servcies.Interfaces;
-using HiveServer.Servcies;
+using HiveServer.Services;
 
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using ZLogger;
 
 namespace HiveServer.Controllers;
 
@@ -28,15 +29,17 @@ public class VerifyTokenController : ControllerBase
     }
 
     [HttpPost("VerifyToken")]
-    public VerifyTokenResponse Verify([FromBody] VerifyTokenRequest request) {
+    public VerifyTokenResponse Verify([FromBody] VerifyTokenRequest request)
+    {
         VerifyTokenResponse response = new();
-
-        if (Security.MakeHashingToken(_saltValue, request.PlayerId)!=request.HiveToken)
+        
+        if (Security.MakeHashingToken(_saltValue, request.PlayerId) != request.HiveToken)
         {
             _logger.ZLogDebug(
                 $"[AccoutDb.CreateAccount] ErrorCode: {ErrorCode.VerifyTokenFail}");
-            response.Result =  ErrorCode.VerifyTokenFail;
+            response.Result = ErrorCode.VerifyTokenFail;
         }
+
         return response;
     }
 }

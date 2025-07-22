@@ -1,6 +1,7 @@
-﻿using GameAPIServer.Models.GameDB;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+
+using GameAPIServer.Models.GameDB;
 
 namespace GameAPIServer.Repository.Interfaces;
 

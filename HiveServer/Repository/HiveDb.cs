@@ -1,24 +1,29 @@
-using HiveServer.Model.Entity;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using SqlKata.Execution;
 using System.Data;
 using System.Threading.Tasks;
-using HiveServer.Repository.Interfaces;
-using MySqlConnector;
 
+using HiveServer.Model.Entity;
+using HiveServer.Repository.Interfaces;
+
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+using MySqlConnector;
+using SqlKata.Execution;
 
 namespace HiveServer.Repository;
 
+
 public class HiveDb : IHiveDb
 {
-    readonly IOptions<DbConfig> _dbConfig;
-    readonly ILogger<HiveDb> _logger;
-    IDbConnection _dbConn;
-    readonly SqlKata.Compilers.MySqlCompiler _compiler;
-    readonly QueryFactory _queryFactory;
+    private readonly IOptions<DbConfig> _dbConfig;
+    private readonly ILogger<HiveDb> _logger;
+    private IDbConnection _dbConn;
+    private readonly SqlKata.Compilers.MySqlCompiler _compiler;
+    private readonly QueryFactory _queryFactory;
 
-    public HiveDb(ILogger<HiveDb> logger, IOptions<DbConfig> dbConfig)
+    public HiveDb(
+        ILogger<HiveDb> logger,
+        IOptions<DbConfig> dbConfig)
     {
         _logger = logger;
         _dbConfig = dbConfig;
@@ -34,26 +39,25 @@ public class HiveDb : IHiveDb
         Close();
     }
 
-
     public async Task<int> InsertAccountAsync(AccountInfo accountInfo)
     {
         return await _queryFactory.Query("account_info").InsertAsync(accountInfo);
     }
 
-
     public async Task<AccountInfo?> GetAccountByEmailAsync(string email)
     {
         return await _queryFactory.Query("account_info")
-        .Where("Email", email)
-        .FirstOrDefaultAsync<AccountInfo>();
+            .Where("Email", email)
+            .FirstOrDefaultAsync<AccountInfo>();
     }
 
-    void Open()
+    private void Open()
     {
         _dbConn = new MySqlConnection(_dbConfig.Value.HiveDb);
         _dbConn.Open();
     }
-    void Close()
+
+    private void Close()
     {
         _dbConn.Close();
     }

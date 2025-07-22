@@ -6,4 +6,9 @@ Content-Type: application/json
   "PW":"123qwe"
 }
 
+###
+
+
+POST http://localhost:11500/Logout
+Uid: 12345
 

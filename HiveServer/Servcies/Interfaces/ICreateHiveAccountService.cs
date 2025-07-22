@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using HiveServer.Model.DTO;
 
-namespace HiveServer.Servcies.Interfaces
+namespace HiveServer.Services.Interfaces
 {
     public interface ICreateHiveAccountService
     {

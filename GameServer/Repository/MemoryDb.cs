@@ -1,38 +1,39 @@
-﻿using GameAPIServer.Models;
+﻿using System;
+using System.Threading.Tasks;
+
 using CloudStructures;
 using CloudStructures.Structures;
-using GameAPIServer.Repository.Interfaces;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 using ZLogger;
 
+using GameAPIServer.Models;
+using GameAPIServer.Repository.Interfaces;
 
 namespace GameAPIServer.Repository;
 
 public class MemoryDb : IMemoryDb
 {
-    readonly RedisConnection _redisConn;
-    readonly ILogger<MemoryDb> _logger;
-    readonly IOptions<DbConfig> _dbConfig;
+    private readonly RedisConnection _redisConn;
+    private readonly ILogger<MemoryDb> _logger;
+    private readonly IOptions<DbConfig> _dbConfig;
 
     public MemoryDb(ILogger<MemoryDb> logger, IOptions<DbConfig> dbConfig)
     {
         _logger = logger;
         _dbConfig = dbConfig;
-        RedisConfig config = new("default", _dbConfig.Value.Redis);
+        var config = new RedisConfig("default", _dbConfig.Value.Redis);
         _redisConn = new RedisConnection(config);
     }
-
 
     public async Task<ErrorCode> RegistUserAsync(string token, int uid)
     {
         var key = MemoryDbKeyMaker.MakeUIDKey(uid.ToString());
-        ErrorCode result = ErrorCode.None;
+        var result = ErrorCode.None;
 
-        RdbAuthUserData user = new()
+        var user = new RdbAuthUserData
         {
             Uid = uid,
             Token = token
@@ -40,17 +41,17 @@ public class MemoryDb : IMemoryDb
 
         try
         {
-            RedisString<RdbAuthUserData> redis = new(_redisConn, key, LoginTimeSpan());
-            if (await redis.SetAsync(user, LoginTimeSpan()) == false)
+            var redis = new RedisString<RdbAuthUserData>(_redisConn, key, LoginTimeSpan());
+            if (!await redis.SetAsync(user, LoginTimeSpan()))
             {
-                _logger.ZLogError($"[RegistUserAsync] Uid:{uid}, Token:{token},ErrorMessage:UserBasicAuth, RedisString set Error");
+                _logger.ZLogError($"[RegistUserAsync] Uid:{uid}, Token:{token}, ErrorMessage:UserBasicAuth, RedisString set Error");
                 result = ErrorCode.LoginFailAddRedis;
                 return result;
             }
         }
         catch
         {
-            _logger.ZLogError($"[RegistUserAsync] Uid:{uid}, Token:{token},ErrorMessage:Redis Connection Error");
+            _logger.ZLogError($"[RegistUserAsync] Uid:{uid}, Token:{token}, ErrorMessage:Redis Connection Error");
             result = ErrorCode.LoginFailAddRedis;
             return result;
         }
@@ -58,11 +59,23 @@ public class MemoryDb : IMemoryDb
         return result;
     }
 
+    public async Task<ErrorCode> DelUserAuthAsync(int uid)
+    {
+        try
+        {
+            var redis = new RedisString<RdbAuthUserData>(_redisConn, MemoryDbKeyMaker.MakeUIDKey(uid.ToString()), null);
+            await redis.DeleteAsync();
+            return ErrorCode.None;
+        }
+        catch
+        {
+            _logger.ZLogError($"[DelUserAuthAsync] Uid:{uid}, ErrorMessage:Redis Connection Error");
+            return ErrorCode.LogoutRedisDelFailException;
+        }
+    }
 
-    
     public TimeSpan LoginTimeSpan()
     {
         return TimeSpan.FromMinutes(RediskeyExpireTime.LoginKeyExpireMin);
     }
-
 }
