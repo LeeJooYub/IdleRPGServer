@@ -1,14 +1,14 @@
 using System;
 using System.Threading.Tasks;
+
 using HiveServer.Model.DTO;
-using HiveServer.Model.Entity;
 using HiveServer.Repository.Interfaces;
-using HiveServer.Servcies.Interfaces;
+using HiveServer.Services.Interfaces;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using ZLogger;
 
-namespace HiveServer.Servcies;
+namespace HiveServer.Services;
 
 public class LoginService : ILoginService
 {
@@ -38,11 +38,11 @@ public class LoginService : ILoginService
         if (userInfo is null)
             return (ErrorCode.LoginFailUserNotExist, 0);
 
-        var hash = Security.MakeHashingPassword(userInfo.salt_value, request.Password);
-        if (userInfo.pw != hash)
+        var hash = Security.MakeHashingPassword(userInfo.SaltValue, request.Password);
+        if (userInfo.Pw != hash)
             return (ErrorCode.LoginFailPwNotMatch, 0);
 
-        return (ErrorCode.None, userInfo.player_id);
+        return (ErrorCode.None, userInfo.PlayerId);
     }
 
 }

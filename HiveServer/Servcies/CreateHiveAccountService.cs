@@ -1,14 +1,14 @@
 using HiveServer.Model.DTO;
 using HiveServer.Model.Entity;
 using HiveServer.Repository.Interfaces;
-using HiveServer.Servcies.Interfaces;
+using HiveServer.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using ZLogger;
 
 
-namespace HiveServer.Servcies;
+namespace HiveServer.Services;
 
 public class CreateHiveAccountService : ICreateHiveAccountService
 {
@@ -31,10 +31,10 @@ public class CreateHiveAccountService : ICreateHiveAccountService
 
             var result = await _hiveDb.InsertAccountAsync(new AccountInfo
             {
-                player_id = 0,
-                email = request.Email,
-                pw = hashedPw,
-                create_dt = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                PlayerId = 0,
+                Email = request.Email,
+                Pw = hashedPw,
+                CreateDt = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
             });
 
             _logger.ZLogDebug($"[CreateAccount] email: {request.Email}, salt: {saltValue}, hash: {hashedPw}");

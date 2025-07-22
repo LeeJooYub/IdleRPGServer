@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-
+﻿
 namespace GameAPIServer.Services.Interfaces;
 
 public interface IUserService

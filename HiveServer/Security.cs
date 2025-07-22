@@ -4,9 +4,8 @@ using System.Security.Cryptography;
 using System.Text;
 
 
-namespace HiveServer.Servcies;
-    // Security class provides methods for hashing passwords and tokens, generating salts, and creating authentication tokens.
-    // It uses SHA256 for hashing and a set of allowable characters for generating random strings.;
+namespace HiveServer.Services;
+
 
 public class Security
 {

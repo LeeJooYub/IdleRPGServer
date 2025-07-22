@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -16,12 +15,12 @@ namespace GameAPIServer.Repository;
 
 public partial class GameDb : IGameDb
 {
-    readonly ILogger<GameDb> _logger;
-    readonly IOptions<DbConfig> _dbConfig;
+    private readonly ILogger<GameDb> _logger;
+    private readonly IOptions<DbConfig> _dbConfig;
     
-    IDbConnection _dbConn;
-    SqlKata.Compilers.MySqlCompiler _compiler;
-    QueryFactory _queryFactory;
+    private IDbConnection _dbConn;
+    private SqlKata.Compilers.MySqlCompiler _compiler;
+    private QueryFactory _queryFactory;
 
     public GameDb(ILogger<GameDb> logger, IOptions<DbConfig> dbConfig)
     {
