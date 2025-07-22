@@ -41,12 +41,20 @@ public class HiveDb : IHiveDb
 
     public async Task<int> InsertAccountAsync(AccountInfo accountInfo)
     {
-        return await _queryFactory.Query("account_info").InsertAsync(accountInfo);
+        var data = new {
+            player_id = accountInfo.PlayerId,
+            email = accountInfo.Email,
+            pw = accountInfo.Pw,
+            salt_value = accountInfo.SaltValue,
+            create_dt = accountInfo.CreateDt
+        };
+        return await _queryFactory.Query("account_info").InsertAsync(data);
     }
 
     public async Task<AccountInfo?> GetAccountByEmailAsync(string email)
     {
         return await _queryFactory.Query("account_info")
+            .Select("player_id as PlayerId", "email as Email", "pw as Pw", "salt_value as SaltValue", "create_dt as CreateDt")
             .Where("Email", email)
             .FirstOrDefaultAsync<AccountInfo>();
     }
