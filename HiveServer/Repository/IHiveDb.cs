@@ -9,5 +9,11 @@ namespace HiveServer.Repository.Interfaces
     {
         Task<int> InsertAccountAsync(AccountInfo accountInfo);
         Task<AccountInfo?> GetAccountByEmailAsync(string email);
+
+
+
+        // Task<int> InsertCategoryAsync(TestCategory category);
+
+        // Task<TestCategory> GetCategoryByIdNoAliasAsync(int id);
     }
 }

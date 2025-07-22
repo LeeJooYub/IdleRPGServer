@@ -24,26 +24,26 @@ public class CreateHiveAccountService : ICreateHiveAccountService
 
     public async Task<ErrorCode> CreateAccountAsync(CreateHiveAccountRequest request)
     {
+        var saltValue = Security.SaltString();
+        var hashedPw = Security.MakeHashingPassword(saltValue, request.Password);
+        _logger.ZLogDebug($"[CreateAccount] email: {request.Email}, salt: {saltValue}, hash: {hashedPw}");
         try
         {
-            var saltValue = Security.SaltString();
-            var hashedPw = Security.MakeHashingPassword(saltValue, request.Password);
-
+            _logger.ZLogDebug($"hi");
             var result = await _hiveDb.InsertAccountAsync(new AccountInfo
             {
-                PlayerId = 0,
-                Email = request.Email,
-                Pw = hashedPw,
-                CreateDt = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                player_id = 0, // Auto incremented by DB
+                email = request.Email,
+                pw = hashedPw,
+                salt = saltValue,
+                create_dt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
             });
-
-            _logger.ZLogDebug($"[CreateAccount] email: {request.Email}, salt: {saltValue}, hash: {hashedPw}");
-
+            _logger.ZLogDebug($"[CreateAccount] Inserted account with result: {result}");
             return result != 1 ? ErrorCode.CreateAccountFailInsert : ErrorCode.None;
         }
         catch (Exception ex)
         {
-            _logger.ZLogError($"[CreateAccount] Exception: {ex}");
+            _logger.ZLogDebug($"[CreateAccount] Exception: {ex}");
             return ErrorCode.CreateAccountFailException;
         }
     }

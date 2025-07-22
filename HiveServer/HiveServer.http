@@ -25,3 +25,16 @@ Content-Type: application/json
   "PlayerId": 0,
   "HiveToken": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
 }
+
+### Add Sample Category
+POST http://localhost:11501/Test/AddSample
+Content-Type: application/json
+
+{}
+
+
+### find Category by Id
+POST http://localhost:11501/Test/FindSample
+Content-Type: application/json
+
+{}

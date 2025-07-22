@@ -17,15 +17,13 @@ namespace HiveServer.Controllers;
 [Route("")]
 public class VerifyTokenController : ControllerBase
 {
-    readonly string _saltValue;
-    readonly ILogger<VerifyTokenController> _logger;
-    readonly IHiveDb _hiveDb;
+    private readonly string _saltValue;
+    private readonly ILogger<VerifyTokenController> _logger;
 
-    public VerifyTokenController(ILogger<VerifyTokenController> logger, IHiveDb hiveDb, IConfiguration config)
+    public VerifyTokenController(ILogger<VerifyTokenController> logger,IConfiguration config)
     {
         _saltValue = config.GetSection("TokenSaltValue").Value;
         _logger = logger;
-        _hiveDb = hiveDb;
     }
 
     [HttpPost("VerifyToken")]

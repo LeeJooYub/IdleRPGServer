@@ -7,7 +7,7 @@ using HiveServer.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-
+using ZLogger;
 
 namespace HiveServer.Controllers;
 
@@ -30,6 +30,7 @@ public class CreateHiveAccountController : ControllerBase
     public async Task<CreateHiveAccountResponse> CreateHiveAccount([FromBody] CreateHiveAccountRequest request)
     {
         CreateHiveAccountResponse response = new();
+        _logger.ZLogDebug($"[CreateHiveAccount] called with Email: {request.Email}, Password: {request.Password}");
         response.Result = await _createHiveAccountService.CreateAccountAsync(request);
 
         return response;

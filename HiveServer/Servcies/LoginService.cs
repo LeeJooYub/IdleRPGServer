@@ -38,11 +38,11 @@ public class LoginService : ILoginService
         if (userInfo is null)
             return (ErrorCode.LoginFailUserNotExist, 0);
 
-        var hash = Security.MakeHashingPassword(userInfo.SaltValue, request.Password);
-        if (userInfo.Pw != hash)
+        var hash = Security.MakeHashingPassword(userInfo.salt, request.Password);
+        if (userInfo.pw != hash)
             return (ErrorCode.LoginFailPwNotMatch, 0);
 
-        return (ErrorCode.None, userInfo.PlayerId);
+        return (ErrorCode.None, userInfo.player_id);
     }
 
 }
