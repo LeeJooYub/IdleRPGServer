@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
+using ZLogger;
+
 namespace HiveServer.Controllers;
 
 [ApiController]
@@ -32,9 +34,10 @@ public class LoginHiveController : ControllerBase
     [HttpPost("")]
     public async Task<LoginHiveResponse> Login([FromBody] LoginHiveRequest request)
     {
+        _logger.ZLogDebug($"[LoginHiveController] Called");
         LoginHiveResponse response = new();
-        (response.Result, response.PlayerId) = await _loginService.VerifyUser(request);
-        response.HiveToken = Security.MakeHashingToken(_saltValue, response.PlayerId);
+        (response.Result, response.AccountId) = await _loginService.VerifyUser(request);
+        response.HiveToken = Security.MakeHashingToken(_saltValue, response.AccountId);
 
         return response;
 

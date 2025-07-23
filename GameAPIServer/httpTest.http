@@ -1,0 +1,20 @@
+﻿POST http://localhost:11500/Login
+Content-Type: application/json
+
+{
+  "PlatformId":1,
+  "PlatformToken":"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+  "PlatformName":"hive"
+}
+
+###
+
+
+POST http://localhost:11500/Logout
+Content-Type: application/json
+
+{
+  "AccountId":1,
+  "GameServerToken":"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+}
+

@@ -24,9 +24,7 @@ public class HiveDb : IHiveDb
     private readonly SqlKata.Compilers.MySqlCompiler _compiler;
     private readonly QueryFactory _queryFactory;
 
-    public HiveDb(
-        ILogger<HiveDb> logger,
-        IOptions<DbConfig> dbConfig)
+    public HiveDb(ILogger<HiveDb> logger,IOptions<DbConfig> dbConfig)
     {
         _logger = logger;
         _dbConfig = dbConfig;
@@ -44,18 +42,8 @@ public class HiveDb : IHiveDb
 
     public async Task<int> InsertAccountAsync(AccountInfo accountInfo)
     {
-        _logger.ZLogDebug($"[InsertAccountAsync] called with: email={accountInfo.email}, pw={accountInfo.pw}, salt={accountInfo.salt}, create_dt={accountInfo.create_dt}");
-        try
-        {
-            var id = await _queryFactory.Query("account_info").InsertAsync(accountInfo);
-            _logger.ZLogDebug($"[InsertAccountAsync] Inserted id: {id}");
-            return id;
-        }
-        catch (Exception ex)
-        {
-            _logger.ZLogError($"[InsertAccountAsync] Exception: {ex}");
-            throw;
-        }
+        var id = await _queryFactory.Query("account_info").InsertAsync(accountInfo);
+        return id;
     }
 
     public async Task<AccountInfo?> GetAccountByEmailAsync(string email)

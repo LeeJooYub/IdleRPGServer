@@ -29,9 +29,12 @@ public class VerifyTokenController : ControllerBase
     [HttpPost("VerifyToken")]
     public VerifyTokenResponse Verify([FromBody] VerifyTokenRequest request)
     {
+        _logger.ZLogDebug($"[VerifyTokenController] Called"+
+            $" AccountId: {request.AccountId}, HiveToken: {request.HiveToken}");
+
         VerifyTokenResponse response = new();
         
-        if (Security.MakeHashingToken(_saltValue, request.PlayerId) != request.HiveToken)
+        if (Security.MakeHashingToken(_saltValue, request.AccountId) != request.HiveToken)
         {
             _logger.ZLogDebug(
                 $"[AccoutDb.CreateAccount] ErrorCode: {ErrorCode.VerifyTokenFail}");
