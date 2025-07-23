@@ -26,8 +26,8 @@ public class LoginService : ILoginService
     public async Task<LoginHiveResponse> Login(LoginHiveRequest request)
     {
         LoginHiveResponse response = new();
-        (response.Result, response.PlayerId) = await VerifyUser(request);
-        response.HiveToken = Security.MakeHashingToken(_saltValue, response.PlayerId);
+        (response.Result, response.AccountId) = await VerifyUser(request);
+        response.HiveToken = Security.MakeHashingToken(_saltValue, response.AccountId);
 
         return response;
     }
@@ -38,11 +38,11 @@ public class LoginService : ILoginService
         if (userInfo is null)
             return (ErrorCode.LoginFailUserNotExist, 0);
 
-        var hash = Security.MakeHashingPassword(userInfo.SaltValue, request.Password);
-        if (userInfo.Pw != hash)
+        var hash = Security.MakeHashingPassword(userInfo.salt, request.Password);
+        if (userInfo.pwd != hash)
             return (ErrorCode.LoginFailPwNotMatch, 0);
 
-        return (ErrorCode.None, userInfo.PlayerId);
+        return (ErrorCode.None, userInfo.account_id);
     }
 
 }

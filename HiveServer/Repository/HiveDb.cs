@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ using Microsoft.Extensions.Options;
 using MySqlConnector;
 using SqlKata.Execution;
 
+using ZLogger;
+
 namespace HiveServer.Repository;
 
 
@@ -21,9 +24,7 @@ public class HiveDb : IHiveDb
     private readonly SqlKata.Compilers.MySqlCompiler _compiler;
     private readonly QueryFactory _queryFactory;
 
-    public HiveDb(
-        ILogger<HiveDb> logger,
-        IOptions<DbConfig> dbConfig)
+    public HiveDb(ILogger<HiveDb> logger,IOptions<DbConfig> dbConfig)
     {
         _logger = logger;
         _dbConfig = dbConfig;
@@ -41,23 +42,53 @@ public class HiveDb : IHiveDb
 
     public async Task<int> InsertAccountAsync(AccountInfo accountInfo)
     {
-        var data = new {
-            player_id = accountInfo.PlayerId,
-            email = accountInfo.Email,
-            pw = accountInfo.Pw,
-            salt_value = accountInfo.SaltValue,
-            create_dt = accountInfo.CreateDt
-        };
-        return await _queryFactory.Query("account_info").InsertAsync(data);
+        var id = await _queryFactory.Query("account_info").InsertAsync(accountInfo);
+        return id;
     }
 
     public async Task<AccountInfo?> GetAccountByEmailAsync(string email)
     {
         return await _queryFactory.Query("account_info")
-            .Select("player_id as PlayerId", "email as Email", "pw as Pw", "salt_value as SaltValue", "create_dt as CreateDt")
-            .Where("Email", email)
+            .Where("email", email)
             .FirstOrDefaultAsync<AccountInfo>();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // public async Task<int> InsertCategoryAsync(TestCategory category)
+    // {
+    //     var data = new
+    //     {
+    //         slug = category.Slug,
+    //         title = category.Title,
+    //         description = category.Description,
+    //         image = category.Image,
+    //         sortid = category.SortIds,
+    //         display = category.Display,
+    //         created_at = category.CreatedAt,
+    //         updated_at = category.UpdatedAt,
+    //         deleted_at = category.DeletedAt
+    //     };
+    //     return await _queryFactory.Query("category").InsertAsync(data);
+    // }
+
+    // public async Task<TestCategory> GetCategoryByIdNoAliasAsync(int id)
+    // {
+    //     // alias 없이 DB 컬럼명(id)과 C# 프로퍼티명(Id)이 다를 때 매핑이 되는지 테스트
+    //     return await _queryFactory.Query("category")
+    //         .Where("id", id)
+    //         .FirstOrDefaultAsync<Category>();
+    // }
 
     private void Open()
     {
