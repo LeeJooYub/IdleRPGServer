@@ -23,7 +23,7 @@ public class MasterDb : IMasterDb
     private readonly IMemoryDb _memoryDb;
     private readonly IGameDb _gameDb;
 
-    public VersionDAO _version { get; set; }
+    public Version _version { get; set; }
 
     public MasterDb(
         ILogger<MasterDb> logger,

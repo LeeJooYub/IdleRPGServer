@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using GameAPIServer.Model.GameDB;
+using GameAPIServer.Models.GameDB;
 
 namespace GameAPIServer.DTO.ServiceDTO
 {
@@ -9,12 +9,15 @@ namespace GameAPIServer.DTO.ServiceDTO
     public class MailListCommand
     {
         public int AccountId { get; set; } // 사용자 ID
+        public int PageNumber { get; set; } // 요청할 페이지 번호
+        public int PageSize { get; set; } // 한 페이지에 표시할 데이터 수
     }
 
     public class MailListResult
     {
-        public List<string> Mails { get; set; } // 메일 목록
+        public List<Mail> Mails { get; set; } // 메일 목록
         public int UnreadCount { get; set; } // 읽지 않은 메일 수
+        public int TotalCount { get; set; } // 전체 메일 수
     }
 
     // GetMailDetail

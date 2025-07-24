@@ -1,19 +1,43 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GameAPIServer.DTO.ServiceDTO;
+using System.Net.Http;
+using System.Net.Http.Json;
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
+using ZLogger;
+
+using GameAPIServer.Models.GameDB;
+using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
+using GameAPIServer.DTO.ExternelAPI;
+using GameAPIServer.DTO.ServiceDTO;
 
 namespace GameAPIServer.Services
 {
     public class MailService : IMailService
     {
+        private readonly ILogger<MailService> _logger;
+        private readonly IGameDb _gameDb;
+
+        public MailService(
+            ILogger<MailService> logger,
+            IGameDb gameDb)
+        {
+            _logger = logger;
+            _gameDb = gameDb;
+        }
+
+
         public async Task<MailListResult> GetMailListAsync(MailListCommand command)
         {
             // 메일 목록 조회 로직 구현
-            var result = new MailListResult();
-            result.Mails = new List<string>();
-            result.UnreadCount = 0;
+            MailListResult result = new MailListResult();
+            result.Mails = await _gameDb.GetMailListAsync(command.AccountId, command.PageNumber, command.PageSize);
+            result.UnreadCount = await _gameDb.GetUnreadMailCountAsync(command.AccountId);
+            result.TotalCount = await _gameDb.GetTotalMailCountAsync(command.AccountId);
             return result;
         }
 
