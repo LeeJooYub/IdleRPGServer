@@ -160,4 +160,21 @@ public enum ErrorCode : UInt16
     AttendanceCheckFailException = 9003,
 
     GetRewardFailException = 9004,
+
+    // Basic Errors 100 ~
+    DatabaseError = 101, // Generic database error
+    ConnectionError = 102, // Database connection error
+    QueryError = 103, // Query execution error
+    NotFoundError = 104, // Resource not found
+    DuplicateEntryError = 105, // Duplicate entry error
+
+    // Basic Errors 200 ~
+    ServiceError = 201, // Generic service error
+    TimeoutError = 202, // Service timeout error
+    ValidationError = 203, // Input validation error
+
+    // Basic Errors 300 ~
+    AuthenticationError = 301, // Authentication failure
+    AuthorizationError = 302, // Authorization failure
+    UnknownError = 303, // Unknown error
 }
