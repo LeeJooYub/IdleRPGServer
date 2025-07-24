@@ -1,30 +1,35 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-using GameAPIServer.Model.GameDB;
+using GameAPIServer.Models.GameDB;
+using GameAPIServer.Models.MasterDB;
 
 namespace GameAPIServer.DTO.ServiceDTO
 {
     // GetMailList
     public class MailListCommand
     {
-        public int AccountId { get; set; } // 사용자 ID
+        public Int64 AccountId { get; set; } // 사용자 ID
+        public DateTime? Cursor { get; set; } // 커서 값 (마지막 메일 ID)
+        public int Limit { get; set; } // 가져올 메일 개수
     }
 
     public class MailListResult
     {
-        public List<string> Mails { get; set; } // 메일 목록
-        public int UnreadCount { get; set; } // 읽지 않은 메일 수
+        [Required] public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
+        public List<Mail> Mails { get; set; } // 메일 목록
     }
 
     // GetMailDetail
     public class MailDetailCommand
     {
-        public int MailId { get; set; } // 메일 ID
+        public Int64 MailId { get; set; } // 메일 ID
     }
 
     public class MailDetailResult
     {
+        [Required] public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
         public string Sender { get; set; } // 발신자
         public string Content { get; set; } // 메일 내용
         public DateTime SentDate { get; set; } // 발송 날짜
@@ -33,34 +38,38 @@ namespace GameAPIServer.DTO.ServiceDTO
     // ClaimMail
     public class ClaimMailCommand
     {
-        public int MailId { get; set; } // 메일 ID
+        public Int64 MailId { get; set; } // 메일 ID
+
+        public Int64 AccountId { get; set; } // 사용자 ID
     }
 
     public class ClaimMailResult
     {
-        public bool IsSuccess { get; set; } // 성공 여부
-        public string Reward { get; set; } // 보상 내용
+        [Required] public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
+        public RewardInMail Reward { get; set; } // 보상 내용
     }
 
     // DeleteMail
     public class DeleteMailCommand
     {
-        public int MailId { get; set; } // 메일 ID
+        public Int64 MailId { get; set; } // 메일 ID
     }
 
     public class DeleteMailResult
     {
-        public bool IsDeleted { get; set; } // 삭제 성공 여부
+        [Required] public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
     }
 
     // ClaimAllMails
     public class ClaimAllMailsCommand
     {
-        public int AccountId { get; set; } // 사용자 ID
+        public Int64 AccountId { get; set; } // 사용자 ID
     }
 
     public class ClaimAllMailsResult
     {
+        [Required] public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
+
         public int TotalClaimed { get; set; } // 수령한 메일 수
         public List<string> Rewards { get; set; } // 수령한 보상 목록
     }

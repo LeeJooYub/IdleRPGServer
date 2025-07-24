@@ -40,47 +40,21 @@ public class MailController
     [HttpPost("list")]
     public async Task<MailListResponse> GetMailListAsync([FromBody] MailListRequest request)
     {
-        // 유저 메일 목록 조회
         MailListCommand command = new MailListCommand
         {
-            AccountId = request.AccountId
+            AccountId = request.AccountId,
+            Cursor = request.Cursor, // Updated to ensure DateTime cursor is passed
+            Limit = request.Limit
         };
+
         MailListResult result = await _mailService.GetMailListAsync(command);
-
-
-
+        
         MailListResponse response = new MailListResponse
         {
             Mails = result.Mails,
-            UnreadCount = result.UnreadCount
+            ErrorCode = result.ErrorCode // 에러 코드 추가
         };
-        return response;
-    }
 
-    /// <summary>
-    /// 메일 상세 정보 조회 API
-    /// 특정 메일의 상세 정보를 조회합니다.
-    /// </summary>
-    /// <param name="request">메일 상세 정보 요청 데이터</param>
-    /// <returns>메일 상세 정보 응답 데이터</returns>
-    [HttpPost("detail")]
-    public async Task<MailDetailResponse> GetMailDetailAsync([FromBody] MailDetailRequest request)
-    {
-        // 특정 메일 상세 정보 조회
-        MailDetailCommand command = new MailDetailCommand
-        {
-            MailId = request.MailId
-        };
-        MailDetailResult result = await _mailService.GetMailDetailAsync(command);
-
-
-
-        MailDetailResponse response = new MailDetailResponse
-        {
-            Sender = result.Sender,
-            Content = result.Content,
-            SentDate = result.SentDate
-        };
         return response;
     }
 
@@ -102,12 +76,12 @@ public class MailController
         ClaimMailResult result = await _mailService.ClaimMailRewardAsync(command);
 
 
-
         ClaimMailResponse response = new ClaimMailResponse
         {
-            IsSuccess = result.IsSuccess,
+            ErrorCode = result.ErrorCode,
             Reward = result.Reward
         };
+
         return response;
     }
 
@@ -117,24 +91,24 @@ public class MailController
     /// </summary>
     /// <param name="request">메일 삭제 요청 데이터</param>
     /// <returns>메일 삭제 응답 데이터</returns>
-    [HttpPost("delete")]
-    public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
-    {
-        // 메일 삭제
-        DeleteMailCommand command = new DeleteMailCommand
-        {
-            MailId = request.MailId
-        };
-        DeleteMailResult result = await _mailService.DeleteMailAsync(command);
+    // [HttpPost("delete")]
+    // public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
+    // {
+    //     // 메일 삭제
+    //     DeleteMailCommand command = new DeleteMailCommand
+    //     {
+    //         MailId = request.MailId
+    //     };
+    //     DeleteMailResult result = await _mailService.DeleteMailAsync(command);
 
 
 
-        DeleteMailResponse response = new DeleteMailResponse
-        {
-            IsDeleted = result.IsDeleted
-        };
-        return response;
-    }
+    //     DeleteMailResponse response = new DeleteMailResponse
+    //     {
+    //         ErrorCode = result.ErrorCode
+    //     };
+    //     return response;
+    // }
 
     /// <summary>
     /// 모든 메일 보상 일괄 수령 API
@@ -148,7 +122,7 @@ public class MailController
         // 모든 메일 보상 일괄 수령
         ClaimAllMailsCommand command = new ClaimAllMailsCommand
         {
-            AccountId = request.UserId
+            AccountId = request.AccountId
         };
         ClaimAllMailsResult result = await _mailService.ClaimAllMailRewardsAsync(command);
 
@@ -157,7 +131,8 @@ public class MailController
         ClaimAllMailsResponse response = new ClaimAllMailsResponse
         {
             TotalClaimed = result.TotalClaimed,
-            Rewards = result.Rewards
+            Rewards = result.Rewards,
+            ErrorCode = result.ErrorCode
         };
         return response;
     }

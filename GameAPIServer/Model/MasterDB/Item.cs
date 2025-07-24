@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GameAPIServer.Models.GameDB
+namespace GameAPIServer.Models.MasterDB
 {
-    public class Attendance
+    public class Item
     {
         
     }
