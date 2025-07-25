@@ -32,9 +32,10 @@ if (!await app.Services.GetService<IMasterDb>().Load())
 }
 
 // log setting
-var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
-// app.UseMiddleware<GameAPIServer.Middleware.VersionCheck>();
-// app.UseMiddleware<GameAPIServer.Middleware.CheckUserAuthAndLoadUserData>();
+// var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
+// app.UseMiddleware<GameAPIServer.Middleware.VersionCheckMiddleware>();
+app.UseMiddleware<GameAPIServer.Middleware.CheckUserAuthMiddleware>();
+app.UseMiddleware<GameAPIServer.Middleware.LockRedisMiddleware>();
 
 app.UseRouting();
 app.MapDefaultControllerRoute();
@@ -69,5 +70,6 @@ void SettingLogger()
     _ = logging.AddZLoggerConsole(options =>
     {
         options.UseJsonFormatter();
+        options.ConfigureEnableAnsiEscapeCode = true; // ANSI 색상 활성화
     });
 }

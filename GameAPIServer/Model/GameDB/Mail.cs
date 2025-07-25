@@ -19,17 +19,37 @@ namespace GameAPIServer.Models.GameDB
         public bool is_read { get; set; } = false;
         public bool is_claimed { get; set; } = false;
 
-    }
+        // Rewards (up to 8)
+        public int? reward1_id { get; set; }
+        public string? reward1_type { get; set; }
+        public int? reward1_qty { get; set; }
 
-    // 메일 보상
-    // 메일에 포함된 보상 정보를 나타내는 클래스입니다.
-    public class RewardInMail
-    {
-        public Int64 mail_id { get; set; }
-        public Int64 account_id { get; set; }
-        public int reward_id { get; set; }
-        public int reward_qty { get; set; } = 0;
-        public string reward_type { get; set; } = "normal"; // gold, item, etc.
-    }
+        public int? reward2_id { get; set; }
+        public string? reward2_type { get; set; }
+        public int? reward2_qty { get; set; }
 
+        public int? reward3_id { get; set; }
+        public string? reward3_type { get; set; }
+        public int? reward3_qty { get; set; }
+
+        public int? reward4_id { get; set; }
+        public string? reward4_type { get; set; }
+        public int? reward4_qty { get; set; }
+
+        public int? reward5_id { get; set; }
+        public string? reward5_type { get; set; }
+        public int? reward5_qty { get; set; }
+
+        public int? reward6_id { get; set; }
+        public string? reward6_type { get; set; }
+        public int? reward6_qty { get; set; }
+
+        public int? reward7_id { get; set; }
+        public string? reward7_type { get; set; }
+        public int? reward7_qty { get; set; }
+
+        public int? reward8_id { get; set; }
+        public string? reward8_type { get; set; }
+        public int? reward8_qty { get; set; }
+    }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GameAPIServer.Models.GameDB
+namespace GameAPIServer.Services
 {
-    public class UserGrowth
+    public class MemoryDBService
     {
         
     }
