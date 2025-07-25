@@ -34,13 +34,22 @@ POST http://localhost:11500/mail/claim
 Content-Type: application/json
 
 {
-  "MailId": 3
+  "MailId": 8,
+  "AccountId": 1
 }
 
-### Claim All Mail Rewards
-POST http://localhost:11500/mail/claimAll
+### Delete Mail
+POST http://localhost:11500/mail/delete
 Content-Type: application/json
 
 {
-  "AccountId": 12345
+  "MailId": 1
 }
+
+# ### Claim All Mail Rewards
+# POST http://localhost:11500/mail/claimAll
+# Content-Type: application/json
+
+# {
+#   "AccountId": 12345
+# }

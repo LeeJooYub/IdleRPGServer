@@ -9,8 +9,10 @@ namespace GameAPIServer.Services.Interfaces
     {
         Task<MailListResult> GetMailListAsync(MailListCommand command); // Updated to include error code handling
         Task<ClaimMailResult> ClaimMailRewardAsync(ClaimMailCommand command); // Updated to include error handling
-        //TODO : Task<DeleteMailResult> DeleteMailAsync(DeleteMailCommand command);
-        Task<ClaimAllMailsResult> ClaimAllMailRewardsAsync(ClaimAllMailsCommand command);
+        Task<DeleteMailResult> DeleteMailAsync(DeleteMailCommand command);
+
+        //TODO : 전체 수령
+        //Task<ClaimAllMailsResult> ClaimAllMailRewardsAsync(ClaimAllMailsCommand command);
 
     }
 }

@@ -1,0 +1,41 @@
+﻿
+### Get Mail List
+POST http://localhost:11500/mail/list
+Content-Type: application/json
+token: sx7kud5v0zr98u4z5dect8diu
+uid: 1
+
+{
+  "AccountId": 1,
+  "Cursor": "2027-10-01T00:00:00Z",
+  "Limit": 10
+}
+
+### Claim Mail Reward
+POST http://localhost:11500/mail/claim
+Content-Type: application/json
+token: 6b87zbgagtg6dz3etcuhix4ye
+uid: 1
+
+{
+  "MailId": 3,
+  "AccountId": 1
+}
+
+### Delete Mail
+POST http://localhost:11500/mail/delete
+Content-Type: application/json
+token: 6b87zbgagtg6dz3etcuhix4ye
+uid: 1
+
+{
+  "MailId": 1
+}
+
+# ### Claim All Mail Rewards
+# POST http://localhost:11500/mail/claimAll
+# Content-Type: application/json
+
+# {
+#   "AccountId": 12345
+# }

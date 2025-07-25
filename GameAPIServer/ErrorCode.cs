@@ -153,6 +153,8 @@ public enum ErrorCode : UInt16
     MailDeleteFailException = 8009,
     MailReceiveFailNotMailOwner = 8010,
     MailReceiveRewardsFailException = 8011,
+    MailReceiveRewardsFailNotMailOwner = 8012,
+    RewardNotExist = 8013, // 보상이 존재하지 않는 경우
 
     // Attendance
     AttendanceInfoFailException = 9001,

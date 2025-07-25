@@ -59,6 +59,55 @@ public class MemoryDb : IMemoryDb
         return result;
     }
 
+
+    public async Task<bool> SetUserReqLockAsync(string key)
+    {
+        try
+        {
+            RedisString<RdbAuthUserData> redis = new(_redisConn, key, NxKeyTimeSpan());
+            if (await redis.SetAsync(new RdbAuthUserData
+            {
+                // emtpy value
+            }, NxKeyTimeSpan(), StackExchange.Redis.When.NotExists) == false)
+            {
+                return false;
+            }
+        }
+        catch
+        {
+            _logger.ZLogError($"[SetUserReqLockAsync] Key = {key}, ErrorMessage:Redis Connection Error");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public async Task<(bool, RdbAuthUserData)> GetUserAsync(string id)
+    {
+        var uid = MemoryDbKeyMaker.MakeUIDKey(id);
+
+        try
+        {
+            RedisString<RdbAuthUserData> redis = new(_redisConn, uid, null);
+            RedisResult<RdbAuthUserData> user = await redis.GetAsync();
+            if (!user.HasValue)
+            {
+                _logger.ZLogError(
+                    $"[GetUserAsync] UID = {uid}, ErrorMessage = Not Assigned User, RedisString get Error");
+                return (false, null);
+            }
+
+            return (true, user.Value);
+        }
+        catch
+        {
+            _logger.ZLogError($"[GetUserAsync] UID:{uid},ErrorMessage:ID does Not Exist");
+            return (false, null);
+        }
+    }
+
+
     public async Task<ErrorCode> DelUserAuthAsync(Int64 account_id)
     {
         try
@@ -74,8 +123,34 @@ public class MemoryDb : IMemoryDb
         }
     }
 
+    public async Task<bool> DelUserReqLockAsync(string key)
+    {
+        if (string.IsNullOrEmpty(key))
+        {
+            return false;
+        }
+
+        try
+        {
+            RedisString<RdbAuthUserData> redis = new(_redisConn, key, null);
+            var redisResult = await redis.DeleteAsync();
+            return redisResult;
+        }
+        catch
+        {
+            _logger.ZLogError($"[DelUserReqLockAsync] Key = {key}, ErrorMessage:Redis Connection Error");
+            return false;
+        }
+    }
+
     public TimeSpan LoginTimeSpan()
     {
         return TimeSpan.FromMinutes(RediskeyExpireTime.LoginKeyExpireMin);
+    }
+    
+    
+    public TimeSpan NxKeyTimeSpan()
+    {
+        return TimeSpan.FromSeconds(RediskeyExpireTime.NxKeyExpireSecond);
     }
 }
