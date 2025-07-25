@@ -33,7 +33,7 @@ if (!await app.Services.GetService<IMasterDb>().Load())
 
 // log setting
 // var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
-// app.UseMiddleware<GameAPIServer.Middleware.VersionCheckMiddleware>();
+app.UseMiddleware<GameAPIServer.Middleware.VersionCheckMiddleware>();
 app.UseMiddleware<GameAPIServer.Middleware.CheckUserAuthMiddleware>();
 app.UseMiddleware<GameAPIServer.Middleware.LockRedisMiddleware>();
 
