@@ -1,5 +1,7 @@
 ﻿POST http://localhost:11500/Login
 Content-Type: application/json
+AppVersion: 1.0.0
+MasterDataVersion: 20250725
 
 {
   "PlatformId":1,
@@ -10,6 +12,8 @@ Content-Type: application/json
 ### Logout
 
 POST http://localhost:11500/Logout
+AppVersion: 1.0.0
+MasterDataVersion: 20250725
 Content-Type: application/json
 token: 6b87zbgagtg6dz3etcuhix4ye
 uid: 1
