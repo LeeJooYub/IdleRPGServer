@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GameAPIServer.Services
+namespace GameAPIServer.Models.MasterDB
 {
-    public class MemoryDBService
+    public class job
+    {
+
+    }
+    
+    public class trait
     {
         
     }

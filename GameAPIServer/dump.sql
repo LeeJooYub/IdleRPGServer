@@ -85,3 +85,19 @@ CREATE TABLE user_currency (
     gem INT NOT NULL DEFAULT 0, -- 젬 수량
     last_updated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 마지막 업데이트 시간
 );
+
+-- user 테이블 임시 데이터
+INSERT INTO user (platform_id, platform_name, nickname) VALUES
+(1, 'testuser@example.com"', 'testpassword'),
+(2, 'hive', 'user2'),
+(3, 'hive', 'user3'),
+(4, 'hive', 'user4'),
+(5, 'hive', 'user5');
+
+-- user_currency 테이블 임시 데이터
+INSERT INTO user_currency (account_id, gold, gem) VALUES
+(1, 1000, 10),
+(2, 2000, 20),
+(3, 3000, 30),
+(4, 4000, 40),
+(5, 5000, 50);

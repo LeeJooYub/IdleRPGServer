@@ -4,7 +4,7 @@ POST http://localhost:11500/mail/list
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Content-Type: application/json
-token: sx7kud5v0zr98u4z5dect8diu
+token: dkd0qpso9kkinazprqln3o31r
 uid: 1
 
 {
@@ -18,7 +18,7 @@ POST http://localhost:11500/mail/claim
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Content-Type: application/json
-token: 6b87zbgagtg6dz3etcuhix4ye
+token: dkd0qpso9kkinazprqln3o31r
 uid: 1
 
 {
@@ -31,7 +31,7 @@ POST http://localhost:11500/mail/delete
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Content-Type: application/json
-token: 6b87zbgagtg6dz3etcuhix4ye
+token: dkd0qpso9kkinazprqln3o31r
 uid: 1
 
 {

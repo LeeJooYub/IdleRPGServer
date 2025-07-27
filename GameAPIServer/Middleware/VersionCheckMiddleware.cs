@@ -24,7 +24,7 @@ public class VersionCheckMiddleware
     {
         var appVersion = context.Request.Headers["AppVersion"].ToString();
         var masterDataVersion = context.Request.Headers["MasterDataVersion"].ToString();
-
+        _logger.LogInformation("MiddleWare Invoked!! AppVersion: {AppVersion}, MasterDataVersion: {MasterDataVersion}", appVersion, masterDataVersion);
         if (!(await VersionCompare(appVersion, masterDataVersion, context)))
         {
             return;
@@ -35,6 +35,15 @@ public class VersionCheckMiddleware
 
     async Task<bool> VersionCompare(string appVersion, string masterDataVersion, HttpContext context)
     {
+        _logger.LogInformation("VersionCompare 호출됨 - 요청값: AppVersion={AppVersion}, MasterDataVersion={MasterDataVersion}", appVersion, masterDataVersion);
+
+        if (_masterDb._version == null)
+        {
+            _logger.LogError("DB 버전 정보가 null입니다.");
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await context.Response.WriteAsync("DB 버전 정보가 없습니다.");
+            return false;
+        }
         if (!appVersion.Equals(_masterDb._version!.app_version))
         {
             context.Response.StatusCode = StatusCodes.Status426UpgradeRequired;

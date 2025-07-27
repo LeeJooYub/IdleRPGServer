@@ -10,15 +10,21 @@ using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services;
 using GameAPIServer.Services.Interfaces;
 
+using MySqlConnector;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
+
+TestDbConnection();
 
 builder.Services.Configure<DbConfig>(configuration.GetSection(nameof(DbConfig)));
 builder.Services.AddTransient<IGameDb, GameDb>();
 builder.Services.AddSingleton<IMemoryDb, MemoryDb>();
 builder.Services.AddSingleton<IMasterDb, MasterDb>();
 builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserDataLoadService, UserDataLoadService>();
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddControllers();
 
@@ -26,6 +32,7 @@ SettingLogger();
 
 var app = builder.Build();
 
+// 버전 불러오기 및 캐싱
 if (!await app.Services.GetService<IMasterDb>().Load())
 {
     return;
@@ -44,6 +51,36 @@ var masterDataDB = app.Services.GetRequiredService<IMasterDb>();
 await masterDataDB.Load();
 
 app.Run(configuration["ServerAddress"]);
+
+
+void TestDbConnection()
+{
+    // DB 연결 테스트 코드 (임시)
+    try
+    {
+        var connStr = configuration.GetSection(nameof(DbConfig))["MasterDb"];
+        using var conn = new MySqlConnection(connStr);
+        conn.Open();
+        Console.WriteLine("master DB 연결 성공!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"master DB 연결 실패: {ex.Message}");
+    }
+
+    // DB 연결 테스트 코드 (임시)
+    try
+    {
+        var connStr = configuration.GetSection(nameof(DbConfig))["GameDb"];
+        using var conn = new MySqlConnection(connStr);
+        conn.Open();
+        Console.WriteLine("GameDb 연결 성공!");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"GameDb 연결 실패: {ex.Message}");
+    }
+}
 
 void SettingLogger()
 {

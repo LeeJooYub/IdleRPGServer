@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+using System.Text.Json;
 using System.Data;
 using System.Threading.Tasks;
 
@@ -9,11 +10,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using GameAPIServer.Repository.Interfaces;
-using GameAPIServer.Models;
+using GameAPIServer.Models.MasterDB;
 
 namespace GameAPIServer.Repository;
 
-public class MasterDb : IMasterDb
+public partial class MasterDb : IMasterDb
 {
     private readonly IOptions<DbConfig> _dbConfig;
     private readonly ILogger<MasterDb> _logger;
@@ -23,7 +24,7 @@ public class MasterDb : IMasterDb
     private readonly IMemoryDb _memoryDb;
     private readonly IGameDb _gameDb;
 
-    public Version _version { get; set; }
+    public GameAPIServer.Models.MasterDB.Version _version { get; set; }
 
     public MasterDb(
         ILogger<MasterDb> logger,
@@ -44,7 +45,25 @@ public class MasterDb : IMasterDb
 
     public async Task<bool> Load()
     {
-        return true;
+        try
+        {
+            var versionRow = await _queryFactory.Query("version").FirstOrDefaultAsync<GameAPIServer.Models.MasterDB.Version>();
+            if (versionRow == null)
+            {
+                _logger.LogError("version 테이블에 데이터가 없습니다.");
+                _version = null;
+                return false;
+            }
+            _version = versionRow;
+            _logger.LogInformation("version 정보 로드 성공: AppVersion={AppVersion}, MasterDataVersion={MasterDataVersion}", _version.app_version, _version.master_data_version);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "version 정보 로드 실패");
+            _version = null;
+            return false;
+        }
     }
 
     public void Dispose()

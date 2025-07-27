@@ -1,4 +1,4 @@
-namespace GameAPIServer.Models;
+namespace GameAPIServer.Models.MasterDB;
 
 public class Version
 {
