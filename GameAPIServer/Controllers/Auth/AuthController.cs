@@ -37,9 +37,9 @@ public class AuthController : ControllerBase
     public async Task<LoginResponse> Login([FromBody] LoginRequest request)
     {
         var result = new LoginResult();
-        result = await _authService.Login(new LoginCommand
+        result = await _authService.Login(new LoginServiceInput
         {
-            PlatformId = request.PlatformId,
+            PlatformId = request.AccountId,
             PlatformToken = request.PlatformToken,
             PlatformName = request.PlatformName
         });

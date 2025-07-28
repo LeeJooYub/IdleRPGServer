@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GameAPIServer.DTO.ServiceDTO;
 
-public class LoginsServiceInput
+public class LoginServiceInput
 {
     [Required]
     public Int64 PlatformId { get; set; } = 0;

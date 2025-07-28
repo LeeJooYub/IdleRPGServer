@@ -13,6 +13,9 @@ using ZLogger;
 
 namespace HiveServer.Controllers;
 
+// 잘 사용하지 않는 컨트롤러
+// 게임 서버에서 해당 컨트롤러를 사용하지 않음
+// 게임 서버에서 주로 호출하는 것은 VerifyTokenController
 [ApiController]
 [Route("[controller]")]
 public class LoginHiveController : ControllerBase

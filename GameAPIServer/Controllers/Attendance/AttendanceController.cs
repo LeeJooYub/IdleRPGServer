@@ -41,12 +41,11 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<LoginResponse> Login([FromBody] LoginRequest request)
     {
-        var result = new LoginResult();
-        result = await _authService.Login(new LoginCommand
+        var result = new LoginServiceOutput();
+        result = await _authService.Login(new LoginServiceInput
         {
-            PlatformId = request.PlatformId,
-            PlatformToken = request.PlatformToken,
-            PlatformName = request.PlatformName
+            AccountId = request.AccountId,
+            HiveToken = request.HiveToken
         });
 
 
@@ -75,7 +74,7 @@ public class AuthController : ControllerBase
     }
     
 
-    
+
 }
 
 
