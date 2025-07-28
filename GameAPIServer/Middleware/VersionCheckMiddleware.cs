@@ -44,6 +44,7 @@ public class VersionCheckMiddleware
             await context.Response.WriteAsync("DB 버전 정보가 없습니다.");
             return false;
         }
+        
         if (!appVersion.Equals(_masterDb._version!.app_version))
         {
             context.Response.StatusCode = StatusCodes.Status426UpgradeRequired;

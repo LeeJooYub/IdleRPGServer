@@ -40,16 +40,16 @@ public class MailController
     [HttpPost("list")]
     public async Task<MailListResponse> GetMailListAsync([FromBody] MailListRequest request)
     {
-        MailListCommand command = new MailListCommand
+        var command = new MailListCommand
         {
             AccountId = request.AccountId,
             Cursor = request.Cursor, // Updated to ensure DateTime cursor is passed
             Limit = request.Limit
         };
 
-        MailListResult result = await _mailService.GetMailListAsync(command);
+        var result = await _mailService.GetMailListAsync(command);
         
-        MailListResponse response = new MailListResponse
+        var response = new MailListResponse
         {
             Mails = result.Mails,
             ErrorCode = result.ErrorCode, // 에러 코드 추가
@@ -76,8 +76,7 @@ public class MailController
         };
         var result = await _mailService.ClaimMailRewardAsync(command);
 
-
-        ClaimMailResponse response = new ClaimMailResponse
+        var response = new ClaimMailResponse
         {
             ErrorCode = result.ErrorCode,
             Rewards = result.Rewards // 보상 목록 추가
@@ -96,16 +95,16 @@ public class MailController
     public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
     {
         // 메일 삭제
-        DeleteMailCommand command = new DeleteMailCommand
+        var command = new DeleteMailCommand
         {
             MailId = request.MailId,
             AccountId = request.AccountId
         };
-        DeleteMailResult result = await _mailService.DeleteMailAsync(command);
+        var result = await _mailService.DeleteMailAsync(command);
 
 
 
-        DeleteMailResponse response = new DeleteMailResponse
+        var response = new DeleteMailResponse
         {
             ErrorCode = result.ErrorCode
         };
@@ -123,20 +122,19 @@ public class MailController
     // {
     //     // 모든 메일 보상 일괄 수령
     //     ClaimAllMailsCommand command = new ClaimAllMailsCommand
-    //     {
-    //         AccountId = request.AccountId
-    //     };
-    //     ClaimAllMailsResult result = await _mailService.ClaimAllMailRewardsAsync(command);
+        // 메일 삭제
+        // var command = new DeleteMailCommand
+        // {
+        //     MailId = request.MailId,
+        //     AccountId = request.AccountId
+        // };
+        // var result = await _mailService.DeleteMailAsync(command);
 
-
-
-    //     ClaimAllMailsResponse response = new ClaimAllMailsResponse
-    //     {
-    //         TotalClaimed = result.TotalClaimed,
-    //         Rewards = result.Rewards,
-    //         ErrorCode = result.ErrorCode
-    //     };
-    //     return response;
+        // var response = new DeleteMailResponse
+        // {
+        //     ErrorCode = result.ErrorCode
+        // };
+        // return response;
     // }
 
 }

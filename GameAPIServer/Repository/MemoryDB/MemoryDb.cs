@@ -30,7 +30,7 @@ public class MemoryDb : IMemoryDb
 
     public async Task<ErrorCode> ActivateGameTokenAsync(string token, Int64 account_id)
     {
-        var key = MemoryDbKeyMaker.MakeUIDKey(account_id.ToString());
+        var key = MemoryDbKeyMaker.UIDKey(account_id.ToString());
         var result = ErrorCode.None;
 
         var user = new RdbAuthUserData
@@ -85,7 +85,7 @@ public class MemoryDb : IMemoryDb
 
     public async Task<(bool, RdbAuthUserData)> GetUserAsync(string id)
     {
-        var uid = MemoryDbKeyMaker.MakeUIDKey(id);
+        var uid = MemoryDbKeyMaker.UIDKey(id);
 
         try
         {
@@ -112,7 +112,7 @@ public class MemoryDb : IMemoryDb
     {
         try
         {
-            var redis = new RedisString<RdbAuthUserData>(_redisConn, MemoryDbKeyMaker.MakeUIDKey(account_id.ToString()), null);
+            var redis = new RedisString<RdbAuthUserData>(_redisConn, MemoryDbKeyMaker.UIDKey(account_id.ToString()), null);
             await redis.DeleteAsync();
             return ErrorCode.None;
         }

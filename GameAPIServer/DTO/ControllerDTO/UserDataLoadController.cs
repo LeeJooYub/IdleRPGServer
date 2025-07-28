@@ -28,9 +28,8 @@ namespace GameAPIServer.DTO.ControllerDTO
         [Required] public Int64 Uid { get; set; } // 유저 ID
         [Required] public string Token { get; set; } // 인증 토큰
     }
-    public class UserDataCurrenyLoadResponse
+    public class UserDataCurrenyLoadResponse : ErrorCodeDTO
     {
-        public ErrorCode Result { get; set; } // 결과 코드
         public List<Currency> CurrencyList { get; set; } = new List<Currency>();// 화폐 데이터
     }
 
@@ -40,9 +39,8 @@ namespace GameAPIServer.DTO.ControllerDTO
         [Required] public string Token { get; set; } // 인증 토큰
     }
 
-    public class UserDataInventoryLoadResponse
+    public class UserDataInventoryLoadResponse : ErrorCodeDTO
     {
-        public ErrorCode Result { get; set; } // 결과 코드
         public List<UserInventory> InventoryItems { get; set; } = new List<UserInventory>();
     }
 
@@ -52,9 +50,8 @@ namespace GameAPIServer.DTO.ControllerDTO
         [Required] public string Token { get; set; } // 인증 토큰
     }
 
-    public class UserCharacterInfoLoadResponse
+    public class UserCharacterInfoLoadResponse : ErrorCodeDTO
     {
-        public ErrorCode Result { get; set; } // 결과 코드
         public UserCharacter Characters { get; set; } = new UserCharacter(); // 캐릭터 정보
     }
 }

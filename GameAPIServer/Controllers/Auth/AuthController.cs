@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<LoginResponse> Login([FromBody] LoginRequest request)
     {
-        LoginResult result = new LoginResult();
+        var result = new LoginResult();
         result = await _authService.Login(new LoginCommand
         {
             PlatformId = request.PlatformId,
@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
         {
             ErrorCode = result.ErrorCode,
             AccountId = result.AccountId,
-            GameServerToken = result.GameServerToken,
+            SessionKey = result.GameServerToken,
             // Nickname = request.Nickname // Nickname은 현재 사용하지 않음
         };
 
@@ -64,7 +64,6 @@ public class AuthController : ControllerBase
     [HttpPost("Logout")]
     public async Task<ErrorCode> DeleteUserToken([FromBody] LogoutRequest request)
     {
-        LogoutResponse response = new();
         var errorCode = await _memoryDb.DelUserAuthAsync(request.AccountId);
 
         return errorCode;

@@ -17,7 +17,7 @@ using ZLogger;
 namespace GameAPIServer.Controllers.User;
 
 [ApiController]
-[Route("userdataload")]
+[Route("loaduserdata")]
 public class UserDataLoadController : ControllerBase
 {
     private readonly ILogger<UserDataLoadController> _logger;
@@ -42,16 +42,16 @@ public class UserDataLoadController : ControllerBase
     [HttpPost("currency")]
     public async Task<UserDataCurrenyLoadResponse> LoadUserCurrencyData(UserDataCurrenyLoadRequest request)
     {
-        GetUserCurrencyCommand command = new()
+        var command = new GetUserCurrencyCommand
         {
             AccountId = request.Uid
         };
-        GetUserCurrencyResult result = await _userDataLoadService.GetUserCurrencyAsync(command);
+        var result = await _userDataLoadService.GetUserCurrencyAsync(command);
 
 
-        UserDataCurrenyLoadResponse response = new()
+        var response = new UserDataCurrenyLoadResponse
         {
-            Result = (ErrorCode)result.ErrorCode,
+            ErrorCode = (ErrorCode)result.ErrorCode,
             CurrencyList = result.CurrencyList
         };
 
@@ -62,16 +62,16 @@ public class UserDataLoadController : ControllerBase
     [HttpPost("inventory")]
     public async Task<UserDataInventoryLoadResponse> LoadUserInventoryData(UserDataCurrenyLoadRequest request)
     {
-        GetUserInventoryCommand command = new()
+        var command = new GetUserInventoryCommand
         {
             AccountId = request.Uid
         };
-        GetUserInventoryResult result = await _userDataLoadService.GetUserInventoryAsync(command);
+        var result = await _userDataLoadService.GetUserInventoryAsync(command);
 
 
-        UserDataInventoryLoadResponse response = new()
+        var response = new UserDataInventoryLoadResponse
         {
-            Result = (ErrorCode)result.ErrorCode,
+            ErrorCode = (ErrorCode)result.ErrorCode,
             InventoryItems = result.InventoryItems,
         };
 

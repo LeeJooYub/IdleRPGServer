@@ -45,9 +45,8 @@ namespace GameAPIServer.DTO.ServiceDTO
         public Int64 AccountId { get; set; } // 사용자 ID
     }
 
-    public class ClaimMailResult
+    public class ClaimMailResult : ErrorCodeDTO
     {
-        public ErrorCode ErrorCode { get; set; } = ErrorCode.None;
         public List<MailRewardDto> Rewards { get; set; } // 보상 목록
     }
 
@@ -58,9 +57,8 @@ namespace GameAPIServer.DTO.ServiceDTO
         public Int64 AccountId { get; set; } // 사용자 ID
     }
 
-    public class DeleteMailResult
+    public class DeleteMailResult : ErrorCodeDTO
     {
-        public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
     }
 
     // ClaimAllMails
@@ -69,9 +67,8 @@ namespace GameAPIServer.DTO.ServiceDTO
         public Int64 AccountId { get; set; } // 사용자 ID
     }
 
-    public class ClaimAllMailsResult
+    public class ClaimAllMailsResult : ErrorCodeDTO
     {
-        public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
         public int TotalClaimed { get; set; } = 0;// 수령한 메일 수
         public List<MailRewardDto> Rewards { get; set; } // 보상 목록
     }

@@ -61,7 +61,7 @@ namespace GameAPIServer.Services
         {
             ClaimMailResult result = new ClaimMailResult();
             ErrorCode errorCode;
-            List<MailRewardDto> rewards = new List<MailRewardDto>();
+            var rewards = new List<MailRewardDto>();
             try
             {
                 (errorCode, rewards) = await _gameDb.ClaimMailRewardAsync(command.MailId);

@@ -41,7 +41,7 @@ public partial class GameDb : IGameDb
         }
 
         // 쿼리 실행 및 결과 반환
-        List<Mail> mails = (await query.GetAsync<Mail>()).ToList();
+        var mails = (await query.GetAsync<Mail>()).ToList();
         DateTime? nextCursor = null;
         if (mails.Count > 0)
         {
@@ -89,14 +89,8 @@ public partial class GameDb : IGameDb
 
         // 보상 추출
         var rewards = new List<MailRewardDto>();
-        if (mail.reward1_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward1_id, RewardType = mail.reward1_type ?? "", RewardQty = mail.reward1_qty });
-        if (mail.reward2_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward2_id, RewardType = mail.reward2_type ?? "", RewardQty = mail.reward2_qty });
-        if (mail.reward3_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward3_id, RewardType = mail.reward3_type ?? "", RewardQty = mail.reward3_qty });
-        if (mail.reward4_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward4_id, RewardType = mail.reward4_type ?? "", RewardQty = mail.reward4_qty });
-        if (mail.reward5_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward5_id, RewardType = mail.reward5_type ?? "", RewardQty = mail.reward5_qty });
-        if (mail.reward6_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward6_id, RewardType = mail.reward6_type ?? "", RewardQty = mail.reward6_qty });    
-        if (mail.reward7_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward7_id, RewardType = mail.reward7_type ?? "", RewardQty = mail.reward7_qty });
-        if (mail.reward8_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward8_id, RewardType = mail.reward8_type ?? "", RewardQty = mail.reward8_qty });
+        if (mail.reward_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward1_id, RewardType = mail.reward1_type ?? "", RewardQty = mail.reward1_qty });
+
 
         if (rewards.Count == 0)
         {
