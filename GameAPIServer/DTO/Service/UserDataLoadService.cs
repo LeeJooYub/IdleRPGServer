@@ -9,12 +9,12 @@ using GameAPIServer.Models.MasterDB;
 namespace GameAPIServer.DTO.ServiceDTO
 {
 
-    public class GetUserInfoCommand
+    public class GetUserInfoServiceInput
     {
         public Int64 AccountId { get; set; }
     }
 
-    public class GetUserInfoResult
+    public class GetUserInfoServiceOutput
     {
         public Int64 AccountId { get; set; }
         public string Nickname { get; set; }
@@ -23,12 +23,12 @@ namespace GameAPIServer.DTO.ServiceDTO
         public ErrorCode ErrorCode { get; set; }
     }
 
-    public class GetUserCurrencyCommand
+    public class GetUserCurrencyServiceInput
     {
         public Int64 AccountId { get; set; }
     }
 
-    public class GetUserCurrencyResult
+    public class GetUserCurrencyServiceOutput
     {
         public Int64 AccountId { get; set; }
         public List<Currency> CurrencyList { get; set; } = new List<Currency>();
@@ -36,25 +36,25 @@ namespace GameAPIServer.DTO.ServiceDTO
     }
 
 
-    public class GetUserInventoryCommand
+    public class GetUserInventoryServiceInput
     {
         public Int64 AccountId { get; set; }
     }
 
 
-    public class GetUserInventoryResult
+    public class GetUserInventoryServiceOutput
     {
         public Int64 AccountId { get; set; }
         public List<UserInventory> InventoryItems { get; set; } = new List<UserInventory>();
         public ErrorCode ErrorCode { get; set; }
     }
 
-    public class GetUserCharacterInfoCommand
+    public class GetUserCharacterServiceInput
     {
         public Int64 AccountId { get; set; }
     }
 
-    public class GetUserCharacterInfoResult
+    public class GetUserCharacterInfoServiceOutput
     {
         public Int64 AccountId { get; set; }
         public UserCharacter Character { get; set; } = new UserCharacter();

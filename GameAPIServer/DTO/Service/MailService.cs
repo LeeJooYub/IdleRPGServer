@@ -9,16 +9,15 @@ using GameAPIServer.Models.MasterDB;
 namespace GameAPIServer.DTO.ServiceDTO
 {
     // GetMailList
-    public class MailListCommand
+    public class MailListServiceInput
     {
         public Int64 AccountId { get; set; } // 사용자 ID
         public DateTime? Cursor { get; set; } // 커서 값 (마지막 메일 ID)
         public int Limit { get; set; } // 가져올 메일 개수
     }
 
-    public class MailListResult
+    public class MailListServiceOutput : ErrorCodeDTO
     {
-        public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
         public List<Mail> Mails { get; set; } // 메일 목록
         public DateTime? NextCursor { get; set; } // 다음 페이지를 위한 커서 값 (마지막 메일의 receive_dt)
     }
@@ -38,40 +37,40 @@ namespace GameAPIServer.DTO.ServiceDTO
     // }
 
     // ClaimMail
-    public class ClaimMailCommand
+    public class ClaimMailServiceInput
     {
         public Int64 MailId { get; set; } // 메일 ID
-
         public Int64 AccountId { get; set; } // 사용자 ID
     }
 
-    public class ClaimMailResult : ErrorCodeDTO
+    public class ClaimMailServiceOutput : ErrorCodeDTO
     {
         public List<MailRewardDto> Rewards { get; set; } // 보상 목록
     }
 
+
     // DeleteMail
-    public class DeleteMailCommand
+    public class DeleteMailServiceInput
     {
         public Int64 MailId { get; set; } // 메일 ID
         public Int64 AccountId { get; set; } // 사용자 ID
     }
 
-    public class DeleteMailResult : ErrorCodeDTO
+    public class DeleteMailServiceOutput : ErrorCodeDTO
     {
     }
 
     // ClaimAllMails
-    public class ClaimAllMailsCommand
-    {
-        public Int64 AccountId { get; set; } // 사용자 ID
-    }
+    // public class ClaimAllMailsCommand
+    // {
+    //     public Int64 AccountId { get; set; } // 사용자 ID
+    // }
 
-    public class ClaimAllMailsResult : ErrorCodeDTO
-    {
-        public int TotalClaimed { get; set; } = 0;// 수령한 메일 수
-        public List<MailRewardDto> Rewards { get; set; } // 보상 목록
-    }
+    // public class ClaimAllMailsResult : ErrorCodeDTO
+    // {
+    //     public int TotalClaimed { get; set; } = 0;// 수령한 메일 수
+    //     public List<MailRewardDto> Rewards { get; set; } // 보상 목록
+    // }
 
     
 }
