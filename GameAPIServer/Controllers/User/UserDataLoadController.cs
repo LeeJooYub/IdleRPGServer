@@ -17,7 +17,7 @@ using ZLogger;
 namespace GameAPIServer.Controllers.User;
 
 [ApiController]
-[Route("userdataload")]
+[Route("loaduserdata")]
 public class UserDataLoadController : ControllerBase
 {
     private readonly ILogger<UserDataLoadController> _logger;

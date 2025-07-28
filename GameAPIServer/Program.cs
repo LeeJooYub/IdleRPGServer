@@ -16,9 +16,10 @@ using System;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-
+// 1. 데이터베이스 연결 테스트
 TestDbConnection();
 
+// 2. 서비스 등록
 builder.Services.Configure<DbConfig>(configuration.GetSection(nameof(DbConfig)));
 builder.Services.AddTransient<IGameDb, GameDb>();
 builder.Services.AddSingleton<IMemoryDb, MemoryDb>();
@@ -28,57 +29,56 @@ builder.Services.AddTransient<IUserDataLoadService, UserDataLoadService>();
 builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddControllers();
 
+// 3. 로깅 설정
 SettingLogger();
 
 var app = builder.Build();
 
-// 버전 불러오기 및 캐싱
-if (!await app.Services.GetService<IMasterDb>().Load())
+// 4. 마스터 데이터 로드
+var masterDataDB = app.Services.GetRequiredService<IMasterDb>();
+if (!await masterDataDB.Load())
 {
     return;
 }
 
-// log setting
-// var loggerFactory = app.Services.GetRequiredService<ILoggerFactory>();
+// 5. 미들웨어 등록
 app.UseMiddleware<GameAPIServer.Middleware.VersionCheckMiddleware>();
 app.UseMiddleware<GameAPIServer.Middleware.CheckUserAuthMiddleware>();
 app.UseMiddleware<GameAPIServer.Middleware.LockRedisMiddleware>();
 
+// 6. 라우팅 및 실행
 app.UseRouting();
 app.MapDefaultControllerRoute();
-
-var masterDataDB = app.Services.GetRequiredService<IMasterDb>();
-await masterDataDB.Load();
-
 app.Run(configuration["ServerAddress"]);
+
+
+
+
+
+//// 아래는 함수 ///
+
+
+
 
 
 void TestDbConnection()
 {
-    // DB 연결 테스트 코드 (임시)
-    try
-    {
-        var connStr = configuration.GetSection(nameof(DbConfig))["MasterDb"];
-        using var conn = new MySqlConnection(connStr);
-        conn.Open();
-        Console.WriteLine("master DB 연결 성공!");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"master DB 연결 실패: {ex.Message}");
-    }
+    TestSingleDbConnection("MasterDb");
+    TestSingleDbConnection("GameDb");
+}
 
-    // DB 연결 테스트 코드 (임시)
+void TestSingleDbConnection(string dbName)
+{
     try
     {
-        var connStr = configuration.GetSection(nameof(DbConfig))["GameDb"];
+        var connStr = configuration.GetSection(nameof(DbConfig))[dbName];
         using var conn = new MySqlConnection(connStr);
         conn.Open();
-        Console.WriteLine("GameDb 연결 성공!");
+        Console.WriteLine($"{dbName} 연결 성공!");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"GameDb 연결 실패: {ex.Message}");
+        Console.WriteLine($"{dbName} 연결 실패: {ex.Message}");
     }
 }
 
