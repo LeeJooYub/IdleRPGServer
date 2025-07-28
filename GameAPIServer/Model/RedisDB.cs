@@ -7,5 +7,5 @@ namespace GameAPIServer.Models;
 public class RdbAuthUserData
 {
     public Int64 AccountId { get; set; } = 0;
-    public string GameServerToken { get; set; } = "";
+    public string SessionKey { get; set; } = "";
 }
