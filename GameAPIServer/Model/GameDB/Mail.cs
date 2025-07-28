@@ -6,11 +6,8 @@ namespace GameAPIServer.Models.GameDB
     // 메일
     public class Mail
     {
-        public Int64 mail_seq { get; set; }
+        public Int64 mail_id { get; set; }
         public Int64 account_uid { get; set; } = 0;
-
-        // public Int64 mail_id { get; set; } = 0;
-        // public Int64 account_id { get; set; } = 0;
         public string mail_type { get; set; } = "normal"; // e.g., "normal", "important"
         public string sender { get; set; } = "System";
         public string receive_condition { get; set; } = "none"; // e.g., "none", "advertise" 메일을 받기 위한 조건. advertise는 광고 시청 후 메일 받기 가능
