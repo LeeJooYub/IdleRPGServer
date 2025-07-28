@@ -10,12 +10,10 @@ namespace GameAPIServer.Middleware;
 
 public class CheckUserAuthMiddleware
 {
-    readonly IMemoryDb _memoryDb;
     readonly RequestDelegate _next;
 
-    public CheckUserAuthMiddleware(RequestDelegate next, IMemoryDb memoryDb)
+    public CheckUserAuthMiddleware(RequestDelegate next)
     {
-        _memoryDb = memoryDb;
         _next = next;
     }
 
@@ -48,7 +46,6 @@ public class CheckUserAuthMiddleware
         context.Items["account_id"] = uid;
         context.Items["game_server_token"] = token;
 
-        // Call the next delegate/middleware in the pipeline
         await _next(context);
 
     }

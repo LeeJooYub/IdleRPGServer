@@ -23,10 +23,9 @@ public class LockRedisMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        //로그인, 회원가입 api는 토큰 검사를 하지 않는다.
+        //로그인 api는 토큰 검사를 하지 않는다.
         var formString = context.Request.Path.Value;
-        if (string.Compare(formString, "/Login", StringComparison.OrdinalIgnoreCase) == 0 ||
-            string.Compare(formString, "/CreateAccount", StringComparison.OrdinalIgnoreCase) == 0)
+        if (string.Compare(formString, "/Login", StringComparison.OrdinalIgnoreCase) == 0)
         {
             // Call the next delegate/middleware in the pipeline
             await _next(context);
@@ -34,11 +33,11 @@ public class LockRedisMiddleware
             return;
         }
 
-        string uid = context.Items["account_id"]?.ToString();
-        string token = context.Items["game_server_token"]?.ToString();
+        var uid = context.Items["account_id"]?.ToString();
+        var token = context.Items["game_server_token"]?.ToString();
 
         //uid를 키로 하는 데이터 없을 때
-        (bool isOk, RdbAuthUserData userInfo) = await _memoryDb.GetUserAsync(uid);
+        var (isOk, userInfo) = await _memoryDb.GetUserAsync(uid);
         if (await IsInvalidUserAuthTokenNotFound(context, isOk))
         {
             return;
@@ -52,7 +51,7 @@ public class LockRedisMiddleware
 
 
         //이번 api 호출 끝날 때까지 redis키 잠금 만약 이미 잠겨있다면 에러
-        var userLockKey = MemoryDbKeyMaker.MakeUserLockKey(userInfo.AccountId.ToString());
+        var userLockKey = MemoryDbKeyMaker.UserLockKey(userInfo.AccountId.ToString());
         if (await SetLockAndIsFailThenSendError(context, userLockKey))
         {
             return;

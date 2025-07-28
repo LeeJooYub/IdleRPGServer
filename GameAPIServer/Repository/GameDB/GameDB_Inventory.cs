@@ -26,7 +26,7 @@ public partial class GameDb : IGameDb
     public async Task<(ErrorCode,List<Currency>)> GetUserCurrencyAsync(Int64 accountId)
     {
         ErrorCode errorCode = ErrorCode.None;
-        List<Currency> currencyList = new List<Currency>();
+        var currencyList = new List<Currency>();
 
         try
         {
@@ -54,7 +54,7 @@ public partial class GameDb : IGameDb
     public async Task<(ErrorCode, List<UserInventory>)> GetUserInventoryItemAsync(Int64 accountId)
     {
         ErrorCode errorCode = ErrorCode.None;
-        List<UserInventory> userInventory = new List<UserInventory>();
+        var userInventory = new List<UserInventory>();
         try
         {
             SqlKata.Query query = _queryFactory.Query("user_inventory")

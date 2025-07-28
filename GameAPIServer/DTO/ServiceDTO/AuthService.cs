@@ -15,9 +15,8 @@ public class LoginCommand
     public string PlatformName { get; set; } = "";
 }
 
-public class LoginResult
+public class LoginResult : ErrorCodeDTO
 {
-    [Required] public ErrorCode ErrorCode { get; set; } = ErrorCode.None;
     [Required] public string GameServerToken { get; set; } = "";
     [Required] public Int64 AccountId { get; set; } = 0;
 

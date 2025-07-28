@@ -32,7 +32,7 @@ public class UserDataLoadService : IUserDataLoadService
     public async Task<GetUserCurrencyResult> GetUserCurrencyAsync(GetUserCurrencyCommand command)
     {
         ErrorCode errorCode = ErrorCode.None;
-        List<Currency> currencyList = new List<Currency>();
+        var currencyList = new List<Currency>();
 
         try
         {
@@ -65,7 +65,7 @@ public class UserDataLoadService : IUserDataLoadService
     public async Task<GetUserInventoryResult> GetUserInventoryAsync(GetUserInventoryCommand command)
     {
         ErrorCode errorCode = ErrorCode.None;
-        List<UserInventory> inventory = new List<UserInventory>();
+        var inventory = new List<UserInventory>();
 
         try
         {
