@@ -40,7 +40,7 @@ public partial class GameDb : IGameDb
             .Where("reward_receive_yn", "!=", "Y") // receive_yn이 'Y'가 아닌 상태
             .OrderByDesc("create_dt") // create_dt 기준으로 내림차순 정렬
             .Limit(limit);
-
+       
         // 쿼리 실행 및 결과 반환
         var mails = (await query.GetAsync<Mail>()).ToList();
         DateTime? nextCursor = null;
