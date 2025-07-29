@@ -25,7 +25,8 @@ public class LockRedisMiddleware
     {
         //로그인 api는 토큰 검사를 하지 않는다.
         var formString = context.Request.Path.Value;
-        if (string.Compare(formString, "/Login", StringComparison.OrdinalIgnoreCase) == 0)
+        if (string.Compare(formString, "/Login", StringComparison.OrdinalIgnoreCase) == 0 ||
+            string.Compare(formString, "/Logout", StringComparison.OrdinalIgnoreCase) == 0)
         {
             // Call the next delegate/middleware in the pipeline
             await _next(context);
@@ -33,25 +34,11 @@ public class LockRedisMiddleware
             return;
         }
 
-        var uid = context.Items["account_id"]?.ToString();
-        var token = context.Items["game_server_token"]?.ToString();
-
-        //uid를 키로 하는 데이터 없을 때
-        var (isOk, userInfo) = await _memoryDb.GetUserAsync(uid);
-        if (await IsInvalidUserAuthTokenNotFound(context, isOk))
-        {
-            return;
-        }
-
-        //토큰이 일치하지 않을 때
-        if (await IsInvalidUserAuthTokenThenSendError(context, userInfo, token))
-        {
-            return;
-        }
+        var userInfo = context.Items["userinfo"] as RdbAuthUserData;
 
 
         //이번 api 호출 끝날 때까지 redis키 잠금 만약 이미 잠겨있다면 에러
-        var userLockKey = MemoryDbKeyMaker.UserLockKey(userInfo.AccountId.ToString());
+        var userLockKey = MemoryDbKeyMaker.UserLockKey(userInfo.TokenKey.ToString());
         if (await SetLockAndIsFailThenSendError(context, userLockKey))
         {
             return;
@@ -65,11 +52,6 @@ public class LockRedisMiddleware
         // 트랜잭션 해제(Redis 동기화 해제)
         await _memoryDb.DelUserReqLockAsync(userLockKey);
     }
-
-
-
-
-
 
 
     async Task<bool> SetLockAndIsFailThenSendError(HttpContext context, string AuthToken)
@@ -86,37 +68,6 @@ public class LockRedisMiddleware
         });
         await context.Response.WriteAsync(errorJsonResponse);
         return true;
-    }
-
-    async Task<bool> IsInvalidUserAuthTokenThenSendError(HttpContext context, RdbAuthUserData userInfo, string token)
-    {
-        if (string.CompareOrdinal(userInfo.GameServerToken, token) == 0)
-        {
-            return false;
-        }
-
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        var errorJsonResponse = JsonSerializer.Serialize(new MiddlewareResponse
-        {
-            result = ErrorCode.AuthTokenFailWrongAuthToken
-        });
-        await context.Response.WriteAsync(errorJsonResponse);
-
-        return true;
-    }
-
-    async Task<bool> IsInvalidUserAuthTokenNotFound(HttpContext context, bool isOk)
-    {
-        if (!isOk)
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            var errorJsonResponse = JsonSerializer.Serialize(new MiddlewareResponse
-            {
-                result = ErrorCode.AuthTokenKeyNotFound
-            });
-            await context.Response.WriteAsync(errorJsonResponse);
-        }
-        return !isOk;
     }
     
 

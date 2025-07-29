@@ -5,7 +5,7 @@ namespace HiveServer.Services.Interfaces
 {
     public interface ICreateHiveAccountService
     {
-        Task<ErrorCode> CreateAccountAsync(CreateHiveAccountCommand command);
+        Task<ErrorCode> CreateAccountAsync(CreateHiveAccountInput input);
 
 
     }

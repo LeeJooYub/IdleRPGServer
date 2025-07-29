@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HiveServer.Model.DTO;
 
-public class CreateHiveAccountCommand
+public class CreateHiveAccountInput
 {
     [Required]
     [MinLength(1, ErrorMessage = "EMAIL CONNOT BE EMPTY")]
@@ -17,7 +17,7 @@ public class CreateHiveAccountCommand
     public string Password { get; set; }
 }
 
-public class CreateHiveAccountResult
+public class CreateHiveAccountOutput
 {
     [Required]
     public ErrorCode Result { get; set; } = ErrorCode.None;

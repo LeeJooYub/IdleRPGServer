@@ -6,7 +6,7 @@ namespace GameAPIServer.DTO.ServiceDTO;
 public class LoginInput
 {
     [Required]
-    public Int64 AccountId { get; set; } = 0;
+    public Int64 AccountUid { get; set; } = 0;
 
     [Required]
     public string Token { get; set; } = "";
@@ -14,8 +14,8 @@ public class LoginInput
 
 public class LoginOutput : ErrorCodeDTO
 {
-    [Required] public string GameServerToken { get; set; } = "";
-    [Required] public Int64 AccountId { get; set; } = 0;
+    [Required] public string Token { get; set; } = "";
+    [Required] public Int64 AccountUid { get; set; } = 0;
 
     // public DataLoadUserInfo userData { get; set; }
 }

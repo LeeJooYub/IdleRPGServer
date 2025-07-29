@@ -6,7 +6,7 @@ namespace GameAPIServer.DTO.ControllerDTO;
 public class LoginRequest 
 {
     [Required]
-    public Int64 AccountId { get; set; } = 0;
+    public Int64 AccountUid { get; set; } = 0;
 
     [Required]
     public string Token { get; set; } = "";
@@ -14,13 +14,12 @@ public class LoginRequest
 
 public class LoginResponse : ErrorCodeDTO
 {
-    [Required] public string SessionKey { get; set; } = "";
 }
 
 public class LogoutRequest
 {
     [Required]
-    public string SessionKey { get; set; }
+    public string Token { get; set; }
 }
 
 public class LogoutResponse  : ErrorCodeDTO

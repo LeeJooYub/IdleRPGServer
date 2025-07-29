@@ -30,7 +30,7 @@ public partial class GameDb : IGameDb
     {
         // 쿼리 작성: 특정 계정의 메일을 가져오고, receive_dt 기준으로 정렬
         SqlKata.Query query = _queryFactory.Query("mail")
-            .Where("account_id", accountId)
+            .Where("account_uid", accountId)
             .OrderByDesc("receive_dt") // receive_dt 기준으로 내림차순 정렬
             .Limit(limit);
 

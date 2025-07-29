@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HiveServer.Model.DTO;
 
-public class LoginHiveCommand
+public class LoginHiveRequest
 {
     [Required]
     [MinLength(1, ErrorMessage = "EMAIL CANNOT BE EMPTY")]
@@ -18,14 +18,14 @@ public class LoginHiveCommand
     public string Password { get; set; }
 }
 
-public class LoginHiveResult
+public class LoginHiveResponse
 {
     [Required]
     public ErrorCode Result { get; set; } = ErrorCode.None;
     [Required]
-    public Int64 PlayerId { get; set; }
+    public Int64 AccountUid { get; set; }
     [Required]
-    public string HiveToken { get; set; }
+    public string Token { get; set; }
 }
 
 

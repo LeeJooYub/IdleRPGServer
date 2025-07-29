@@ -45,7 +45,7 @@ namespace GameAPIServer.Services
 
             try
             {
-                (result.Mails, result.NextCursor) = await _gameDb.GetMailListAsync(input.AccountId, input.Cursor, input.Limit);
+                (result.Mails, result.NextCursor) = await _gameDb.GetMailListAsync(input.AccountUid, input.Cursor, input.Limit);
             }
             catch (Exception ex)
             {

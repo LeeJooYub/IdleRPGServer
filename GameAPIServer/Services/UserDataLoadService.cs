@@ -36,10 +36,10 @@ public class UserDataLoadService : IUserDataLoadService
 
         try
         {
-            (errorCode,currencyList)= await _gameDb.GetUserCurrencyAsync(input.AccountId);
+            (errorCode,currencyList)= await _gameDb.GetUserCurrencyAsync(input.AccountUid);
             var result = new GetUserCurrencyOutput
             {
-                AccountId = input.AccountId,
+                AccountUid = input.AccountUid,
                 CurrencyList = currencyList,
                 ErrorCode = 0 // Assuming 0 means no error
             };
@@ -50,10 +50,10 @@ public class UserDataLoadService : IUserDataLoadService
 
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading user currency for AccountId: {AccountId}", input.AccountId);
+            _logger.LogError(ex, "Error loading user currency for AccountUid: {AccountUid}", input.AccountUid);
             var result = new GetUserCurrencyOutput
             {
-                AccountId = input.AccountId,
+                AccountUid = input.AccountUid,
                 CurrencyList = new List<UserCurrency>(), // Return an empty list on error
                 ErrorCode = ErrorCode.UserMoneyInfoFailException // Assuming -1 means an error occurred
             };
@@ -69,10 +69,10 @@ public class UserDataLoadService : IUserDataLoadService
 
         try
         {
-            (errorCode,inventory) = await _gameDb.GetUserInventoryItemAsync(input.AccountId);
+            (errorCode,inventory) = await _gameDb.GetUserInventoryItemAsync(input.AccountUid);
             var result = new GetUserInventoryOutput
             {
-                AccountId = input.AccountId,
+                AccountUid = input.AccountUid,
                 InventoryItems = inventory,
                 ErrorCode = 0 // Assuming 0 means no error
             };
@@ -81,10 +81,10 @@ public class UserDataLoadService : IUserDataLoadService
 
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading user inventory for AccountId: {AccountId}", input.AccountId);
+            _logger.LogError(ex, "Error loading user inventory for AccountUid: {AccountUid}", input.AccountUid);
             var result = new GetUserInventoryOutput
             {
-                AccountId = input.AccountId,
+                AccountUid = input.AccountUid,
                 ErrorCode = ErrorCode.UserInventoryFailException // Assuming -1 means an error occurred
             };
             return result;

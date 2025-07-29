@@ -1,103 +1,126 @@
 use game_db;
 
-CREATE TABLE user (
-    account_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    platform_id BIGINT NOT NULL,
-    platform_name VARCHAR(255) NOT NULL DEFAULT 'hive',
-    nickname VARCHAR(255) NOT NULL DEFAULT 'default_nickname',
-    created_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+DROP TABLE IF EXISTS User;
+-- User 테이블 (예시)
+CREATE TABLE User (
+    account_uid BIGINT PRIMARY KEY,
+    create_dt DATETIME NOT NULL,
+    last_login_dt DATETIME NOT NULL
 );
 
-use game_db;
+DROP TABLE IF EXISTS Attendance;
+-- Attendance 테이블
+CREATE TABLE Attendance (
+    account_uid BIGINT NOT NULL,
+    attendance_book_id BIGINT NOT NULL,
+    last_attendance_dt DATETIME NOT NULL,
+    attendance_continue_cnt INT NOT NULL,
+    PRIMARY KEY (account_uid, attendance_book_id)
+);
 
-DROP TABLE IF EXISTS mail;
-CREATE TABLE mail (
-    mail_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    account_id BIGINT NOT NULL,
-    mail_type VARCHAR(50) NOT NULL DEFAULT 'normal',
-    sender VARCHAR(100) NOT NULL DEFAULT 'System',
-    receive_condition VARCHAR(50) NOT NULL DEFAULT 'none',
-    subject VARCHAR(255) NOT NULL DEFAULT 'No Subject',
-    content VARCHAR(150) NOT NULL DEFAULT 'No Content',
-    create_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+DROP TABLE IF EXISTS UserCurrency;
+-- UserCurrency 테이블
+CREATE TABLE UserCurrency (
+    account_uid BIGINT NOT NULL,
+    currency_id INT NOT NULL,
+    amount INT NOT NULL DEFAULT 0,
+    last_update_dt DATETIME NOT NULL,
+    PRIMARY KEY (account_uid, currency_id)
+);
+
+DROP TABLE IF EXISTS UserCharacter;
+-- UserCharacter 테이블
+DROP TABLE IF EXISTS UserCharacter;
+CREATE TABLE UserCharacter (
+    account_uid BIGINT NOT NULL, -- 사용자 계정 ID
+    character_name VARCHAR(50) NOT NULL, -- 캐릭터 이름
+    level INT NOT NULL DEFAULT 1, -- 캐릭터 레벨
+    create_dt DATETIME NOT NULL, -- 캐릭터 생성 날짜
+    last_login_dt DATETIME NOT NULL, -- 마지막 로그인 시간
+    character_hp INT NOT NULL DEFAULT 100, -- 캐릭터 체력
+    character_mp INT NOT NULL DEFAULT 50, -- 캐릭터 마나
+    character_atk INT NOT NULL DEFAULT 10, -- 캐릭터 공격력
+    character_def INT NOT NULL DEFAULT 5, -- 캐릭터 방어력
+    character_job_cd VARCHAR(2) NOT NULL DEFAULT '01', -- 캐릭터 직업 코드 (예: '01': Warrior, '02': Mage, '03': Archer)
+    PRIMARY KEY (account_uid, character_name)
+);
+
+DROP TABLE IF EXISTS UserInventory;
+-- UserInventory 테이블
+CREATE TABLE UserInventory (
+    account_uid BIGINT NOT NULL,
+    item_id INT NOT NULL,
+    item_qty INT NOT NULL DEFAULT 0,
+    acquire_dt DATETIME NOT NULL,
+    last_update_dt DATETIME NOT NULL,
+    PRIMARY KEY (account_uid, item_id)
+);
+
+-- UserMail 테이블
+DROP TABLE IF EXISTS Mail;
+CREATE TABLE Mail (
+    mail_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    account_uid BIGINT NOT NULL,
+    mail_type_cd VARCHAR(2) NOT NULL DEFAULT 'N', -- e.g., 'N': normal, 'I': important
+    sender_cd VARCHAR(2) NOT NULL DEFAULT '01',   -- e.g., '01': System, '02': Admin, '03': Event
+    title VARCHAR(100) NOT NULL,
+    content TEXT,
+    create_dt DATETIME NOT NULL,
     expire_dt DATETIME NULL,
-    receive_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    is_read BOOLEAN NOT NULL DEFAULT FALSE,
-    is_claimed BOOLEAN NOT NULL DEFAULT FALSE,
-
-    reward1_id INT NULL,
-    reward1_type VARCHAR(50) NULL,
-    reward1_qty INT NULL,
-
-    reward2_id INT NULL,
-    reward2_type VARCHAR(50) NULL,
-    reward2_qty INT NULL,
-
-    reward3_id INT NULL,
-    reward3_type VARCHAR(50) NULL,
-    reward3_qty INT NULL,
-
-    reward4_id INT NULL,
-    reward4_type VARCHAR(50) NULL,
-    reward4_qty INT NULL,
-
-    reward5_id INT NULL,
-    reward5_type VARCHAR(50) NULL,
-    reward5_qty INT NULL,
-
-    reward6_id INT NULL,
-    reward6_type VARCHAR(50) NULL,
-    reward6_qty INT NULL,
-
-    reward7_id INT NULL,
-    reward7_type VARCHAR(50) NULL,
-    reward7_qty INT NULL,
-
-    reward8_id INT NULL,
-    reward8_type VARCHAR(50) NULL,
-    reward8_qty INT NULL
+    receive_dt DATETIME NULL,
+    receive_yn CHAR(1) NOT NULL DEFAULT 'N',      -- 'Y' or 'N'
+    reward_id INT NULL,
+    reward_type_cd VARCHAR(2) NULL,               -- e.g., '01': gold, '02': item
+    reward_qty INT NULL
 );
 
-INSERT INTO mail (
-    mail_type, sender, receive_condition, account_id, subject, content, create_dt, expire_dt, receive_dt, is_read, is_claimed,
-    reward1_id, reward1_type, reward1_qty,
-    reward2_id, reward2_type, reward2_qty,
-    reward3_id, reward3_type, reward3_qty
-) VALUES
-('normal', 'System', 'none', 1, 'Welcome!', 'Enjoy your adventure!', NOW(), NULL, NOW(), FALSE, FALSE, 101, 'gold', 500, 201, 'item', 1, NULL, NULL, NULL),
-('important', 'Admin', 'none', 1, 'Daily Reward', 'Here is your daily login reward.', NOW(), NULL, NOW(), FALSE, FALSE, 102, 'gem', 10, NULL, NULL, NULL, NULL, NULL, NULL),
-('normal', 'System', 'advertise', 1, 'Ad Reward', 'Watch an ad to claim.', NOW(), NULL, NOW(), FALSE, FALSE, 103, 'gold', 100, 202, 'item', 2, NULL, NULL, NULL),
-('normal', 'System', 'none', 1, 'Quest Complete', 'Quest reward inside.', NOW(), NULL, NOW(), FALSE, FALSE, 104, 'gold', 300, 203, 'item', 1, NULL, NULL, NULL),
-('important', 'Admin', 'none', 1, 'Event Reward', 'Special event reward!', NOW(), NULL, NOW(), FALSE, FALSE, 105, 'gem', 20, 204, 'item', 3, NULL, NULL, NULL),
-('normal', 'System', 'none', 1, 'Level Up!', 'Congrats on leveling up!', NOW(), NULL, NOW(), FALSE, FALSE, 106, 'gold', 200, NULL, NULL, NULL, NULL, NULL, NULL),
-('normal', 'System', 'none', 1, 'Friend Gift', 'A friend sent you a gift.', NOW(), NULL, NOW(), FALSE, FALSE, 107, 'item', 5, NULL, NULL, NULL, NULL, NULL, NULL),
-('important', 'Admin', 'none', 1, 'Maintenance Compensation', 'Sorry for the inconvenience.', NOW(), NULL, NOW(), FALSE, FALSE, 108, 'gem', 15, 205, 'item', 2, NULL, NULL, NULL),
-('normal', 'System', 'none', 1, 'Anniversary', 'Happy anniversary!', NOW(), NULL, NOW(), FALSE, FALSE, 109, 'gold', 1000, NULL, NULL, NULL, NULL, NULL, NULL),
-('normal', 'System', 'none', 1, 'Special Offer', 'Limited time offer!', NOW(), NULL, NOW(), FALSE, FALSE, 110, 'item', 10, NULL, NULL, NULL, NULL, NULL, NULL),
-('important', 'Admin', 'none', 1, 'Bug Fix Compensation', 'Thank you for your patience.', NOW(), NULL, NOW(), FALSE, FALSE, 111, 'gem', 5, NULL, NULL, NULL, NULL, NULL, NULL),
-('normal', 'System', 'none', 1, 'Weekly Bonus', 'Here is your weekly bonus.', NOW(), NULL, NOW(), FALSE, FALSE, 112, 'gold', 700, 206, 'item', 1, NULL, NULL, NULL);
+INSERT INTO Mail (account_uid, mail_type_cd, sender_cd, title, content, create_dt, expire_dt, receive_dt, receive_yn, reward_id, reward_type_cd, reward_qty) VALUES
+(10001, 'N', '01', 'Welcome!', 'Welcome to the game!', '2025-07-29 09:00:00', NULL, NULL, 'N', 1, '01', 100),
+(10001, 'N', '01', 'Daily Reward', 'Here is your daily reward.', '2025-07-29 09:05:00', NULL, '2025-07-29 09:10:00', 'Y', 2, '02', 10),
+(10002, 'I', '02', 'Event Notice', 'Check out the new event!', '2025-07-28 08:30:00', NULL, NULL, 'N', 3, '02', 1),
+(10003, 'N', '01', 'Maintenance', 'Server maintenance completed.', '2025-07-27 10:15:00', NULL, '2025-07-27 10:20:00', 'Y', 4, '01', 200),
+(10004, 'N', '01', 'Gift', 'You received a special gift!', '2025-07-29 11:20:00', NULL, NULL, 'N', 5, '02', 2),
+(10001, 'I', '03', 'Event Reward', 'Congrats on the event!', '2025-07-29 12:00:00', NULL, NULL, 'N', 6, '01', 5),
+(10002, 'N', '01', 'Login Bonus', 'Thanks for logging in!', '2025-07-29 08:00:00', NULL, NULL, 'N', 7, '01', 50),
+(10003, 'N', '01', 'Quest Clear', 'Quest completed!', '2025-07-28 15:00:00', NULL, NULL, 'N', 8, '02', 3),
+(10004, 'I', '02', 'Special Offer', 'Check out this offer!', '2025-07-28 18:00:00', NULL, NULL, 'N', 9, '01', 20),
+(10005, 'N', '01', 'Compensation', 'Sorry for the inconvenience.', '2025-07-27 20:00:00', NULL, NULL, 'N', 10, '01', 300);
 
+INSERT INTO User (account_uid, create_dt, last_login_dt) VALUES
+(10001, '2025-07-01 10:00:00', '2025-07-29 09:00:00'),
+(10002, '2025-07-10 12:00:00', '2025-07-28 08:30:00'),
+(10003, '2025-07-15 14:00:00', '2025-07-27 10:15:00'),
+(10004, '2025-07-20 16:00:00', '2025-07-29 11:20:00'),
+(10005, '2025-07-25 18:00:00', '2025-07-26 07:45:00');
 
-DROP TABLE IF EXISTS user_currency;
-CREATE TABLE user_currency (
-    account_id BIGINT PRIMARY KEY, -- 사용자 계정 ID (기본 키)
-    gold INT NOT NULL DEFAULT 0, -- 골드 수량
-    gem INT NOT NULL DEFAULT 0, -- 젬 수량
-    last_updated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 마지막 업데이트 시간
-);
+-- 예시 데이터: Attendance
+INSERT INTO Attendance (account_uid, attendance_book_id, last_attendance_dt, attendance_continue_cnt) VALUES
+(10001, 1, '2025-07-29 09:00:00', 3),
+(10002, 1, '2025-07-28 08:30:00', 1),
+(10003, 2, '2025-07-27 10:15:00', 5),
+(10004, 1, '2025-07-29 11:20:00', 2),
+(10005, 3, '2025-07-26 07:45:00', 7);
 
--- user 테이블 임시 데이터
-INSERT INTO user (platform_id, platform_name, nickname) VALUES
-(1, 'testuser@example.com"', 'testpassword'),
-(2, 'hive', 'user2'),
-(3, 'hive', 'user3'),
-(4, 'hive', 'user4'),
-(5, 'hive', 'user5');
+-- 예시 데이터: UserCurrency
+INSERT INTO UserCurrency (account_uid, currency_id, amount, last_update_dt) VALUES
+(10001, 1, 1000, '2025-07-29 09:00:00'),
+(10001, 2, 50, '2025-07-29 09:00:00'),
+(10002, 1, 500, '2025-07-28 08:30:00'),
+(10003, 1, 200, '2025-07-27 10:15:00'),
+(10004, 3, 10, '2025-07-29 11:20:00');
 
--- user_currency 테이블 임시 데이터
-INSERT INTO user_currency (account_id, gold, gem) VALUES
-(1, 1000, 10),
-(2, 2000, 20),
-(3, 3000, 30),
-(4, 4000, 40),
-(5, 5000, 50);
+-- 예시 데이터: UserCharacter
+INSERT INTO UserCharacter (account_uid, character_name, level, create_dt, last_login_dt, character_hp, character_mp, character_atk, character_def, character_job_cd) VALUES
+(10001, 'Arthur', 10, '2025-07-01 10:00:00', '2025-07-29 09:00:00', 150, 80, 25, 12, '01'),
+(10002, 'Merlin', 8, '2025-07-10 12:00:00', '2025-07-28 08:30:00', 120, 150, 15, 8, '02'),
+(10003, 'Lancelot', 12, '2025-07-15 14:00:00', '2025-07-27 10:15:00', 180, 60, 30, 15, '01'),
+(10004, 'Guinevere', 7, '2025-07-20 16:00:00', '2025-07-29 11:20:00', 110, 90, 18, 10, '03'),
+(10005, 'Morgana', 9, '2025-07-25 18:00:00', '2025-07-26 07:45:00', 130, 140, 22, 9, '02');
+
+-- 예시 데이터: UserInventory
+INSERT INTO UserInventory (account_uid, item_id, item_qty, acquire_dt, last_update_dt) VALUES
+(10001, 101, 3, '2025-07-25 09:00:00', '2025-07-29 09:00:00'),
+(10001, 102, 1, '2025-07-26 09:00:00', '2025-07-29 09:00:00'),
+(10002, 101, 2, '2025-07-28 08:30:00', '2025-07-28 08:30:00'),
+(10003, 103, 5, '2025-07-27 10:15:00', '2025-07-27 10:15:00'),
+(10004, 104, 10, '2025-07-29 11:20:00', '2025-07-29 11:20:00');

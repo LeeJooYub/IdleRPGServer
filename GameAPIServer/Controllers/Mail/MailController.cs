@@ -42,7 +42,7 @@ public class MailController
     {
         var input = new MailListInput
         {
-            AccountId = request.AccountId,
+            AccountUid = request.AccountUid,
             Cursor = request.Cursor, // Updated to ensure DateTime cursor is passed
             Limit = request.Limit
         };
@@ -72,7 +72,7 @@ public class MailController
         var input = new ClaimMailInput
         {
             MailId = request.MailId,
-            AccountId = request.AccountId
+            AccountUid = request.AccountUid
         };
         var result = await _mailService.ClaimMailRewardAsync(input);
 
@@ -98,7 +98,7 @@ public class MailController
         var input = new DeleteMailInput
         {
             MailId = request.MailId,
-            AccountId = request.AccountId
+            AccountUid = request.AccountUid
         };
         var result = await _mailService.DeleteMailAsync(input);
 

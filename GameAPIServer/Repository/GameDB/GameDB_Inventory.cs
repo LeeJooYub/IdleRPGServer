@@ -31,7 +31,7 @@ public partial class GameDb : IGameDb
         try
         {
             SqlKata.Query query = _queryFactory.Query("user_currency")
-                .Where("account_id", accountId);
+                .Where("account_uid", accountId);
 
             userCurrencyList = (await query.GetAsync<UserCurrency>()).ToList();
 
@@ -58,7 +58,7 @@ public partial class GameDb : IGameDb
         try
         {
             SqlKata.Query query = _queryFactory.Query("user_inventory")
-                .Where("account_id", accountId);
+                .Where("account_uid", accountId);
             userInventory = await query.FirstOrDefaultAsync<List<UserInventoryItem>>();
 
             return (errorCode, userInventory);

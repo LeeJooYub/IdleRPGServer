@@ -22,16 +22,16 @@ public class CreateHiveAccountService : ICreateHiveAccountService
 
     }
 
-    public async Task<ErrorCode> CreateAccountAsync(CreateHiveAccountCommand command)
+    public async Task<ErrorCode> CreateAccountAsync(CreateHiveAccountInput input)
     {
         var saltValue = Security.SaltString();
-        var hashedPw = Security.MakeHashingPassword(saltValue, command.Password);
+        var hashedPw = Security.MakeHashingPassword(saltValue, input.Password);
 
         try
         {
             var result = await _hiveDb.InsertAccountAsync(new AccountInfo
             {
-                email = command.Email,
+                email = input.Email,
                 pwd = hashedPw,
                 salt = saltValue
             });

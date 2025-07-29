@@ -2,7 +2,7 @@ use hive;
 
 DROP TABLE IF EXISTS account_info;
 CREATE TABLE account_info (
-    account_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    account_uid BIGINT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL,
     pwd VARCHAR(255) NOT NULL,
     salt VARCHAR(255) NOT NULL,
@@ -16,3 +16,4 @@ CREATE TABLE account_info (
 -- ('user3@email.com', 'pwd3', 'salt3'),
 -- ('user4@email.com', 'pwd4', 'salt4'),
 -- ('user5@email.com', 'pwd5', 'salt5');
+

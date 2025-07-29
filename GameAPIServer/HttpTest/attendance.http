@@ -1,53 +1,23 @@
-﻿POST http://localhost:11500/Login
+﻿### Login
+POST http://localhost:11500/Login
+AppVersion: 1.0.0
+MasterDataVersion: 20250725
 Content-Type: application/json
 
 {
-  "PlatformId":1,
-  "PlatformToken":"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
-  "PlatformName":"hive"
+  "AccountUid": 1,
+  "Token": "test-login-token-1"
 }
 
 ### Logout
-
 POST http://localhost:11500/Logout
+AppVersion: 1.0.0
+MasterDataVersion: 20250725
 Content-Type: application/json
 
 {
-  "AccountId":1,
-  "GameServerToken":"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+  "Token": "test-login-token-1"
 }
-
-###
-
-### Get Mail List
-POST http://localhost:11500/mail/list
-Content-Type: application/json
-
-{
-  "AccountId": 1,
-  "Cursor": "2027-10-01T00:00:00Z",
-  "Limit": 10
-}
-
-### Claim Mail Reward
-POST http://localhost:11500/mail/claim
-Content-Type: application/json
-
-{
-  "MailId": 8,
-  "AccountId": 1
-}
-
-### Delete Mail
-POST http://localhost:11500/mail/delete
-Content-Type: application/json
-
-{
-  "MailId": 1
-}
-
-# ### Claim All Mail Rewards
-# POST http://localhost:11500/mail/claimAll
 # Content-Type: application/json
 
 # {

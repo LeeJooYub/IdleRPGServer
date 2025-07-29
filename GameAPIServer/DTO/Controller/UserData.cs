@@ -25,7 +25,7 @@ namespace GameAPIServer.DTO.ControllerDTO
 
     public class UserDataCurrenyLoadRequest
     {
-        [Required] public Int64 Uid { get; set; } // 유저 ID
+        [Required] public Int64 AccountUid { get; set; } // 유저 ID
         [Required] public string Token { get; set; } // 인증 토큰
     }
     public class UserDataCurrenyLoadResponse : ErrorCodeDTO
@@ -35,7 +35,7 @@ namespace GameAPIServer.DTO.ControllerDTO
 
     public class UserDataInventoryLoadRequest
     {
-        [Required] public Int64 Uid { get; set; } // 유저 ID
+        [Required] public Int64 AccountUid { get; set; } // 유저 ID
         [Required] public string Token { get; set; } // 인증 토큰
     }
 
@@ -46,7 +46,7 @@ namespace GameAPIServer.DTO.ControllerDTO
 
     public class UserCharacterInfoLoadRequest
     {
-        [Required] public Int64 Uid { get; set; } // 유저 ID
+        [Required] public Int64 AccountUid { get; set; } // 유저 ID
         [Required] public string Token { get; set; } // 인증 토큰
     }
 

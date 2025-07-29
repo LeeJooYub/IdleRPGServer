@@ -8,20 +8,18 @@ namespace GameAPIServer.Models.GameDB
     {
         public Int64 mail_id { get; set; }
         public Int64 account_uid { get; set; } = 0;
-        public string mail_type { get; set; } = "normal"; // e.g., "normal", "important"
-        public string sender { get; set; } = "System";
-        public string receive_condition { get; set; } = "none"; // e.g., "none", "advertise" 메일을 받기 위한 조건. advertise는 광고 시청 후 메일 받기 가능
-        public string subject { get; set; } = "No Subject"; //제목
+        public string mail_type_cd { get; set; } = "N"; // e.g., "normal", "important"
+        public string sender_cd { get; set; } = "01"; // e.g. 01: System, 02: Admin, 03: Event
+        public string title { get; set; } = "No Subject"; //제목
         public string content { get; set; } = "No Content"; // 내용
         public DateTime create_dt { get; set; } = DateTime.UtcNow;
         public DateTime? expire_dt { get; set; }
         public DateTime? receive_dt { get; set; }
-        public bool is_read { get; set; } = false;
-        public bool is_claimed { get; set; } = false;
+        public char receive_yn { get; set; } = 'N';
 
         // Rewards (up to 8)
         public int? reward_id { get; set; }
-        public string? reward_type { get; set; } // 보상 타입 (예: "gold", "item")
+        public string? reward_type_cd { get; set; } //  e.g., 01: "gold", 02: "item"
         public int? reward_qty { get; set; }
     }
 }

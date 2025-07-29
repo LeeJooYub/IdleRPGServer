@@ -38,9 +38,9 @@ public class LoginHiveController : ControllerBase
     public async Task<LoginHiveResponse> Login([FromBody] LoginHiveRequest request)
     {
         _logger.ZLogDebug($"[LoginHiveController] Called");
-        LoginHiveResponse response = new();
-        (response.Result, response.AccountId) = await _loginService.VerifyUser(request);
-        response.HiveToken = Security.MakeHashingToken(_saltValue, response.AccountId);
+        var response = new LoginHiveResponse();
+        (response.Result, response.AccountUid) = await _loginService.VerifyUser(request);
+        response.Token = Security.MakeHashingToken(_saltValue, response.AccountUid);
 
         return response;
 

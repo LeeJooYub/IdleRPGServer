@@ -3,13 +3,12 @@
 POST http://localhost:11500/mail/list
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
+Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 Content-Type: application/json
-token: dkd0qpso9kkinazprqln3o31r
-uid: 1
 
 {
-  "AccountId": 1,
-  "Cursor": "2027-10-01T00:00:00Z",
+  "AccountUid": 10001,
+  "Cursor": "2025-07-31T00:00:00Z",
   "Limit": 10
 }
 
@@ -17,31 +16,33 @@ uid: 1
 POST http://localhost:11500/mail/claim
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
+Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 Content-Type: application/json
-token: dkd0qpso9kkinazprqln3o31r
-uid: 1
 
 {
-  "MailId": 3,
-  "AccountId": 1
+  "MailId": 6,
+  "AccountUid": 10001
 }
 
-### Delete Mail
-POST http://localhost:11500/mail/delete
-AppVersion: 1.0.0
-MasterDataVersion: 20250725
-Content-Type: application/json
-token: dkd0qpso9kkinazprqln3o31r
-uid: 1
-
-{
-  "MailId": 1
-}
-
-# ### Claim All Mail Rewards
-# POST http://localhost:11500/mail/claimAll
+# ### Delete Mail
+# POST http://localhost:11500/mail/delete
+# AppVersion: 1.0.0
+# MasterDataVersion: 20250725
+# Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 # Content-Type: application/json
 
 # {
-#   "AccountId": 12345
+#   "MailId": 1,
+#   "AccountUid": 10001
 # }
+
+### Claim All Mail Rewards
+POST http://localhost:11500/mail/claimAll
+AppVersion: 1.0.0
+MasterDataVersion: 20250725
+Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
+Content-Type: application/json
+
+{
+  "AccountUid": 10001
+}

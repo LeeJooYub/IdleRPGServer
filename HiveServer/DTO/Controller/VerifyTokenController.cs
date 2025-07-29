@@ -6,9 +6,9 @@ namespace HiveServer.Model.DTO;
 public class VerifyTokenRequest
 {
     [Required]
-    public string HiveToken { get; set; }
+    public string Token { get; set; }
     [Required]
-    public Int64 AccountId { get; set; }
+    public Int64 AccountUid { get; set; }
 }
 
 public class VerifyTokenResponse

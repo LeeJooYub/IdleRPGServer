@@ -30,14 +30,14 @@ public class CreateHiveAccountController : ControllerBase
     public async Task<CreateHiveAccountResponse> CreateHiveAccount([FromBody] CreateHiveAccountRequest request)
     {
         _logger.ZLogDebug($"[CreateHiveAccountController] Called");
-        var command = new CreateHiveAccountCommand
+        var input = new CreateHiveAccountInput
         {
             Email = request.Email,
             Password = request.Password
         };
 
-        CreateHiveAccountResponse response = new();
-        response.Result = await _createHiveAccountService.CreateAccountAsync(command);
+        var response = new CreateHiveAccountResponse();
+        response.Result = await _createHiveAccountService.CreateAccountAsync(input);
 
         return response;
     }

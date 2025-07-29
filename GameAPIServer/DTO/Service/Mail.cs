@@ -11,7 +11,7 @@ namespace GameAPIServer.DTO.ServiceDTO
     // GetMailList
     public class MailListInput
     {
-        public Int64 AccountId { get; set; } // 사용자 ID
+        public Int64 AccountUid { get; set; } // 사용자 ID
         public DateTime? Cursor { get; set; } // 커서 값 (마지막 메일 ID)
         public int Limit { get; set; } // 가져올 메일 개수
     }
@@ -40,7 +40,7 @@ namespace GameAPIServer.DTO.ServiceDTO
     public class ClaimMailInput
     {
         public Int64 MailId { get; set; } // 메일 ID
-        public Int64 AccountId { get; set; } // 사용자 ID
+        public Int64 AccountUid { get; set; } // 사용자 ID
     }
 
     public class ClaimMailOutput : ErrorCodeDTO
@@ -53,7 +53,7 @@ namespace GameAPIServer.DTO.ServiceDTO
     public class DeleteMailInput
     {
         public Int64 MailId { get; set; } // 메일 ID
-        public Int64 AccountId { get; set; } // 사용자 ID
+        public Int64 AccountUid { get; set; } // 사용자 ID
     }
 
     public class DeleteMailOutput : ErrorCodeDTO

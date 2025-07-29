@@ -44,7 +44,7 @@ public class UserDataLoadController : ControllerBase
     {
         var input = new GetUserCurrencyInput
         {
-            AccountId = request.Uid
+            AccountUid = request.AccountUid
         };
         var result = await _userDataLoadService.GetUserCurrencyAsync(input);
 
@@ -64,7 +64,7 @@ public class UserDataLoadController : ControllerBase
     {
         var input = new GetUserInventoryInput
         {
-            AccountId = request.Uid
+            AccountUid = request.AccountUid
         };
         var result = await _userDataLoadService.GetUserInventoryAsync(input);
 

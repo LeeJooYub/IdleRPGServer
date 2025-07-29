@@ -2,12 +2,12 @@
 
 public class MemoryDbKeyMaker
 {
-    const string loginUID = "UID_";
+    const string loginToken = "Token_";
     const string userLockKey = "ULock_";
 
-    public static string UIDKey(string id)
+    public static string TokenKey(string token)
     {
-        return loginUID + id;
+        return loginToken + token;
     }
 
     public static string UserLockKey(string id)
