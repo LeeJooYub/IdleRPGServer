@@ -9,8 +9,8 @@ CREATE TABLE account_info (
     create_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 임시 데이터 5개
--- INSERT INTO account_info (email, pwd, salt) VALUES
+임시 데이터 5개
+INSERT INTO account_info (email, pwd, salt) VALUES
 -- ('user1@email.com', 'pwd1', 'salt1'),
 -- ('user2@email.com', 'pwd2', 'salt2'),
 -- ('user3@email.com', 'pwd3', 'salt3'),
