@@ -23,43 +23,43 @@ namespace GameAPIServer.Repository;
 
 public partial class GameDb : IGameDb
 {
-    public async Task<(ErrorCode,List<Currency>)> GetUserCurrencyAsync(Int64 accountId)
+    public async Task<(ErrorCode,List<UserCurrency>)> GetUserCurrencyAsync(Int64 accountId)
     {
         ErrorCode errorCode = ErrorCode.None;
-        var currencyList = new List<Currency>();
+        var userCurrencyList = new List<UserCurrency>();
 
         try
         {
             SqlKata.Query query = _queryFactory.Query("user_currency")
                 .Where("account_id", accountId);
 
-            UserCurrency userCurrency = await query.FirstOrDefaultAsync<UserCurrency>();
+            userCurrencyList = (await query.GetAsync<UserCurrency>()).ToList();
 
-            if (userCurrency == null)
+            if (userCurrencyList == null || userCurrencyList.Count == 0)
             {
                 errorCode = ErrorCode.UserMoneyInfoFailException;
-                return (errorCode, currencyList);
+                return (errorCode, userCurrencyList);
             }
 
-            return (errorCode, userCurrency.CurrencyList);
+            return (errorCode, userCurrencyList);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving user currency for AccountId: {AccountId}", accountId);
             errorCode = ErrorCode.DatabaseError;
-            return (errorCode, currencyList);
+            return (errorCode, userCurrencyList);
         }
     }
 
-    public async Task<(ErrorCode, List<UserInventory>)> GetUserInventoryItemAsync(Int64 accountId)
+    public async Task<(ErrorCode, List<UserInventoryItem>)> GetUserInventoryItemAsync(Int64 accountId)
     {
         ErrorCode errorCode = ErrorCode.None;
-        var userInventory = new List<UserInventory>();
+        var userInventory = new List<UserInventoryItem>();
         try
         {
             SqlKata.Query query = _queryFactory.Query("user_inventory")
                 .Where("account_id", accountId);
-            userInventory = await query.FirstOrDefaultAsync<List<UserInventory>>();
+            userInventory = await query.FirstOrDefaultAsync<List<UserInventoryItem>>();
 
             return (errorCode, userInventory);
         }

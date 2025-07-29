@@ -33,19 +33,19 @@ namespace GameAPIServer.Services
         }
 
 
-        public async Task<MailListResult> GetMailListAsync(MailListCommand command)
+        public async Task<MailListOutput> GetMailListAsync(MailListInput input)
         {
-            MailListResult result = new MailListResult();
+            var result = new MailListOutput();
 
-            if (!command.Cursor.HasValue)
+            if (!input.Cursor.HasValue)
             {
-                command.Cursor = DateTime.UtcNow; // 기본값으로 현재 시간을 설정
+                input.Cursor = DateTime.UtcNow; // 기본값으로 현재 시간을 설정
             }
 
 
             try
             {
-                (result.Mails, result.NextCursor) = await _gameDb.GetMailListAsync(command.AccountId, command.Cursor, command.Limit);
+                (result.Mails, result.NextCursor) = await _gameDb.GetMailListAsync(input.AccountId, input.Cursor, input.Limit);
             }
             catch (Exception ex)
             {
@@ -57,20 +57,20 @@ namespace GameAPIServer.Services
             return result;
         }
 
-        public async Task<ClaimMailResult> ClaimMailRewardAsync(ClaimMailCommand command)
+        public async Task<ClaimMailOutput> ClaimMailRewardAsync(ClaimMailInput input)
         {
-            ClaimMailResult result = new ClaimMailResult();
-            ErrorCode errorCode;
+            var result = new ClaimMailOutput();
+            var errorCode = ErrorCode.None;
             var rewards = new List<MailRewardDto>();
             try
             {
-                (errorCode, rewards) = await _gameDb.ClaimMailRewardAsync(command.MailId);
+                (errorCode, rewards) = await _gameDb.ClaimMailRewardAsync(input.MailId);
                 result.ErrorCode = errorCode;
                 result.Rewards = rewards;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error claiming mail reward for MailId: {MailId}", command.MailId);
+                _logger.LogError(ex, "Error claiming mail reward for MailId: {MailId}", input.MailId);
                 result.ErrorCode = ErrorCode.DatabaseError;
             }
             if (result.ErrorCode != ErrorCode.None)
@@ -91,12 +91,12 @@ namespace GameAPIServer.Services
 
             try
             {
-                errorCode = await _gameDb.UpdateMailClaimStatusAsync(command.MailId);
+                errorCode = await _gameDb.UpdateMailClaimStatusAsync(input.MailId);
                 result.ErrorCode = errorCode;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error claiming mail reward for MailId: {MailId}", command.MailId);
+                _logger.LogError(ex, "Error claiming mail reward for MailId: {MailId}", input.MailId);
                 result.ErrorCode = ErrorCode.DatabaseError;
             }
             if (result.ErrorCode != ErrorCode.None)
@@ -108,16 +108,16 @@ namespace GameAPIServer.Services
             return result;
         }
 
-        public async Task<DeleteMailResult> DeleteMailAsync(DeleteMailCommand command)
+        public async Task<DeleteMailOutput> DeleteMailAsync(DeleteMailInput input)
         {
-            var result = new DeleteMailResult();
+            var result = new DeleteMailOutput();
             try
             {
-                result.ErrorCode = await _gameDb.DeleteMailAsync(command.MailId);
+                result.ErrorCode = await _gameDb.DeleteMailAsync(input.MailId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error deleting mail with MailId: {MailId}", command.MailId);
+                _logger.LogError(ex, "Error deleting mail with MailId: {MailId}", input.MailId);
                 result.ErrorCode = ErrorCode.DatabaseError;
             }
 

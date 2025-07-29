@@ -42,11 +42,11 @@ public class UserDataLoadController : ControllerBase
     [HttpPost("currency")]
     public async Task<UserDataCurrenyLoadResponse> LoadUserCurrencyData(UserDataCurrenyLoadRequest request)
     {
-        var command = new GetUserCurrencyCommand
+        var input = new GetUserCurrencyInput
         {
             AccountId = request.Uid
         };
-        var result = await _userDataLoadService.GetUserCurrencyAsync(command);
+        var result = await _userDataLoadService.GetUserCurrencyAsync(input);
 
 
         var response = new UserDataCurrenyLoadResponse
@@ -62,11 +62,11 @@ public class UserDataLoadController : ControllerBase
     [HttpPost("inventory")]
     public async Task<UserDataInventoryLoadResponse> LoadUserInventoryData(UserDataCurrenyLoadRequest request)
     {
-        var command = new GetUserInventoryCommand
+        var input = new GetUserInventoryInput
         {
             AccountId = request.Uid
         };
-        var result = await _userDataLoadService.GetUserInventoryAsync(command);
+        var result = await _userDataLoadService.GetUserInventoryAsync(input);
 
 
         var response = new UserDataInventoryLoadResponse

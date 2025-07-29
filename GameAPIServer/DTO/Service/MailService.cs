@@ -9,14 +9,14 @@ using GameAPIServer.Models.MasterDB;
 namespace GameAPIServer.DTO.ServiceDTO
 {
     // GetMailList
-    public class MailListServiceInput
+    public class MailListInput
     {
         public Int64 AccountId { get; set; } // 사용자 ID
         public DateTime? Cursor { get; set; } // 커서 값 (마지막 메일 ID)
         public int Limit { get; set; } // 가져올 메일 개수
     }
 
-    public class MailListServiceOutput : ErrorCodeDTO
+    public class MailListOutput : ErrorCodeDTO
     {
         public List<Mail> Mails { get; set; } // 메일 목록
         public DateTime? NextCursor { get; set; } // 다음 페이지를 위한 커서 값 (마지막 메일의 receive_dt)
@@ -37,26 +37,26 @@ namespace GameAPIServer.DTO.ServiceDTO
     // }
 
     // ClaimMail
-    public class ClaimMailServiceInput
+    public class ClaimMailInput
     {
         public Int64 MailId { get; set; } // 메일 ID
         public Int64 AccountId { get; set; } // 사용자 ID
     }
 
-    public class ClaimMailServiceOutput : ErrorCodeDTO
+    public class ClaimMailOutput : ErrorCodeDTO
     {
         public List<MailRewardDto> Rewards { get; set; } // 보상 목록
     }
 
 
     // DeleteMail
-    public class DeleteMailServiceInput
+    public class DeleteMailInput
     {
         public Int64 MailId { get; set; } // 메일 ID
         public Int64 AccountId { get; set; } // 사용자 ID
     }
 
-    public class DeleteMailServiceOutput : ErrorCodeDTO
+    public class DeleteMailOutput : ErrorCodeDTO
     {
     }
 

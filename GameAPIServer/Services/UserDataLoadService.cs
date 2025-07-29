@@ -29,17 +29,17 @@ public class UserDataLoadService : IUserDataLoadService
         _memoryDb = memoryDb;
     }
 
-    public async Task<GetUserCurrencyResult> GetUserCurrencyAsync(GetUserCurrencyCommand command)
+    public async Task<GetUserCurrencyOutput> GetUserCurrencyAsync(GetUserCurrencyInput input)
     {
-        ErrorCode errorCode = ErrorCode.None;
-        var currencyList = new List<Currency>();
+        var errorCode = ErrorCode.None;
+        var currencyList = new List<UserCurrency>();
 
         try
         {
-            (errorCode,currencyList)= await _gameDb.GetUserCurrencyAsync(command.AccountId);
-            GetUserCurrencyResult result = new()
+            (errorCode,currencyList)= await _gameDb.GetUserCurrencyAsync(input.AccountId);
+            var result = new GetUserCurrencyOutput
             {
-                AccountId = command.AccountId,
+                AccountId = input.AccountId,
                 CurrencyList = currencyList,
                 ErrorCode = 0 // Assuming 0 means no error
             };
@@ -50,11 +50,11 @@ public class UserDataLoadService : IUserDataLoadService
 
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading user currency for AccountId: {AccountId}", command.AccountId);
-            GetUserCurrencyResult result = new()
+            _logger.LogError(ex, "Error loading user currency for AccountId: {AccountId}", input.AccountId);
+            var result = new GetUserCurrencyOutput
             {
-                AccountId = command.AccountId,
-                CurrencyList = new List<Currency>(), // Return an empty list on error
+                AccountId = input.AccountId,
+                CurrencyList = new List<UserCurrency>(), // Return an empty list on error
                 ErrorCode = ErrorCode.UserMoneyInfoFailException // Assuming -1 means an error occurred
             };
             return result;
@@ -62,17 +62,17 @@ public class UserDataLoadService : IUserDataLoadService
     }
 
 
-    public async Task<GetUserInventoryResult> GetUserInventoryAsync(GetUserInventoryCommand command)
+    public async Task<GetUserInventoryOutput> GetUserInventoryAsync(GetUserInventoryInput input)
     {
-        ErrorCode errorCode = ErrorCode.None;
-        var inventory = new List<UserInventory>();
+        var errorCode = ErrorCode.None;
+        var inventory = new List<UserInventoryItem>();
 
         try
         {
-            (errorCode,inventory) = await _gameDb.GetUserInventoryItemAsync(command.AccountId);
-            GetUserInventoryResult result = new()
+            (errorCode,inventory) = await _gameDb.GetUserInventoryItemAsync(input.AccountId);
+            var result = new GetUserInventoryOutput
             {
-                AccountId = command.AccountId,
+                AccountId = input.AccountId,
                 InventoryItems = inventory,
                 ErrorCode = 0 // Assuming 0 means no error
             };
@@ -81,10 +81,10 @@ public class UserDataLoadService : IUserDataLoadService
 
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading user inventory for AccountId: {AccountId}", command.AccountId);
-            GetUserInventoryResult result = new()
+            _logger.LogError(ex, "Error loading user inventory for AccountId: {AccountId}", input.AccountId);
+            var result = new GetUserInventoryOutput
             {
-                AccountId = command.AccountId,
+                AccountId = input.AccountId,
                 ErrorCode = ErrorCode.UserInventoryFailException // Assuming -1 means an error occurred
             };
             return result;

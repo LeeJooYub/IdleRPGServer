@@ -36,12 +36,12 @@ public class AuthService : IAuthService
     }
 
     //TODO : 다른 플랫폼에 확장 가능하게 정리. 현재는 하이브만 상정하고 만든 기능.
-    public async Task<LoginResult> Login(LoginCommand command)
+    public async Task<LoginOutput> Login(LoginInput input)
     {
-        LoginResult loginResult = new LoginResult();
+        var loginResult = new LoginOutput();
 
         // 하이브 토큰 체크
-        ErrorCode errorCode = await VerifyTokenToHive(command.PlatformId, command.PlatformToken);
+        var errorCode = await VerifyTokenToHive(input.AccountId, input.Token);
         loginResult.ErrorCode = errorCode;
 
         if (errorCode != ErrorCode.None)
@@ -50,7 +50,7 @@ public class AuthService : IAuthService
         }
 
         // 유저 있는지 확인
-        (errorCode, Int64 accountId) = await _gameDb.FindUserByPlatformId(command.PlatformId);
+        (errorCode, Int64 accountId) = await _gameDb.FindUserByPlatformId(input.AccountId);
         loginResult.ErrorCode = errorCode;
         
         // 유저가 없으면 생성
@@ -59,13 +59,12 @@ public class AuthService : IAuthService
 
             (errorCode, accountId) = await _gameDb.CreateUser(new AccountInfo
             {
-                platform_id = command.PlatformId,
-                platform_name = command.PlatformName,
+                account_uid = input.AccountId,
             });
             loginResult.ErrorCode = errorCode;
             if (errorCode != ErrorCode.None)
             {
-                _logger.ZLogError($"[AuthService.Login] ErrorCode: {errorCode}, PlayerId: {command.PlatformId}");
+                _logger.ZLogError($"[AuthService.Login] ErrorCode: {errorCode}, PlayerId: {input.AccountId}");
                 return loginResult;
             }
         }
@@ -93,7 +92,7 @@ public class AuthService : IAuthService
         {
             using var client = new HttpClient();
 
-            string verifyTokenToHiveAddress = _hiveServerAPIAddress + "/verifytoken";
+            var verifyTokenToHiveAddress = _hiveServerAPIAddress + "/verifytoken";
             var hiveResponse = await client.PostAsJsonAsync(verifyTokenToHiveAddress, new { AccountId = PlatformId, HiveToken = token });
             if (hiveResponse == null || !ValidateHiveResponse(hiveResponse))
             {
@@ -102,7 +101,7 @@ public class AuthService : IAuthService
             }
 
 
-            HiveVerifyTokenResponse authResult = await hiveResponse.Content.ReadFromJsonAsync<HiveVerifyTokenResponse>();
+            var authResult = await hiveResponse.Content.ReadFromJsonAsync<HiveVerifyTokenResponse>();
             if (!authResult.ErrorCode.Equals(ErrorCode.None))
             {
                 return ErrorCode.Hive_Fail_InvalidResponse;

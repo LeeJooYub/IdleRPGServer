@@ -9,7 +9,7 @@ public class LoginRequest
     public Int64 AccountId { get; set; } = 0;
 
     [Required]
-    public string HiveToken { get; set; } = "";
+    public string Token { get; set; } = "";
 }
 
 public class LoginResponse : ErrorCodeDTO

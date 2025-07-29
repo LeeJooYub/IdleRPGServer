@@ -26,8 +26,8 @@ public interface IGameDb
 
 
     // User data load methods
-    public Task<(ErrorCode, List<Currency>)> GetUserCurrencyAsync(Int64 accountId);
-    public Task<(ErrorCode, List<UserInventory>)> GetUserInventoryItemAsync(Int64 accountId);
+    public Task<(ErrorCode, List<UserCurrency>)> GetUserCurrencyAsync(Int64 accountId);
+    public Task<(ErrorCode, List<UserInventoryItem>)> GetUserInventoryItemAsync(Int64 accountId);
     //public Task<GetUserCharacterInfoResult> GetUserCharacterInfoAsync(Int64 accountId);
     //public IDbConnection GDbConnection();
 }

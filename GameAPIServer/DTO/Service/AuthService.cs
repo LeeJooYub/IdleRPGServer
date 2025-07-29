@@ -3,19 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GameAPIServer.DTO.ServiceDTO;
 
-public class LoginServiceInput
+public class LoginInput
 {
     [Required]
-    public Int64 PlatformId { get; set; } = 0;
+    public Int64 AccountId { get; set; } = 0;
 
     [Required]
-    public string PlatformToken { get; set; } = "";
-
-    [Required]
-    public string PlatformName { get; set; } = "";
+    public string Token { get; set; } = "";
 }
 
-public class LoginServiceOutput : ErrorCodeDTO
+public class LoginOutput : ErrorCodeDTO
 {
     [Required] public string GameServerToken { get; set; } = "";
     [Required] public Int64 AccountId { get; set; } = 0;

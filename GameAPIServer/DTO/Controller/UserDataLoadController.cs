@@ -30,7 +30,7 @@ namespace GameAPIServer.DTO.ControllerDTO
     }
     public class UserDataCurrenyLoadResponse : ErrorCodeDTO
     {
-        public List<Currency> CurrencyList { get; set; } = new List<Currency>();// 화폐 데이터
+        public List<UserCurrency> CurrencyList { get; set; } = new List<UserCurrency>();// 화폐 데이터
     }
 
     public class UserDataInventoryLoadRequest
@@ -41,7 +41,7 @@ namespace GameAPIServer.DTO.ControllerDTO
 
     public class UserDataInventoryLoadResponse : ErrorCodeDTO
     {
-        public List<UserInventory> InventoryItems { get; set; } = new List<UserInventory>();
+        public List<UserInventoryItem> InventoryItems { get; set; } = new List<UserInventoryItem>();
     }
 
     public class UserCharacterInfoLoadRequest

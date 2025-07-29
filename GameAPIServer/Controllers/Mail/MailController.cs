@@ -40,15 +40,15 @@ public class MailController
     [HttpPost("list")]
     public async Task<MailListResponse> GetMailListAsync([FromBody] MailListRequest request)
     {
-        var command = new MailListCommand
+        var input = new MailListInput
         {
             AccountId = request.AccountId,
             Cursor = request.Cursor, // Updated to ensure DateTime cursor is passed
             Limit = request.Limit
         };
 
-        var result = await _mailService.GetMailListAsync(command);
-        
+        var result = await _mailService.GetMailListAsync(input);
+
         var response = new MailListResponse
         {
             Mails = result.Mails,
@@ -69,12 +69,12 @@ public class MailController
     [HttpPost("claim")]
     public async Task<ClaimMailResponse> ClaimMailRewardAsync([FromBody] ClaimMailRequest request)
     {
-        var command = new ClaimMailCommand
+        var input = new ClaimMailInput
         {
             MailId = request.MailId,
             AccountId = request.AccountId
         };
-        var result = await _mailService.ClaimMailRewardAsync(command);
+        var result = await _mailService.ClaimMailRewardAsync(input);
 
         var response = new ClaimMailResponse
         {
@@ -95,12 +95,12 @@ public class MailController
     public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
     {
         // 메일 삭제
-        var command = new DeleteMailCommand
+        var input = new DeleteMailInput
         {
             MailId = request.MailId,
             AccountId = request.AccountId
         };
-        var result = await _mailService.DeleteMailAsync(command);
+        var result = await _mailService.DeleteMailAsync(input);
 
 
 

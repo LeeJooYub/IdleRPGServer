@@ -9,12 +9,12 @@ using GameAPIServer.Models.MasterDB;
 namespace GameAPIServer.DTO.ServiceDTO
 {
 
-    public class GetUserInfoServiceInput
+    public class GetUserInfoInput
     {
         public Int64 AccountId { get; set; }
     }
 
-    public class GetUserInfoServiceOutput
+    public class GetUserInfoOutput
     {
         public Int64 AccountId { get; set; }
         public string Nickname { get; set; }
@@ -23,38 +23,38 @@ namespace GameAPIServer.DTO.ServiceDTO
         public ErrorCode ErrorCode { get; set; }
     }
 
-    public class GetUserCurrencyServiceInput
+    public class GetUserCurrencyInput
     {
         public Int64 AccountId { get; set; }
     }
 
-    public class GetUserCurrencyServiceOutput
+    public class GetUserCurrencyOutput
     {
         public Int64 AccountId { get; set; }
-        public List<Currency> CurrencyList { get; set; } = new List<Currency>();
+        public List<UserCurrency> CurrencyList { get; set; } = new List<UserCurrency>();
         public ErrorCode ErrorCode { get; set; }
     }
 
 
-    public class GetUserInventoryServiceInput
+    public class GetUserInventoryInput
     {
         public Int64 AccountId { get; set; }
     }
 
 
-    public class GetUserInventoryServiceOutput
+    public class GetUserInventoryOutput
     {
         public Int64 AccountId { get; set; }
-        public List<UserInventory> InventoryItems { get; set; } = new List<UserInventory>();
+        public List<UserInventoryItem> InventoryItems { get; set; } = new List<UserInventoryItem>();
         public ErrorCode ErrorCode { get; set; }
     }
 
-    public class GetUserCharacterServiceInput
+    public class GetUserCharacterInput
     {
         public Int64 AccountId { get; set; }
     }
 
-    public class GetUserCharacterInfoServiceOutput
+    public class GetUserCharacterInfoOutput
     {
         public Int64 AccountId { get; set; }
         public UserCharacter Character { get; set; } = new UserCharacter();

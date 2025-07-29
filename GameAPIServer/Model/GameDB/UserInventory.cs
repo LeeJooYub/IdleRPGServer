@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GameAPIServer.Models.GameDB
 {
-    public class UserInventory
+    public class UserInventoryItem
     {
         public Int64 account_uid { get; set; } // 사용자 계정 ID
         public int item_id { get; set; } // 아이템 ID

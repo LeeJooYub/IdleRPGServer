@@ -6,7 +6,7 @@ namespace GameAPIServer.Services.Interfaces;
 
 public interface IAuthService
 {
-    public Task<LoginResult> Login(LoginCommand command);
+    public Task<LoginOutput> Login(LoginInput input);
     
 
 }

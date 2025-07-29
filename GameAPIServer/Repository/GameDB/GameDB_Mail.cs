@@ -89,7 +89,7 @@ public partial class GameDb : IGameDb
 
         // 보상 추출
         var rewards = new List<MailRewardDto>();
-        if (mail.reward_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward1_id, RewardType = mail.reward1_type ?? "", RewardQty = mail.reward1_qty });
+        if (mail.reward_id.HasValue) rewards.Add(new MailRewardDto { RewardId = mail.reward_id, RewardType = mail.reward_type ?? "", RewardQty = mail.reward_qty });
 
 
         if (rewards.Count == 0)

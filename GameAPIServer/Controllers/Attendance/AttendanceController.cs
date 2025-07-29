@@ -34,44 +34,43 @@ public class AuthController : ControllerBase
         _memoryDb = memoryDb;
     }
 
-    /// <summary>
-    /// 로그인 API<br/>
-    /// (로그인 정보가 클라이언트 캐시에 있는 상태) 자동 로그인을 시작합니다. 우선 플랫폼 ID와 플랫폼 토큰을 플랫폼에 보내 검증 후, 게임 ID와 게임 토큰을 발급합니다.
-    /// </summary>
-    [HttpPost("Login")]
-    public async Task<LoginResponse> Login([FromBody] LoginRequest request)
-    {
-        var result = new LoginServiceOutput();
-        result = await _authService.Login(new LoginServiceInput
-        {
-            AccountId = request.AccountId,
-            HiveToken = request.HiveToken
-        });
+    // /// <summary>
+    // /// 로그인 API<br/>
+    // /// (로그인 정보가 클라이언트 캐시에 있는 상태) 자동 로그인을 시작합니다. 우선 플랫폼 ID와 플랫폼 토큰을 플랫폼에 보내 검증 후, 게임 ID와 게임 토큰을 발급합니다.
+    // /// </summary>
+    // [HttpPost("Login")]
+    // public async Task<LoginResponse> Login([FromBody] LoginRequest request)
+    // {
+    //     var result = new LoginOutput();
+    //     result = await _authService.Login(new LoginInput
+    //     {
+    //         AccountId = request.AccountId,
+    //         Token = request.Token
+    //     });
 
 
-        var response = new LoginResponse
-        {
-            ErrorCode = result.ErrorCode,
-            AccountId = result.AccountId,
-            SessionKey = result.GameServerToken,
-            // Nickname = request.Nickname // Nickname은 현재 사용하지 않음
-        };
+    //     var response = new LoginResponse
+    //     {
+    //         ErrorCode = result.ErrorCode,
+    //         SessionKey = result.GameServerToken,
+    //         // Nickname = request.Nickname // Nickname은 현재 사용하지 않음
+    //     };
 
-        return response;
-    }
+    //     return response;
+    // }
 
 
-    /// <summary>
-    /// 로그아웃 API </br>
-    /// 해당 유저의 토큰을 Redis에서 삭제합니다.
-    /// </summary>
-    [HttpPost("Logout")]
-    public async Task<ErrorCode> DeleteUserToken([FromBody] LogoutRequest request)
-    {
-        var errorCode = await _memoryDb.DelUserAuthAsync(request.AccountId);
+    // /// <summary>
+    // /// 로그아웃 API </br>
+    // /// 해당 유저의 토큰을 Redis에서 삭제합니다.
+    // /// </summary>
+    // [HttpPost("Logout")]
+    // public async Task<ErrorCode> DeleteUserToken([FromBody] LogoutRequest request)
+    // {
+    //     var errorCode = await _memoryDb.DelUserAuthAsync(request.SessionKey);
 
-        return errorCode;
-    }
+    //     return errorCode;
+    // }
     
 
 
