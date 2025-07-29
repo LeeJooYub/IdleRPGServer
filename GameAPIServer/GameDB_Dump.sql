@@ -1,16 +1,16 @@
 use game_db;
 
-DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS user;
 -- User 테이블 (예시)
-CREATE TABLE User (
+CREATE TABLE user (
     account_uid BIGINT PRIMARY KEY,
     create_dt DATETIME NOT NULL,
     last_login_dt DATETIME NOT NULL
 );
 
-DROP TABLE IF EXISTS Attendance;
+DROP TABLE IF EXISTS user_attendance;
 -- Attendance 테이블
-CREATE TABLE Attendance (
+CREATE TABLE user_attendance (
     account_uid BIGINT NOT NULL,
     attendance_book_id BIGINT NOT NULL,
     last_attendance_dt DATETIME NOT NULL,
@@ -18,9 +18,9 @@ CREATE TABLE Attendance (
     PRIMARY KEY (account_uid, attendance_book_id)
 );
 
-DROP TABLE IF EXISTS UserCurrency;
+DROP TABLE IF EXISTS user_currency;
 -- UserCurrency 테이블
-CREATE TABLE UserCurrency (
+CREATE TABLE user_currency (
     account_uid BIGINT NOT NULL,
     currency_id INT NOT NULL,
     amount INT NOT NULL DEFAULT 0,
@@ -28,10 +28,10 @@ CREATE TABLE UserCurrency (
     PRIMARY KEY (account_uid, currency_id)
 );
 
-DROP TABLE IF EXISTS UserCharacter;
+
 -- UserCharacter 테이블
-DROP TABLE IF EXISTS UserCharacter;
-CREATE TABLE UserCharacter (
+DROP TABLE IF EXISTS user_character;
+CREATE TABLE user_character (
     account_uid BIGINT NOT NULL, -- 사용자 계정 ID
     character_name VARCHAR(50) NOT NULL, -- 캐릭터 이름
     level INT NOT NULL DEFAULT 1, -- 캐릭터 레벨
@@ -45,9 +45,9 @@ CREATE TABLE UserCharacter (
     PRIMARY KEY (account_uid, character_name)
 );
 
-DROP TABLE IF EXISTS UserInventory;
+DROP TABLE IF EXISTS user_inventory;
 -- UserInventory 테이블
-CREATE TABLE UserInventory (
+CREATE TABLE user_inventory (
     account_uid BIGINT NOT NULL,
     item_id INT NOT NULL,
     item_qty INT NOT NULL DEFAULT 0,
@@ -57,8 +57,8 @@ CREATE TABLE UserInventory (
 );
 
 -- UserMail 테이블
-DROP TABLE IF EXISTS Mail;
-CREATE TABLE Mail (
+DROP TABLE IF EXISTS mail;
+CREATE TABLE mail (
     mail_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     account_uid BIGINT NOT NULL,
     mail_type_cd VARCHAR(2) NOT NULL DEFAULT 'N', -- e.g., 'N': normal, 'I': important
@@ -74,7 +74,7 @@ CREATE TABLE Mail (
     reward_qty INT NULL
 );
 
-INSERT INTO Mail (account_uid, mail_type_cd, sender_cd, title, content, create_dt, expire_dt, receive_dt, receive_yn, reward_id, reward_type_cd, reward_qty) VALUES
+INSERT INTO mail (account_uid, mail_type_cd, sender_cd, title, content, create_dt, expire_dt, receive_dt, receive_yn, reward_id, reward_type_cd, reward_qty) VALUES
 (10001, 'N', '01', 'Welcome!', 'Welcome to the game!', '2025-07-29 09:00:00', NULL, NULL, 'N', 1, '01', 100),
 (10001, 'N', '01', 'Daily Reward', 'Here is your daily reward.', '2025-07-29 09:05:00', NULL, '2025-07-29 09:10:00', 'Y', 2, '02', 10),
 (10002, 'I', '02', 'Event Notice', 'Check out the new event!', '2025-07-28 08:30:00', NULL, NULL, 'N', 3, '02', 1),
@@ -86,7 +86,7 @@ INSERT INTO Mail (account_uid, mail_type_cd, sender_cd, title, content, create_d
 (10004, 'I', '02', 'Special Offer', 'Check out this offer!', '2025-07-28 18:00:00', NULL, NULL, 'N', 9, '01', 20),
 (10005, 'N', '01', 'Compensation', 'Sorry for the inconvenience.', '2025-07-27 20:00:00', NULL, NULL, 'N', 10, '01', 300);
 
-INSERT INTO User (account_uid, create_dt, last_login_dt) VALUES
+INSERT INTO user (account_uid, create_dt, last_login_dt) VALUES
 (10001, '2025-07-01 10:00:00', '2025-07-29 09:00:00'),
 (10002, '2025-07-10 12:00:00', '2025-07-28 08:30:00'),
 (10003, '2025-07-15 14:00:00', '2025-07-27 10:15:00'),
@@ -94,7 +94,7 @@ INSERT INTO User (account_uid, create_dt, last_login_dt) VALUES
 (10005, '2025-07-25 18:00:00', '2025-07-26 07:45:00');
 
 -- 예시 데이터: Attendance
-INSERT INTO Attendance (account_uid, attendance_book_id, last_attendance_dt, attendance_continue_cnt) VALUES
+INSERT INTO user_attendance (account_uid, attendance_book_id, last_attendance_dt, attendance_continue_cnt) VALUES
 (10001, 1, '2025-07-29 09:00:00', 3),
 (10002, 1, '2025-07-28 08:30:00', 1),
 (10003, 2, '2025-07-27 10:15:00', 5),
@@ -102,7 +102,7 @@ INSERT INTO Attendance (account_uid, attendance_book_id, last_attendance_dt, att
 (10005, 3, '2025-07-26 07:45:00', 7);
 
 -- 예시 데이터: UserCurrency
-INSERT INTO UserCurrency (account_uid, currency_id, amount, last_update_dt) VALUES
+INSERT INTO user_currency (account_uid, currency_id, amount, last_update_dt) VALUES
 (10001, 1, 1000, '2025-07-29 09:00:00'),
 (10001, 2, 50, '2025-07-29 09:00:00'),
 (10002, 1, 500, '2025-07-28 08:30:00'),
@@ -110,7 +110,7 @@ INSERT INTO UserCurrency (account_uid, currency_id, amount, last_update_dt) VALU
 (10004, 3, 10, '2025-07-29 11:20:00');
 
 -- 예시 데이터: UserCharacter
-INSERT INTO UserCharacter (account_uid, character_name, level, create_dt, last_login_dt, character_hp, character_mp, character_atk, character_def, character_job_cd) VALUES
+INSERT INTO user_character (account_uid, character_name, level, create_dt, last_login_dt, character_hp, character_mp, character_atk, character_def, character_job_cd) VALUES
 (10001, 'Arthur', 10, '2025-07-01 10:00:00', '2025-07-29 09:00:00', 150, 80, 25, 12, '01'),
 (10002, 'Merlin', 8, '2025-07-10 12:00:00', '2025-07-28 08:30:00', 120, 150, 15, 8, '02'),
 (10003, 'Lancelot', 12, '2025-07-15 14:00:00', '2025-07-27 10:15:00', 180, 60, 30, 15, '01'),
@@ -118,7 +118,7 @@ INSERT INTO UserCharacter (account_uid, character_name, level, create_dt, last_l
 (10005, 'Morgana', 9, '2025-07-25 18:00:00', '2025-07-26 07:45:00', 130, 140, 22, 9, '02');
 
 -- 예시 데이터: UserInventory
-INSERT INTO UserInventory (account_uid, item_id, item_qty, acquire_dt, last_update_dt) VALUES
+INSERT INTO user_inventory (account_uid, item_id, item_qty, acquire_dt, last_update_dt) VALUES
 (10001, 101, 3, '2025-07-25 09:00:00', '2025-07-29 09:00:00'),
 (10001, 102, 1, '2025-07-26 09:00:00', '2025-07-29 09:00:00'),
 (10002, 101, 2, '2025-07-28 08:30:00', '2025-07-28 08:30:00'),

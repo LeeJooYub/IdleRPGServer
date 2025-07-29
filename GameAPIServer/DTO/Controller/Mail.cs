@@ -22,27 +22,15 @@ public class MailListResponse : ErrorCodeDTO
     public DateTime? NextCursor { get; set; } // 다음 페이지를 위한 커서 값 (마지막 메일의 receive_dt)
 }
 
-// public class MailDetailRequest
-// {
-//     public int MailId { get; set; } // 메일 ID
-// }
-
-// public class MailDetailResponse
-// {
-//     public string Sender { get; set; } // 발신자
-//     public string Content { get; set; } // 메일 내용
-//     public DateTime SentDate { get; set; } // 발송 날짜
-// }
-
-public class ClaimMailRequest
+public class ReceiveMailRequest
 {
     [Required] public Int64 MailId { get; set; } // 메일 ID
     [Required] public Int64 AccountUid { get; set; } // 사용자 ID
 }
 
-public class ClaimMailResponse : ErrorCodeDTO
+public class ReceiveMailResponse : ErrorCodeDTO
 {
-    public List<MailRewardDto> Rewards { get; set; } // 보상 목록
+    public RewardData Reward { get; set; } // 보상 목록
 }
 
 public class DeleteMailRequest
@@ -55,20 +43,15 @@ public class DeleteMailResponse : ErrorCodeDTO
 {
 }
 
-public class ClaimAllMailsRequest
+public class ReceiveAllMailsRequest
 {
     [Required] public Int64 AccountUid { get; set; } // 사용자 ID
+    [Required] public DateTime? Now { get; set; } = DateTime.UtcNow; // 현재 시간 (기본값: 현재 시간)
 }
 
-public class ClaimAllMailsResponse : ErrorCodeDTO
+public class ReceiveAllMailsResponse : ErrorCodeDTO
 {
     public int TotalClaimed { get; set; } = 0; // 수령한 메일 수
-    public List<MailRewardDto> Rewards { get; set; } = new List<MailRewardDto>(); // 보상 목록
+    public List<RewardData> Rewards { get; set; } = new List<RewardData>(); // 보상 목록
 }
 
-public class MailRewardDto
-{
-    public int? RewardId { get; set; }
-    public string RewardType { get; set; }
-    public int? RewardQty { get; set; }
-}

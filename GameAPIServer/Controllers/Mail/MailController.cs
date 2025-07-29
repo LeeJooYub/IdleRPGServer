@@ -66,20 +66,20 @@ public class MailController
     /// </summary>
     /// <param name="request">메일 보상 수령 요청 데이터</param>
     /// <returns>메일 보상 수령 응답 데이터</returns>
-    [HttpPost("claim")]
-    public async Task<ClaimMailResponse> ClaimMailRewardAsync([FromBody] ClaimMailRequest request)
+    [HttpPost("receive-reward")]
+    public async Task<ReceiveMailResponse> ReceiveRewardAsync([FromBody] ReceiveMailRequest request)
     {
-        var input = new ClaimMailInput
+        var input = new ReceiveMailInput
         {
             MailId = request.MailId,
             AccountUid = request.AccountUid
         };
-        var result = await _mailService.ClaimMailRewardAsync(input);
+        var result = await _mailService.ReceiveMailRewardAsync(input);
 
-        var response = new ClaimMailResponse
+        var response = new ReceiveMailResponse
         {
             ErrorCode = result.ErrorCode,
-            Rewards = result.Rewards // 보상 목록 추가
+            Reward = result.Reward // 보상 목록 추가
         };
 
         return response;
@@ -111,12 +111,7 @@ public class MailController
         return response;
     }
 
-    /// <summary>
-    /// 모든 메일 보상 일괄 수령 API
-    /// 사용자의 메일함에 있는 모든 메일의 보상을 일괄 수령합니다.
-    /// </summary>
-    /// <param name="request">모든 메일 보상 수령 요청 데이터</param>
-    /// <returns>모든 메일 보상 수령 응답 데이터</returns>
+    // 모든 보상 한번에 받기 구현
     // [HttpPost("claimAll")]
     // public async Task<ClaimAllMailsResponse> ClaimAllMailRewardsAsync([FromBody] ClaimAllMailsRequest request)
     // {

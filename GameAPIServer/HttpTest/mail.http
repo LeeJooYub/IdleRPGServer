@@ -13,14 +13,14 @@ Content-Type: application/json
 }
 
 ### Claim Mail Reward
-POST http://localhost:11500/mail/claim
+POST http://localhost:11500/mail/receive-reward
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 Content-Type: application/json
 
 {
-  "MailId": 6,
+  "MailId": 2,
   "AccountUid": 10001
 }
 

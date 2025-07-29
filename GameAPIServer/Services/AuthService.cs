@@ -50,40 +50,41 @@ public class AuthService : IAuthService
         }
 
         // 유저 있는지 확인
-        (errorCode, Int64 accountId) = await _gameDb.FindUserByPlatformId(input.AccountUid);
-        loginOutput.ErrorCode = errorCode;
+        var accountInfo = await _gameDb.FindUserByAccountId(input.AccountUid);
         
         // 유저가 없으면 생성
-        if (errorCode == ErrorCode.LoginFailUserNotExist)
+        if (accountInfo == null)
         {
-
-            (errorCode, accountId) = await _gameDb.CreateUser(new AccountInfo
+            try
             {
-                account_uid = input.AccountUid,
-            });
-            loginOutput.ErrorCode = errorCode;
-            if (errorCode != ErrorCode.None)
+                await _gameDb.CreateUser(new AccountInfo
+                {
+                    account_uid = input.AccountUid,
+                });
+            }
+            catch (Exception ex)
             {
-                _logger.ZLogError($"[AuthService.Login] ErrorCode: {errorCode}, PlayerId: {input.AccountUid}");
+                _logger.ZLogError($"[AuthService.Login] User creation failed: {ex.Message}");
                 return loginOutput;
             }
         }
-        loginOutput.AccountUid = accountId;
-
-        _logger.ZLogDebug($"[AuthService.Login] After CreateUser, AccountUid: {accountId}");
+        loginOutput.AccountUid = accountInfo.account_uid;
+        _logger.ZLogDebug($"[AuthService.Login] After CreateUser, AccountUid: {accountInfo.account_uid}");
 
         // 토큰 Redis에 저장
-        errorCode = await _memoryDb.SetTokenAsync(input.Token, accountId);
-
-        loginOutput.Token = input.Token;
-        if (errorCode != ErrorCode.None)
-        {
-            return loginOutput;
+        try{
+            errorCode = await _memoryDb.SetTokenAsync(input.Token, accountInfo.account_uid);
         }
-
+        catch (Exception ex)
+        {
+            _logger.ZLogError($"[AuthService.Login] Error setting token in Redis: {ex.Message}");
+            loginOutput.ErrorCode = ErrorCode.LoginFailAddRedis;
+            return loginOutput;
+        }   
 
         return loginOutput;
     }
+
 
     public async Task<ErrorCode> VerifyTokenToHive(Int64 AccountUid, string token)
     {

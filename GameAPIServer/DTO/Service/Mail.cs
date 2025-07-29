@@ -22,31 +22,34 @@ namespace GameAPIServer.DTO.ServiceDTO
         public DateTime? NextCursor { get; set; } // 다음 페이지를 위한 커서 값 (마지막 메일의 receive_dt)
     }
 
-    // GetMailDetail
-    // public class MailDetailCommand
-    // {
-    //     public Int64 MailId { get; set; } // 메일 ID
-    // }
 
-    // public class MailDetailResult
-    // {
-    //     [Required] public ErrorCode ErrorCode { get; set; } = ErrorCode.None; // 에러 코드
-    //     public string Sender { get; set; } // 발신자
-    //     public string Content { get; set; } // 메일 내용
-    //     public DateTime SentDate { get; set; } // 발송 날짜
-    // }
 
     // ClaimMail
-    public class ClaimMailInput
+    public class ReceiveMailInput
     {
         public Int64 MailId { get; set; } // 메일 ID
         public Int64 AccountUid { get; set; } // 사용자 ID
     }
 
-    public class ClaimMailOutput : ErrorCodeDTO
+    public class ReceiveMailOutput : ErrorCodeDTO
     {
-        public List<MailRewardDto> Rewards { get; set; } // 보상 목록
+        public RewardData Reward { get; set; } // 보상 목록
     }
+
+
+    // ClaimMail
+    public class ReceiveAllMailInput
+    {
+        public Int64 MailId { get; set; } // 메일 ID
+        public Int64 AccountUid { get; set; } // 사용자 ID
+        public DateTime? Now { get; set; } // 현재 시간 (기본값: 현재 시간)
+    }
+
+    public class ReceiveAllMailOutput : ErrorCodeDTO
+    {
+        public List<RewardData> Rewards { get; set; } // 보상 목록
+    }
+
 
 
     // DeleteMail
@@ -59,18 +62,5 @@ namespace GameAPIServer.DTO.ServiceDTO
     public class DeleteMailOutput : ErrorCodeDTO
     {
     }
-
-    // ClaimAllMails
-    // public class ClaimAllMailsCommand
-    // {
-    //     public Int64 AccountId { get; set; } // 사용자 ID
-    // }
-
-    // public class ClaimAllMailsResult : ErrorCodeDTO
-    // {
-    //     public int TotalClaimed { get; set; } = 0;// 수령한 메일 수
-    //     public List<MailRewardDto> Rewards { get; set; } // 보상 목록
-    // }
-
     
 }

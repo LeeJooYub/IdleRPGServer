@@ -39,19 +39,10 @@ public class MemoryDb : IMemoryDb
             TokenKey = token
         };
 
-        try
+        var redis = new RedisString<RdbAuthUserData>(_redisConn, token, LoginTimeSpan());
+        if (!await redis.SetAsync(user, LoginTimeSpan()))
         {
-            var redis = new RedisString<RdbAuthUserData>(_redisConn, token, LoginTimeSpan());
-            if (!await redis.SetAsync(user, LoginTimeSpan()))
-            {
-                _logger.ZLogError($"[SetTokenRedisAsync] Uid:{account_uid}, Token:{token}, ErrorMessage:UserBasicAuth, RedisString set Error");
-                result = ErrorCode.LoginFailAddRedis;
-                return result;
-            }
-        }
-        catch
-        {
-            _logger.ZLogError($"[SetTokenRedisAsync] Uid:{account_uid}, Token:{token}, ErrorMessage:Redis Connection Error");
+            _logger.ZLogError($"[SetTokenRedisAsync] Uid:{account_uid}, Token:{token}, ErrorMessage:UserBasicAuth, RedisString set Error");
             result = ErrorCode.LoginFailAddRedis;
             return result;
         }
@@ -62,22 +53,16 @@ public class MemoryDb : IMemoryDb
 
     public async Task<bool> SetUserReqLockAsync(string key)
     {
-        try
+
+        RedisString<RdbAuthUserData> redis = new(_redisConn, key, NxKeyTimeSpan());
+        if (await redis.SetAsync(new RdbAuthUserData
         {
-            RedisString<RdbAuthUserData> redis = new(_redisConn, key, NxKeyTimeSpan());
-            if (await redis.SetAsync(new RdbAuthUserData
-            {
-                // emtpy value
-            }, NxKeyTimeSpan(), StackExchange.Redis.When.NotExists) == false)
-            {
-                return false;
-            }
-        }
-        catch
+            // emtpy value
+        }, NxKeyTimeSpan(), StackExchange.Redis.When.NotExists) == false)
         {
-            _logger.ZLogError($"[SetUserReqLockAsync] Key = {key}, ErrorMessage:Redis Connection Error");
             return false;
         }
+
 
         return true;
     }
@@ -89,58 +74,46 @@ public class MemoryDb : IMemoryDb
             return false;
         }
 
-        try
-        {
-            RedisString<RdbAuthUserData> redis = new(_redisConn, key, null);
-            var redisResult = await redis.DeleteAsync();
-            return redisResult;
-        }
-        catch
-        {
-            _logger.ZLogError($"[DelUserReqLockAsync] Key = {key}, ErrorMessage:Redis Connection Error");
-            return false;
-        }
+        RedisString<RdbAuthUserData> redis = new(_redisConn, key, null);
+        var redisResult = await redis.DeleteAsync();
+        return redisResult;
     }
 
 
     public async Task<(bool, RdbAuthUserData)> GetUserAsync(string token)
     {
-        var tokenKey = MemoryDbKeyMaker.TokenKey(token);
-
-        try
+        RedisString<RdbAuthUserData> redis = new(_redisConn, token, null);
+        RedisResult<RdbAuthUserData> user = await redis.GetAsync();
+        if (!user.HasValue)
         {
-            RedisString<RdbAuthUserData> redis = new(_redisConn, token, null);
-            RedisResult<RdbAuthUserData> user = await redis.GetAsync();
-            if (!user.HasValue)
-            {
-                _logger.ZLogError(
-                    $"[GetUserAsync] Token = {token}, ErrorMessage = Not Assigned User, RedisString get Error");
-                return (false, null);
-            }
-
-            return (true, user.Value);
-        }
-        catch
-        {
-            _logger.ZLogError($"[GetUserAsync] Token:{token},ErrorMessage:ID does Not Exist");
+            _logger.ZLogError(
+                $"[GetUserAsync] Token = {token}, ErrorMessage = Not Assigned User, RedisString get Error");
             return (false, null);
         }
+
+        return (true, user.Value);
+  
+    }
+
+    public async Task<(ErrorCode, Int64)> GetUserIdAsync(string token)
+    {
+        RedisString<RdbAuthUserData> redis = new(_redisConn, token, null);
+        RedisResult<RdbAuthUserData> user = await redis.GetAsync();
+        if (!user.HasValue)
+        {
+            _logger.ZLogError($"[GetUserIdAsync] Token:{token}, ErrorMessage:ID does Not Exist");
+            return (ErrorCode.AuthTokenKeyNotFound, 0);
+        }
+
+        return (ErrorCode.None, user.Value.AccountUid);
     }
 
 
     public async Task<ErrorCode> DelUserAuthAsync(string token)
     {
-        try
-        {
-            var redis = new RedisString<RdbAuthUserData>(_redisConn, token, null);
-            await redis.DeleteAsync();
-            return ErrorCode.None;
-        }
-        catch
-        {
-            _logger.ZLogError($"[DelUserAuthAsync] Token:{token}, ErrorMessage:Redis Connection Error");
-            return ErrorCode.LogoutRedisDelFailException;
-        }
+        var redis = new RedisString<RdbAuthUserData>(_redisConn, token, null);
+        await redis.DeleteAsync();
+        return ErrorCode.None;
     }
 
     public TimeSpan LoginTimeSpan()

@@ -48,10 +48,13 @@ public enum ErrorCode : UInt16
     // Mail
 
     MailReceiveFailAlreadyReceived = 8003,
+    MailNotFound = 8004, // 메일이 존재하지 않는 경우
+    MailReceiveFailNotFound = 8005, // 메일 수령 실패: 메
     RewardNotExist = 8013, // 보상이 존재하지 않는 경우
+    MailAlreadyClaimed = 8014, // 메일이 이미 수령된 경우
 
     // Attendance
-    
+
 
     // Basic Errors 100 ~
     DatabaseError = 101, // Generic database error

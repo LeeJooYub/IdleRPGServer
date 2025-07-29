@@ -16,6 +16,7 @@ using GameAPIServer.Services.Interfaces;
 using GameAPIServer.DTO.ExternelAPI;
 using GameAPIServer.DTO.ControllerDTO;
 using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.Models.MasterDB;
 
 namespace GameAPIServer.Services
 {
@@ -32,17 +33,17 @@ namespace GameAPIServer.Services
             _gameDb = gameDb;
         }
 
-
         public async Task<MailListOutput> GetMailListAsync(MailListInput input)
         {
             var result = new MailListOutput();
 
+            // 커서가 없으면 현재 시간을 기본값으로 설정
             if (!input.Cursor.HasValue)
             {
                 input.Cursor = DateTime.UtcNow; // 기본값으로 현재 시간을 설정
             }
 
-
+    
             try
             {
                 (result.Mails, result.NextCursor) = await _gameDb.GetMailListAsync(input.AccountUid, input.Cursor, input.Limit);
@@ -52,111 +53,160 @@ namespace GameAPIServer.Services
                 _logger.LogError(ex, "Error fetching mail list");
                 result.ErrorCode = ErrorCode.DatabaseError;
             }
-
-
             return result;
         }
 
-        public async Task<ClaimMailOutput> ClaimMailRewardAsync(ClaimMailInput input)
+
+        //TODO : 트랜잭션으로 묶기?
+        public async Task<ReceiveMailOutput> ReceiveMailRewardAsync(ReceiveMailInput input)
         {
-            var result = new ClaimMailOutput();
-            var errorCode = ErrorCode.None;
-            var rewards = new List<MailRewardDto>();
+            var result = new ReceiveMailOutput();
+            var reward = new RewardData();
+
+            // 메일 정보 조회
+            var mail = await _gameDb.GetMailAsync(input.MailId);
+            if (mail == null)
+            {
+                _logger.LogError("Mail not found for MailId: {MailId}", input.MailId);
+                result.ErrorCode = ErrorCode.MailNotFound;
+                return result;
+            }
+            else if (mail.reward_receive_yn == 'Y') // 이미 수령한 메일
+            {
+                _logger.LogWarning("Mail already claimed for MailId: {MailId}", input.MailId);
+                result.ErrorCode = ErrorCode.MailAlreadyClaimed;
+                return result;
+            }
+
+
+            //리워드 받기
             try
             {
-                (errorCode, rewards) = await _gameDb.ClaimMailRewardAsync(input.MailId);
-                result.ErrorCode = errorCode;
-                result.Rewards = rewards;
+                reward = await _gameDb.GetMailRewardAsync(input.MailId);
+                result.Reward = reward; // 보상 데이터 설정
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching mail reward for MailId: {MailId}", input.MailId);
+                result.ErrorCode = ErrorCode.DatabaseError;
+                return result;
+            }
+
+
+            // 유저 상태 (돈,화폐) 업데이트
+            try
+            {
+                if (reward.reward_type_cd == "01") // Assuming '01' is the currency type code
+                {
+                    // 화폐 리워드 처리
+                    await _gameDb.UpdateUserCurrencyAsync(input.AccountUid, reward.reward_id.Value, reward.reward_qty.Value);
+                }
+                else if (reward.reward_type_cd == "02") // Assuming '02' is the item type code
+                {
+                    // 아이템 리워드 처리
+                    await _gameDb.UpdateUserInventoryItemAsync(input.AccountUid, reward.reward_id.Value, reward.reward_qty.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating user state for AccountUid: {AccountUid}", input.AccountUid);
+                result.ErrorCode = ErrorCode.DatabaseError;
+                return result;
+            }
+
+            // 메일 수령 상태 업데이트
+            try
+            {
+
+                await _gameDb.UpdateMailRewardStatusAsync(input.MailId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error claiming mail reward for MailId: {MailId}", input.MailId);
                 result.ErrorCode = ErrorCode.DatabaseError;
+                return result;
             }
-            if (result.ErrorCode != ErrorCode.None)
-            {
-                return result; // 에러가 발생한 경우 바로 반환
-            }
+  
+            return result;
+        }
 
-            // TODO: 보상 추출 후 사용자 보상 업데이트
-            // try
-            // {
-            //     errorCode = await _gameDb.UpdateUserRewardsAsync(command.AccountId, result.Rewards);
-            // }
-            // catch (Exception ex)
-            // {
-            //     _logger.LogError(ex, "Error claiming mail reward for MailId: {MailId}", command.MailId);
-            //     result.ErrorCode = ErrorCode.DatabaseError;
-            // }
+
+        public async Task<ReceiveAllMailOutput> ReceiveAllMailRewardAsync(ReceiveAllMailInput input)
+        {
+            var result = new ReceiveAllMailOutput();
+            var mails = new List<Mail>();
+            var rewards = new List<RewardData>();
 
             try
             {
-                errorCode = await _gameDb.UpdateMailClaimStatusAsync(input.MailId);
-                result.ErrorCode = errorCode;
+                mails = await _gameDb.GetAllMailsRewardAsync(input.AccountUid);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error claiming mail reward for MailId: {MailId}", input.MailId);
+                _logger.LogError(ex, "Error claiming all mail rewards for AccountUid: {AccountUid}", input.AccountUid);
                 result.ErrorCode = ErrorCode.DatabaseError;
-            }
-            if (result.ErrorCode != ErrorCode.None)
-            {
-                return result; // 에러가 발생한 경우 바로 반환
+                return result;
             }
 
+            // TODO : 하나하나 업데이트? -> 한번에 업데이트
+            try
+            {
+                foreach (var mail in mails)
+                {
+                    var reward = new RewardData
+                    {
+                        reward_id = mail.reward_id,
+                        reward_type_cd = mail.reward_type_cd,
+                        reward_qty = mail.reward_qty
+                    };
+                    // 유저 상태 업데이트
+                    if (reward.reward_type_cd == "01") // 화폐
+                    {
+                        await _gameDb.UpdateUserCurrencyAsync(input.AccountUid, reward.reward_id.Value, reward.reward_qty.Value);
+                    }
+                    else if (reward.reward_type_cd == "02") // 아이템
+                    {
+                        await _gameDb.UpdateUserInventoryItemAsync(input.AccountUid, reward.reward_id.Value, reward.reward_qty.Value);
+                    }
+                    rewards.Add(reward);
+                }
+
+                await _gameDb.UpdateAllMailRewardStatusAsync(input.AccountUid, input.Now);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error claiming all mail rewards for AccountUid: {AccountUid}", input.AccountUid);
+                result.ErrorCode = ErrorCode.DatabaseError;
+                return result;
+            }
 
             return result;
         }
+
+
 
         public async Task<DeleteMailOutput> DeleteMailAsync(DeleteMailInput input)
         {
+            var affectedRows = 0;
             var result = new DeleteMailOutput();
+
             try
             {
-                result.ErrorCode = await _gameDb.DeleteMailAsync(input.MailId);
+                affectedRows = await _gameDb.DeleteMailAsync(input.MailId);
+                result.ErrorCode = affectedRows == 1 ? ErrorCode.None : ErrorCode.DatabaseError;
             }
+
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting mail with MailId: {MailId}", input.MailId);
                 result.ErrorCode = ErrorCode.DatabaseError;
+                return result;
             }
 
             return result;
         }
-
-        //TODO : 전체 수령
-        // public async Task<ClaimAllMailsResult> ClaimAllMailRewardsAsync(ClaimAllMailsCommand command)
-        // {
-        //     var result = new ClaimAllMailsResult
-        //     {
-        //         TotalClaimed = 0,
-        //         Rewards = new List<string>()
-        //     };
-
-        //     var rewards = await _gameDb.GetRewardsToClaim(command.AccountId);
-        //     if (!rewards.Any())
-        //     {
-        //         result.ErrorCode = ErrorCode.MailReceiveFailMailNotExist;
-        //         return result;
-        //     }
-
-        //     var updateResult = await _gameDb.UpdateUserRewardsAllAsync(command.AccountId, rewards);
-        //     if (updateResult != ErrorCode.None)
-        //     {
-        //         result.ErrorCode = updateResult;
-        //         return result;
-        //     }
-
-        //     await _gameDb.MarkAllMailsClaimed(command.AccountId);
-
-        //     result.TotalClaimed = rewards.Count;
-        //     result.Rewards = rewards.Select(r => $"{r.reward_type} x {r.reward_qty}").ToList();
-        //     result.ErrorCode = ErrorCode.None;
-
-        //     return result;
-        // }
+        
     }
-
-
 
 }
