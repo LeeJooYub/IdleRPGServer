@@ -68,7 +68,6 @@ public class AuthService : IAuthService
                 return loginOutput;
             }
         }
-        loginOutput.AccountUid = accountInfo.account_uid;
         _logger.ZLogDebug($"[AuthService.Login] After CreateUser, AccountUid: {accountInfo.account_uid}");
 
         // 토큰 Redis에 저장
@@ -118,7 +117,7 @@ public class AuthService : IAuthService
         }
     }
 
-    
+
 
 
     public bool ValidateHiveResponse(HttpResponseMessage? response)

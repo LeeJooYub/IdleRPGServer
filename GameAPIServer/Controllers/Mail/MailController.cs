@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using GameAPIServer.DTO.ControllerDTO;
 using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.Models;
 using GameAPIServer.Services.Interfaces;
 using GameAPIServer.Repository.Interfaces;
 
@@ -18,7 +19,7 @@ namespace GameAPIServer.Controllers.Mail;
 
 [ApiController]
 [Route("[controller]")]
-public class MailController
+public class MailController : ControllerBase
 {
     private readonly ILogger<MailController> _logger;
     private readonly IMailService _mailService; 
@@ -40,9 +41,10 @@ public class MailController
     [HttpPost("list")]
     public async Task<MailListResponse> GetMailListAsync([FromBody] MailListRequest request)
     {
+        var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
         var input = new MailListInput
         {
-            AccountUid = request.AccountUid,
+            AccountUid = userInfo.AccountUid,
             Cursor = request.Cursor, // Updated to ensure DateTime cursor is passed
             Limit = request.Limit
         };
@@ -69,10 +71,11 @@ public class MailController
     [HttpPost("receive-reward")]
     public async Task<ReceiveMailResponse> ReceiveRewardAsync([FromBody] ReceiveMailRequest request)
     {
+        var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
         var input = new ReceiveMailInput
         {
             MailId = request.MailId,
-            AccountUid = request.AccountUid
+            AccountUid = userInfo.AccountUid
         };
         var result = await _mailService.ReceiveMailRewardAsync(input);
 
@@ -95,10 +98,11 @@ public class MailController
     public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
     {
         // 메일 삭제
+        var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
         var input = new DeleteMailInput
         {
             MailId = request.MailId,
-            AccountUid = request.AccountUid
+            AccountUid = userInfo.AccountUid
         };
         var result = await _mailService.DeleteMailAsync(input);
 

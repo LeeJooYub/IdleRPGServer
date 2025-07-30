@@ -44,8 +44,6 @@ public class LockRedisMiddleware
             return;
         }
 
-        context.Items[nameof(RdbAuthUserData)] = userInfo;
-
         // Call the next delegate/middleware in the pipeline
         await _next(context);
 

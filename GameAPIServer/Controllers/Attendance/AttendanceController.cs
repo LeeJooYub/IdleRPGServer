@@ -11,6 +11,7 @@ using GameAPIServer.Repository.Interfaces;
 
 using ZLogger;
 using GameAPIServer.DTO.Controller.DTO;
+using GameAPIServer.Models;
 
 namespace GameAPIServer.Controllers.Attendance;
 
@@ -36,7 +37,8 @@ public class AttendanceController : ControllerBase
     [HttpPost("check-today")]
     public async Task<CheckTodayResponse> CheckTodayAttendance([FromBody] CheckTodayRequest request)
     {    
-        var (errorCode, rewardData) = await _attendanceService.CheckTodayAsync(request.AccountId, request.AttendanceBookId);
+        var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
+        var (errorCode, rewardData) = await _attendanceService.CheckTodayAsync(userInfo.AccountUid, request.AttendanceBookId);
         var response = new CheckTodayResponse
         {
             ErrorCode = errorCode,
