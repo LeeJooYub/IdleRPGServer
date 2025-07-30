@@ -10,7 +10,6 @@ namespace GameAPIServer.DTO.Controller.DTO
 {
     public class CheckTodayRequest
     {
-        public long AccountId { get; set; }
         public int AttendanceBookId { get; set; }
     }
 

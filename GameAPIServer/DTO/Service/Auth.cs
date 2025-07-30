@@ -15,7 +15,5 @@ public class LoginInput
 public class LoginOutput : ErrorCodeDTO
 {
     [Required] public string Token { get; set; } = "";
-    [Required] public Int64 AccountUid { get; set; } = 0;
-
     // public DataLoadUserInfo userData { get; set; }
 }

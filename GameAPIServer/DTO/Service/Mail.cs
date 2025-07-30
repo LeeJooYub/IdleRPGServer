@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using GameAPIServer.Models.GameDB;
 using GameAPIServer.DTO.ControllerDTO;
 using GameAPIServer.Models.MasterDB;
+using GameAPIServer.Models;
 
 namespace GameAPIServer.DTO.ServiceDTO
 {
