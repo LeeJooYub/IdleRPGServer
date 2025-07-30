@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using GameAPIServer.Models.GameDB;
 using GameAPIServer.DTO.ServiceDTO;
 using GameAPIServer.DTO.ControllerDTO;
-using GameAPIServer.Models.MasterDB;
+using GameAPIServer.Models;
 
 
 namespace GameAPIServer.Repository.Interfaces;

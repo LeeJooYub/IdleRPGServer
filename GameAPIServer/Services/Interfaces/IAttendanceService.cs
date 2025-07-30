@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using GameAPIServer.Models.GameDB;
-
 using GameAPIServer.Models.MasterDB;
+using GameAPIServer.Models;
 
 namespace GameAPIServer.Services.Interfaces
 {

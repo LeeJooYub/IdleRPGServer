@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using GameAPIServer.Models.MasterDB;
 
+using GameAPIServer.Models;
+
 namespace GameAPIServer.DTO.Controller.DTO
 {
     public class CheckTodayRequest

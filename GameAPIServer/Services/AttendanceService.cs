@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameAPIServer.Models.GameDB;
 using GameAPIServer.Models.MasterDB;
+using GameAPIServer.Models;
+
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
 

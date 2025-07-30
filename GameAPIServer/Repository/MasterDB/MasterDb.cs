@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Models.MasterDB;
+using GameAPIServer.Models;
 
 namespace GameAPIServer.Repository;
 

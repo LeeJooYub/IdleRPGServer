@@ -17,6 +17,7 @@ using GameAPIServer.DTO.ExternelAPI;
 using GameAPIServer.DTO.ControllerDTO;
 using GameAPIServer.DTO.ServiceDTO;
 using GameAPIServer.Models.MasterDB;
+using GameAPIServer.Models;
 
 namespace GameAPIServer.Services
 {
