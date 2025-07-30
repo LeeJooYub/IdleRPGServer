@@ -6,85 +6,70 @@ using GameAPIServer.Models.MasterDB;
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
 
-namespace GameAPIServer.Services
+namespace GameAPIServer.Services;
+
+public class AttendanceService : IAttendanceService
 {
-    public class AttendanceService : IAttendanceService
+
+    private readonly IGameDb _gameDb;
+    private readonly IMasterDb _masterDb;
+
+    public AttendanceService(IGameDb gameDb, IMasterDb masterDb)
     {
-  
-        private readonly IGameDb _gameDb;
-        private readonly IMasterDb _masterDb;
+        _gameDb = gameDb;
+        _masterDb = masterDb;
+    }
 
-        public AttendanceService(IGameDb gameDb, IMasterDb masterDb)
+    //TODO : 에러 코드들 정리
+    public async Task<(ErrorCode, RewardData)> CheckTodayAsync(Int64 accountUid, Int64 attendanceBookId)
+    {
+        // Call the repository method to get attendance data
+
+        var attendance = new Attendance();
+        var rewardData = new RewardData();
+
+        // 내 특정 출석부 정보 가져오기 (리워드 정보 체크)
+        try
         {
-            _gameDb = gameDb;
-            _masterDb = masterDb;
+            attendance = await _gameDb.GetAttendanceBookAsync(accountUid, attendanceBookId);
+        }
+        catch (Exception e)
+        {
+            return (ErrorCode.DatabaseError, null);
         }
 
-        //TODO : 에러 코드들 정리
-        public async Task<(ErrorCode, RewardData)> CheckTodayAsync(Int64 accountUid, Int64 attendanceBookId)
+        // 마스터 데이터에서 해당 출석부, 특정 날짜에 대한 리워드 정보 가져오기
+        try
         {
-            // Call the repository method to get attendance data
+            rewardData = await _masterDb.GetRewardInAttendanceBookAsync(attendanceBookId, attendance.attendance_continue_cnt);
+        }
+        catch (Exception e)
+        {
+            return (ErrorCode.DatabaseError, null);
 
-            var attendance = new Attendance();
-            var rewardData = new RewardData();
-
-            // 내 특정 출석부 정보 가져오기 (리워드 정보 체크)
-            try
-            {
-                attendance = await _gameDb.GetAttendanceBookAsync(accountUid, attendanceBookId);
-            }
-            catch (Exception e)
-            {
-                return (ErrorCode.DatabaseError, null);
-            }
-
-            // 마스터 데이터에서 해당 출석부, 특정 날짜에 대한 리워드 정보 가져오기
-            try
-            {
-                rewardData = await _masterDb.GetRewardInAttendanceBookAsync(attendanceBookId, attendance.attendance_continue_cnt);
-            }
-            catch (Exception e)
-            {
-                return (ErrorCode.DatabaseError, null);
-
-            }
-
-            // 출석 체크
-            try
-            {
-                await _gameDb.CheckInAttendanceBookAsync(accountUid, attendanceBookId);
-            }
-            catch (Exception ex)
-            {
-                return (ErrorCode.DatabaseError, null);
-            }
-
-            try
-            {
-                await _gameDb.UpdateUserFromRewardAsync(accountUid, rewardData);
-            }
-            catch (Exception ex)
-            {
-                return (ErrorCode.DatabaseError, null);
-            }
-
-
-            return (ErrorCode.None, rewardData);
         }
 
-        // public async Task<int> UpdateAttendanceAsync(Attendance attendance)
-        // {
-        //     return await _attendanceRepository.UpdateAttendanceAsync(attendance);
-        // }
+        // 출석 체크
+        try
+        {
+            await _gameDb.CheckInAttendanceBookAsync(accountUid, attendanceBookId);
+        }
+        catch (Exception ex)
+        {
+            return (ErrorCode.DatabaseError, null);
+        }
 
-        // public async Task<int> InsertAttendanceAsync(Attendance attendance)
-        // {
-        //     return await _attendanceRepository.InsertAttendanceAsync(attendance);
-        // }
+        try
+        {
+            await _gameDb.UpdateUserFromRewardAsync(accountUid, rewardData);
+        }
+        catch (Exception ex)
+        {
+            return (ErrorCode.DatabaseError, null);
+        }
 
-        // public async Task<List<Attendance>> GetAttendanceListAsync(long accountUid)
-        // {
-        //     return await _attendanceRepository.GetAttendanceListAsync(accountUid);
-        // }
+
+        return (ErrorCode.None, rewardData);
     }
 }
+

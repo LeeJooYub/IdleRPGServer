@@ -118,6 +118,8 @@ public class AuthService : IAuthService
         }
     }
 
+    
+
 
     public bool ValidateHiveResponse(HttpResponseMessage? response)
     {

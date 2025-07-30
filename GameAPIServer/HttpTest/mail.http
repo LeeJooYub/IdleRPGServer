@@ -35,7 +35,7 @@ Content-Type: application/json
 # }
 
 ### Claim All Mail Rewards
-POST http://localhost:11500/mail/claimAll
+POST http://localhost:11500/mail/claim-all
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
