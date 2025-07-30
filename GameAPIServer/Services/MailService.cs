@@ -96,16 +96,7 @@ namespace GameAPIServer.Services
             // 유저 상태 (돈,화폐) 업데이트
             try
             {
-                if (reward.reward_type_cd == "01") // Assuming '01' is the currency type code
-                {
-                    // 화폐 리워드 처리
-                    await _gameDb.UpdateUserCurrencyAsync(input.AccountUid, reward.reward_id.Value, reward.reward_qty.Value);
-                }
-                else if (reward.reward_type_cd == "02") // Assuming '02' is the item type code
-                {
-                    // 아이템 리워드 처리
-                    await _gameDb.UpdateUserInventoryItemAsync(input.AccountUid, reward.reward_id.Value, reward.reward_qty.Value);
-                }
+                await _gameDb.UpdateUserFromRewardAsync(input.AccountUid, reward);
             }
             catch (Exception ex)
             {

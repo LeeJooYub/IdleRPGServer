@@ -7,9 +7,9 @@ using GameAPIServer.Repository.Interfaces;
 
 namespace GameAPIServer.Repository
 {
-    public partial class GameDb : IAttendanceRepository
+    public partial class GameDb : IGameDb
     {
-        public async Task<Attendance> GetAttendanceAsync(Int64 accountUid, Int64 attendanceBookId)
+        public async Task<Attendance> GetAttendanceBookAsync(Int64 accountUid, Int64 attendanceBookId)
         {
             return await _queryFactory.Query("attendance")
                 .Where("account_uid", accountUid)
@@ -17,24 +17,12 @@ namespace GameAPIServer.Repository
                 .FirstOrDefaultAsync<Attendance>();
         }
 
-        public async Task<int> UpdateAttendanceAsync(Attendance attendance)
-        {
-            return await _queryFactory.Query("attendance")
-                .Where("account_uid", attendance.account_uid)
-                .Where("attendance_book_id", attendance.attendance_book_id)
-                .UpdateAsync(new
-                {
-                    last_attendance_dt = attendance.last_attendance_dt,
-                    attendance_continue_cnt = attendance.attendance_continue_cnt
-                });
-        }
-
-        public async Task<int> InsertAttendanceAsync(Attendance attendance)
+        public async Task<int> InsertAttendanceBookAsync(Attendance attendance)
         {
             return await _queryFactory.Query("attendance").InsertAsync(attendance);
         }
 
-        public async Task<bool> CheckInAttendanceAsync(Int64 accountUid, Int64 attendanceBookId)
+        public async Task<bool> CheckInAttendanceBookAsync(Int64 accountUid, Int64 attendanceBookId)
         {
             var query = _queryFactory.Query("attendance")
                 .Where("account_uid", accountUid)

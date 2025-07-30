@@ -21,7 +21,7 @@ CREATE TABLE day_in_attendance (
     attendance_book_id BIGINT NOT NULL, -- 출석 ID
     attendance_day INT NOT NULL, -- 출석 일수 (1부터 시작)
     reward_id INT NOT NULL, -- 보상 ID
-    reward_type_cd CHAR(2) NOT NULL, -- 보상 타입 (예: "GD": gold, "IT": item)
+    reward_type_cd CHAR(2) NOT NULL, -- 보상 타입 (예: "01": gold, "02": item)
     reward_qty INT NOT NULL, -- 보상 수량
     PRIMARY KEY (attendance_id, attendance_day)
 );

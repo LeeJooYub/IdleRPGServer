@@ -13,6 +13,7 @@ using GameAPIServer.Services.Interfaces;
 using GameAPIServer.Repository.Interfaces;
 
 using ZLogger;
+using GameAPIServer.DTO.Controller.DTO;
 
 namespace GameAPIServer.Controllers.Attendance;
 
@@ -21,48 +22,33 @@ namespace GameAPIServer.Controllers.Attendance;
 public class AttendanceController : ControllerBase
 {
     private readonly ILogger<AttendanceController> _logger;
-    private readonly IAttendanceService _authService;
+    private readonly IAttendanceService _attendanceService;
     private readonly IMemoryDb _memoryDb;
 
     public AttendanceController(
         ILogger<AttendanceController> logger,
-        IAttendanceService authService,
+        IAttendanceService attendanceService,
         IMemoryDb memoryDb)
     {
         _logger = logger;
-        _authService = authService;
+        _attendanceService = attendanceService;
         _memoryDb = memoryDb;
     }
 
-    /// <summary>
-    /// 로그인 API<br/>
-    /// (로그인 정보가 클라이언트 캐시에 있는 상태) 자동 로그인을 시작합니다. 우선 플랫폼 ID와 플랫폼 토큰을 플랫폼에 보내 검증 후, 게임 ID와 게임 토큰을 발급합니다.
-    /// </summary>
-    [HttpPost("CheckInAttendanceBook")]
-    public async Task<CheckInAttendanceBookResponse> CheckInAttendanceBook([FromBody] AttendanceCheckInRequest request)
-    {
-        var result = new CheckInAttendanceBookResponse();
-        var (errorCode, rewardData) = await _authService.CheckInTodayAsync(request.AccountId, request.AttendanceBookId);
 
-        result.ErrorCode = errorCode;
-        result.RewardData = rewardData;
+    [HttpPost("check-today")]
+    public async Task<CheckTodayResponse> CheckTodayAttendance([FromBody] CheckTodayRequest request)
+    {    
+        var (errorCode, rewardData) = await _attendanceService.CheckTodayAsync(request.AccountId, request.AttendanceBookId);
+        var response = new CheckTodayResponse
+        {
+            ErrorCode = errorCode,
+            Reward = rewardData
+        };
 
-        return result;
+        return response;
     }
 
-
-    // /// <summary>
-    // /// 로그아웃 API </br>
-    // /// 해당 유저의 토큰을 Redis에서 삭제합니다.
-    // /// </summary>
-    // [HttpPost("Logout")]
-    // public async Task<ErrorCode> DeleteUserToken([FromBody] LogoutRequest request)
-    // {
-    //     var errorCode = await _memoryDb.DelUserAuthAsync(request.SessionKey);
-
-    //     return errorCode;
-    // }
-    
 
 
 }

@@ -11,6 +11,7 @@ namespace GameAPIServer.Models.MasterDB
         public string? reward_type_cd { get; set; } //  reward_type_cd: "GD" = Gold, "IT" = Item)
         public int? reward_qty { get; set; }
     }
+
 }
 
 

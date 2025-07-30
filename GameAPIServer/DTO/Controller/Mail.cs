@@ -11,9 +11,8 @@ namespace GameAPIServer.DTO.ControllerDTO;
 
 public class MailListRequest
 {
-    [Required] public Int64 AccountUid { get; set; } // 사용자 ID
     public DateTime? Cursor { get; set; } // 커서 값 (마지막 메일의 receive_dt) (default: 현재 시간)
-    public int Limit { get; set; } // 가져올 메일 개수
+    public int Limit { get; set; } = 10; // 가져올 메일 개수
 }
 
 public class MailListResponse : ErrorCodeDTO
@@ -25,7 +24,6 @@ public class MailListResponse : ErrorCodeDTO
 public class ReceiveMailRequest
 {
     [Required] public Int64 MailId { get; set; } // 메일 ID
-    [Required] public Int64 AccountUid { get; set; } // 사용자 ID
 }
 
 public class ReceiveMailResponse : ErrorCodeDTO
@@ -36,7 +34,6 @@ public class ReceiveMailResponse : ErrorCodeDTO
 public class DeleteMailRequest
 {
     [Required] public Int64 MailId { get; set; } // 메일 ID
-    [Required] public Int64 AccountUid { get; set; } // 사용자 ID
 }
 
 public class DeleteMailResponse : ErrorCodeDTO
@@ -45,7 +42,6 @@ public class DeleteMailResponse : ErrorCodeDTO
 
 public class ReceiveAllMailsRequest
 {
-    [Required] public Int64 AccountUid { get; set; } // 사용자 ID
     [Required] public DateTime? Now { get; set; } = DateTime.UtcNow; // 현재 시간 (기본값: 현재 시간)
 }
 

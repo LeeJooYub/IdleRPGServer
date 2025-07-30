@@ -26,6 +26,10 @@ public interface IGameDb
     public Task<int> UpdateMailRewardStatusAsync(Int64 mailId);
     public Task<int> UpdateAllMailRewardStatusAsync(Int64 account_id, DateTime? now);
 
+    // Attendance related methods
+    public Task<Attendance> GetAttendanceBookAsync(Int64 accountUid, Int64 attendanceBookId);
+    public Task<int> InsertAttendanceBookAsync(Attendance attendance);
+    public Task<bool> CheckInAttendanceBookAsync(Int64 accountUid, Int64 attendanceBookId);
 
     // User data load methods
     public Task<List<UserCurrency>> GetUserCurrencyListAsync(Int64 accountUid);
@@ -37,6 +41,7 @@ public interface IGameDb
     // user data update methods
     public Task<bool> UpdateUserCurrencyAsync(Int64 accountUid, int currencyId, int deltaAmount);
     public Task<bool> UpdateUserInventoryItemAsync(Int64 accountUid, int itemId, int deltaAmount);
+    public Task<ErrorCode> UpdateUserFromRewardAsync(Int64 accountUid, RewardData reward);
 
 
 

@@ -28,7 +28,7 @@ public enum ErrorCode : UInt16
     
 
     // Item 3000 ~
-   
+
 
 
     //GameDb 4000~ 
@@ -43,7 +43,11 @@ public enum ErrorCode : UInt16
     UserInventoryFailException = 6003,
 
     InvetoryEmptyFailException = 6004, // 인벤토리 비어있음
-   
+
+    //User Currency & Item
+
+    NoSuchCurrency = 7005, // 화폐가 존재하지 않음
+    ItemInsertFailed = 7006,
 
     // Mail
 
@@ -52,6 +56,9 @@ public enum ErrorCode : UInt16
     MailReceiveFailNotFound = 8005, // 메일 수령 실패: 메
     RewardNotExist = 8013, // 보상이 존재하지 않는 경우
     MailAlreadyClaimed = 8014, // 메일이 이미 수령된 경우
+
+    // Reward
+    InvalidRewardType = 9001,
 
     // Attendance
 

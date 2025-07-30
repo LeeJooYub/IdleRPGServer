@@ -7,7 +7,6 @@ Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 Content-Type: application/json
 
 {
-  "AccountUid": 10001,
   "Cursor": "2025-07-31T00:00:00Z",
   "Limit": 10
 }
@@ -21,7 +20,6 @@ Content-Type: application/json
 
 {
   "MailId": 2,
-  "AccountUid": 10001
 }
 
 # ### Delete Mail
@@ -44,5 +42,4 @@ Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 Content-Type: application/json
 
 {
-  "AccountUid": 10001
 }
