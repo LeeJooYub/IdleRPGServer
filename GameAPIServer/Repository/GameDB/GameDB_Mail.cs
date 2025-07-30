@@ -67,9 +67,9 @@ public partial class GameDb : IGameDb
     public async Task<Mail> GetMailRewardAsync(Int64 mailId)
     {
         // 특정 mail_id에 대한 보상 정보를 가져오기
-        var mail = (await _queryFactory.Query("mail")
+        var mail = await _queryFactory.Query("mail")
             .Where("mail_id", mailId)
-            .FirstOrDefaultAsync<Mail>());
+            .FirstOrDefaultAsync<Mail>();
 
         return mail;
     }

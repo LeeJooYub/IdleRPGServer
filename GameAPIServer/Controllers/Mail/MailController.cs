@@ -22,7 +22,7 @@ namespace GameAPIServer.Controllers.Mail;
 public class MailController : ControllerBase
 {
     private readonly ILogger<MailController> _logger;
-    private readonly IMailService _mailService; 
+    private readonly IMailService _mailService;
 
     public MailController(
         ILogger<MailController> logger,
@@ -88,32 +88,6 @@ public class MailController : ControllerBase
         return response;
     }
 
-    /// <summary>
-    /// 메일 삭제 API
-    /// 특정 메일을 삭제합니다.
-    /// </summary>
-    /// <param name="request">메일 삭제 요청 데이터</param>
-    /// <returns>메일 삭제 응답 데이터</returns>
-    [HttpPost("delete")]
-    public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
-    {
-        // 메일 삭제
-        var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
-        var input = new DeleteMailInput
-        {
-            MailId = request.MailId,
-            AccountUid = userInfo.AccountUid
-        };
-        var result = await _mailService.DeleteMailAsync(input);
-
-
-
-        var response = new DeleteMailResponse
-        {
-            ErrorCode = result.ErrorCode
-        };
-        return response;
-    }
 
     // 모든 보상 한번에 받기 구현
     // [HttpPost("claimAll")]
@@ -121,19 +95,54 @@ public class MailController : ControllerBase
     // {
     //     // 모든 메일 보상 일괄 수령
     //     ClaimAllMailsCommand command = new ClaimAllMailsCommand
-        // 메일 삭제
-        // var command = new DeleteMailCommand
-        // {
-        //     MailId = request.MailId,
-        //     AccountId = request.AccountId
-        // };
-        // var result = await _mailService.DeleteMailAsync(command);
+    // 메일 삭제
+    // var command = new DeleteMailCommand
+    // {
+    //     MailId = request.MailId,
+    //     AccountId = request.AccountId
+    // };
+    // var result = await _mailService.DeleteMailAsync(command);
 
-        // var response = new DeleteMailResponse
-        // {
-        //     ErrorCode = result.ErrorCode
-        // };
-        // return response;
+    // var response = new DeleteMailResponse
+    // {
+    //     ErrorCode = result.ErrorCode
+    // };
+    // return response;
+    // }
+
+
+
+
+    
+
+
+    // 아래 기능은 유저는 사용할 수 없습니다.
+
+    /// <summary>
+    /// 메일 삭제 API
+    /// 특정 메일을 삭제합니다.
+    /// </summary>
+    /// <param name="request">메일 삭제 요청 데이터</param>
+    /// <returns>메일 삭제 응답 데이터</returns>
+    // [HttpPost("delete")]
+    // public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
+    // {
+    //     // 메일 삭제
+    //     var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
+    //     var input = new DeleteMailInput
+    //     {
+    //         MailId = request.MailId,
+    //         AccountUid = userInfo.AccountUid
+    //     };
+    //     var result = await _mailService.DeleteMailAsync(input);
+
+
+
+    //     var response = new DeleteMailResponse
+    //     {
+    //         ErrorCode = result.ErrorCode
+    //     };
+    //     return response;
     // }
 
 }

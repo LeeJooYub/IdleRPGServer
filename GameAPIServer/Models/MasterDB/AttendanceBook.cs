@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using GameAPIServer.Models.MasterDB;
 using GameAPIServer.Models;
 
-namespace GameAPIServer.Model.MasterDB;
+namespace GameAPIServer.Models.MasterDB;
 
 public class AttendanceBook
 {
@@ -16,7 +16,7 @@ public class AttendanceBook
     public DateTime create_dt { get; set; } = DateTime.UtcNow; // 생성일시
 }
 
-public class DayInAttendance : RewardData
+public class DayInAttendanceBook : RewardData
 {
     public Int64 attendance_book_id { get; set; } // 출석 ID
     public int attendance_day { get; set; } // 출석 일수 (1부터 시작. 한달 출석부 기준으로 1~30)

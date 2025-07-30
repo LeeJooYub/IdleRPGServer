@@ -61,7 +61,11 @@ public enum ErrorCode : UInt16
     InvalidRewardType = 9001,
 
     // Attendance
-
+    GameDbGetAttendanceBookError = 10001, // 출석부 조회 실패
+    MasterDbGetAttendanceBookError = 10002, // 출석부 조회 실패
+    MasterDbGetRewardInfoInAttendanceBookError = 10003, // 출석부 리워드 정보 조회 실패
+    GameDbCheckInAttendanceBookError = 10004, // 출석 체크 실패
+    GameDbUpdateUserFromRewardError = 10005, // 리워드 업데이트 실패
 
     // Basic Errors 100 ~
     DatabaseError = 101, // Generic database error

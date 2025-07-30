@@ -5,8 +5,8 @@ MasterDataVersion: 20250725
 Content-Type: application/json
 
 {
-  "AccountUid": 10001,
-  "Token": "e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b"
+  "AccountUid": 1,
+  "Token": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
 }
 
 ### Logout
@@ -16,5 +16,5 @@ MasterDataVersion: 20250725
 Content-Type: application/json
 
 {
-  "Token": "e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b"
+  "Token": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
 }

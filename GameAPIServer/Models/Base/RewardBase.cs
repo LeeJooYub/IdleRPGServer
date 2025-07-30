@@ -8,7 +8,7 @@ namespace GameAPIServer.Models
     public class RewardData
     {
         public int? reward_id { get; set; }
-        public string? reward_type_cd { get; set; } //  reward_type_cd: "GD" = Gold, "IT" = Item)
+        public string? reward_type_cd { get; set; }  // -- e.g., '01': gold, '02': item
         public int? reward_qty { get; set; }
     }
 

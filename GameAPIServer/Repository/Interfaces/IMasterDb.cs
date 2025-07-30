@@ -12,7 +12,10 @@ public interface IMasterDb
 
     public Task<bool> Load();
 
-  
-    //Reward 관련 메소드  
-    //public Task<RewardData> GetRewardInAttendanceBookAsync(Int64 attendanceBookId, int DayInAttendanceBook);
+
+    // 출석부 관련 메소드
+    public Task<AttendanceBook> GetAttendanceBookAsync(Int64 attendance_book_id);
+    public Task<AttendanceBook> GetAttendanceBookConsideringValidityAsync(Int64 attendance_book_id, DateTime utcNow);
+    public Task<RewardData> GetRewardInfoInAttendanceBookAsync(Int64 attendanceBookId, int DayInAttendanceBook, DateTime utcNow);
+
 }

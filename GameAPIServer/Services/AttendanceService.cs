@@ -23,31 +23,44 @@ public class AttendanceService : IAttendanceService
     }
 
     //TODO : 에러 코드들 정리
-    public async Task<(ErrorCode, RewardData)> CheckTodayAsync(Int64 accountUid, Int64 attendanceBookId)
+    public async Task<(ErrorCode, RewardData)> CheckTodayAsync(Int64 accountUid, Int64 attendanceBookId, DateTime utcNow)
     {
         // Call the repository method to get attendance data
-
         var attendance = new Attendance();
         var rewardData = new RewardData();
 
-        // 내 특정 출석부 정보 가져오기 (리워드 정보 체크)
+        // 내 특정 출석부 정보 가져오기 (출석부 ID, 현 출석 현황)
         try
         {
             attendance = await _gameDb.GetAttendanceBookAsync(accountUid, attendanceBookId);
         }
         catch (Exception e)
         {
-            return (ErrorCode.DatabaseError, null);
+            return (ErrorCode.GameDbGetAttendanceBookError, null);
         }
 
-        // 마스터 데이터에서 해당 출석부, 특정 날짜에 대한 리워드 정보 가져오기
+        // 이미 만료된 출석부면 에러
         try
         {
-            rewardData = await _masterDb.GetRewardInAttendanceBookAsync(attendanceBookId, attendance.attendance_continue_cnt);
+            var attendanceBook = await _masterDb.GetAttendanceBookAsync(attendanceBookId);
+            if (attendanceBook == null || attendanceBook.end_dt < utcNow)
+            {
+                return (ErrorCode.MasterDbGetAttendanceBookError, null);
+            }
         }
         catch (Exception e)
         {
-            return (ErrorCode.DatabaseError, null);
+            return (ErrorCode.MasterDbGetAttendanceBookError, null);
+        }
+
+        // 마스터 데이터에서 해당 출석부, 특정 날짜에 대한 리워드 정보 가져오기 
+        try
+        {
+            rewardData = await _masterDb.GetRewardInfoInAttendanceBookAsync(attendanceBookId, attendance.attendance_continue_cnt, utcNow);
+        }
+        catch (Exception e)
+        {
+            return (ErrorCode.MasterDbGetRewardInfoInAttendanceBookError, null);
 
         }
 
@@ -58,16 +71,20 @@ public class AttendanceService : IAttendanceService
         }
         catch (Exception ex)
         {
-            return (ErrorCode.DatabaseError, null);
+            return (ErrorCode.GameDbCheckInAttendanceBookError, null);
         }
 
         try
         {
-            await _gameDb.UpdateUserFromRewardAsync(accountUid, rewardData);
+            ErrorCode errorCode = await _gameDb.UpdateUserFromRewardAsync(accountUid, rewardData);
+            if (errorCode != ErrorCode.None)
+            {
+                return (errorCode, null);
+            }
         }
         catch (Exception ex)
         {
-            return (ErrorCode.DatabaseError, null);
+            return (ErrorCode.GameDbUpdateUserFromRewardError, null);
         }
 
 

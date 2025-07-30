@@ -97,7 +97,7 @@ namespace GameAPIServer.Services
             // 유저 상태 (돈,화폐) 업데이트
             try
             {
-                await _gameDb.UpdateUserFromRewardAsync(input.AccountUid, reward);
+                 result.ErrorCode = await _gameDb.UpdateUserFromRewardAsync(input.AccountUid, reward);
             }
             catch (Exception ex)
             {

@@ -1,25 +1,10 @@
-﻿### Login
-POST http://localhost:11500/Login
+﻿### 출석체크
+POST http://localhost:11500/attendance/check-today
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
+Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
 Content-Type: application/json
 
 {
-  "AccountUid": 1,
-  "Token": "test-login-token-1"
+  "AttendanceBookId": 1
 }
-
-### Logout
-POST http://localhost:11500/Logout
-AppVersion: 1.0.0
-MasterDataVersion: 20250725
-Content-Type: application/json
-
-{
-  "Token": "test-login-token-1"
-}
-# Content-Type: application/json
-
-# {
-#   "AccountId": 12345
-# }
