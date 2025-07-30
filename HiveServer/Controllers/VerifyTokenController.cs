@@ -30,11 +30,11 @@ public class VerifyTokenController : ControllerBase
     public VerifyTokenResponse Verify([FromBody] VerifyTokenRequest request)
     {
         _logger.ZLogDebug($"[VerifyTokenController] Called"+
-            $" AccountId: {request.AccountId}, HiveToken: {request.HiveToken}");
+            $" AccountId: {request.AccountUid}, HiveToken: {request.Token}");
 
-        VerifyTokenResponse response = new();
-        
-        if (Security.MakeHashingToken(_saltValue, request.AccountId) != request.HiveToken)
+        var response = new VerifyTokenResponse();
+
+        if (Security.MakeHashingToken(_saltValue, request.AccountUid) != request.Token)
         {
             _logger.ZLogDebug(
                 $"[AccoutDb.CreateAccount] ErrorCode: {ErrorCode.VerifyTokenFail}");

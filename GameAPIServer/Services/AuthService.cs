@@ -36,74 +36,73 @@ public class AuthService : IAuthService
     }
 
     //TODO : 다른 플랫폼에 확장 가능하게 정리. 현재는 하이브만 상정하고 만든 기능.
-    public async Task<LoginResult> Login(LoginCommand command)
+    public async Task<LoginOutput> Login(LoginInput input)
     {
-        LoginResult loginResult = new LoginResult();
+        var loginOutput = new LoginOutput();
 
         // 하이브 토큰 체크
-        ErrorCode errorCode = await VerifyTokenToHive(command.PlatformId, command.PlatformToken);
-        loginResult.ErrorCode = errorCode;
+        var errorCode = await VerifyTokenToHive(input.AccountUid, input.Token);
+        loginOutput.ErrorCode = errorCode;
 
         if (errorCode != ErrorCode.None)
         {
-            return loginResult;
+            return loginOutput;
         }
 
         // 유저 있는지 확인
-        (errorCode, Int64 accountId) = await _gameDb.FindUserByPlatformId(command.PlatformId);
-        loginResult.ErrorCode = errorCode;
+        var accountInfo = await _gameDb.FindUserByAccountId(input.AccountUid);
         
         // 유저가 없으면 생성
-        if (errorCode == ErrorCode.LoginFailUserNotExist)
+        if (accountInfo == null)
         {
-
-            (errorCode, accountId) = await _gameDb.CreateUser(new AccountInfo
+            try
             {
-                platform_id = command.PlatformId,
-                platform_name = command.PlatformName,
-            });
-            loginResult.ErrorCode = errorCode;
-            if (errorCode != ErrorCode.None)
+                await _gameDb.CreateUser(new AccountInfo
+                {
+                    account_uid = input.AccountUid,
+                });
+            }
+            catch (Exception ex)
             {
-                _logger.ZLogError($"[AuthService.Login] ErrorCode: {errorCode}, PlayerId: {command.PlatformId}");
-                return loginResult;
+                _logger.ZLogError($"[AuthService.Login] User creation failed: {ex.Message}");
+                return loginOutput;
             }
         }
-        loginResult.AccountId = accountId;
+        _logger.ZLogDebug($"[AuthService.Login] After CreateUser, AccountUid: {accountInfo.account_uid}");
 
-        _logger.ZLogDebug($"[AuthService.Login] After CreateUser, AccountId: {accountId}");
-
-        // 게임 세션 토큰 발급
-        var token = Security.CreateAuthToken();
-        errorCode = await _memoryDb.ActivateGameTokenAsync(token, accountId);
-        
-        loginResult.GameServerToken = token;
-        if (errorCode != ErrorCode.None)
-        {
-            return loginResult;
+        // 토큰 Redis에 저장
+        try{
+            errorCode = await _memoryDb.SetTokenAsync(input.Token, accountInfo.account_uid);
         }
+        catch (Exception ex)
+        {
+            _logger.ZLogError($"[AuthService.Login] Error setting token in Redis: {ex.Message}");
+            loginOutput.ErrorCode = ErrorCode.LoginFailAddRedis;
+            return loginOutput;
+        }   
 
-
-        return loginResult;
+        return loginOutput;
     }
 
-    public async Task<ErrorCode> VerifyTokenToHive(Int64 PlatformId, string token)
+
+    public async Task<ErrorCode> VerifyTokenToHive(Int64 AccountUid, string token)
     {
         try
         {
             using var client = new HttpClient();
 
-            string verifyTokenToHiveAddress = _hiveServerAPIAddress + "/verifytoken";
-            var hiveResponse = await client.PostAsJsonAsync(verifyTokenToHiveAddress, new { AccountId = PlatformId, HiveToken = token });
+            var verifyTokenToHiveAddress = _hiveServerAPIAddress + "/verifytoken";
+            var hiveResponse = await client.PostAsJsonAsync(verifyTokenToHiveAddress, new { AccountUid = AccountUid, Token = token });
             if (hiveResponse == null || !ValidateHiveResponse(hiveResponse))
             {
-                _logger.ZLogDebug($"[VerifyTokenToHive Service] ErrorCode:{ErrorCode.Hive_Fail_InvalidResponse}, PlayerID = {PlatformId}, Token = {token}, StatusCode = {hiveResponse?.StatusCode}");
+                _logger.ZLogInformation($"[VerifyTokenToHive Service] ErrorCode:{ErrorCode.Hive_Fail_InvalidResponse}, PlayerID = {AccountUid}, Token = {token}, StatusCode = {hiveResponse?.StatusCode}");
                 return ErrorCode.Hive_Fail_InvalidResponse;
             }
 
 
-            HiveVerifyTokenResponse authResult = await hiveResponse.Content.ReadFromJsonAsync<HiveVerifyTokenResponse>();
-            if (!authResult.ErrorCode.Equals(ErrorCode.None))
+            var authResult = await hiveResponse.Content.ReadFromJsonAsync<HiveVerifyTokenResponse>();
+            _logger.ZLogInformation($"[VerifyTokenToHive Service] PlayerID = {AccountUid}, Token = {token}, AuthResult = {authResult?.Result}");
+            if (!authResult.Result.Equals(ErrorCode.None))
             {
                 return ErrorCode.Hive_Fail_InvalidResponse;
             }
@@ -113,10 +112,12 @@ public class AuthService : IAuthService
         }
         catch
         {
-            _logger.ZLogDebug($"[VerifyTokenToHive Service] ErrorCode:{ErrorCode.Hive_Fail_InvalidResponse}, PlayerID = {PlatformId}, Token = {token}");
+            _logger.ZLogInformation($"[VerifyTokenToHive Service] ErrorCode:{ErrorCode.Hive_Fail_InvalidResponse}, PlayerID = {AccountUid}, Token = {token}");
             return ErrorCode.Hive_Fail_InvalidResponse;
         }
     }
+
+
 
 
     public bool ValidateHiveResponse(HttpResponseMessage? response)

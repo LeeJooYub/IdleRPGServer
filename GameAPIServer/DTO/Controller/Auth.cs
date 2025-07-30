@@ -1,0 +1,27 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace GameAPIServer.DTO.ControllerDTO;
+
+public class LoginRequest 
+{
+    [Required]
+    public Int64 AccountUid { get; set; } = 0;
+
+    [Required]
+    public string Token { get; set; } = "";
+}
+
+public class LoginResponse : ErrorCodeDTO
+{
+}
+
+public class LogoutRequest
+{
+    [Required]
+    public string Token { get; set; }
+}
+
+public class LogoutResponse  : ErrorCodeDTO
+{
+}

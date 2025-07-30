@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using GameAPIServer.DTO.ControllerDTO;
 using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.Models;
 using GameAPIServer.Services.Interfaces;
 using GameAPIServer.Repository.Interfaces;
 
@@ -18,10 +19,10 @@ namespace GameAPIServer.Controllers.Mail;
 
 [ApiController]
 [Route("[controller]")]
-public class MailController
+public class MailController : ControllerBase
 {
     private readonly ILogger<MailController> _logger;
-    private readonly IMailService _mailService; 
+    private readonly IMailService _mailService;
 
     public MailController(
         ILogger<MailController> logger,
@@ -40,16 +41,17 @@ public class MailController
     [HttpPost("list")]
     public async Task<MailListResponse> GetMailListAsync([FromBody] MailListRequest request)
     {
-        MailListCommand command = new MailListCommand
+        var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
+        var input = new MailListInput
         {
-            AccountId = request.AccountId,
+            AccountUid = userInfo.AccountUid,
             Cursor = request.Cursor, // Updated to ensure DateTime cursor is passed
             Limit = request.Limit
         };
 
-        MailListResult result = await _mailService.GetMailListAsync(command);
-        
-        MailListResponse response = new MailListResponse
+        var result = await _mailService.GetMailListAsync(input);
+
+        var response = new MailListResponse
         {
             Mails = result.Mails,
             ErrorCode = result.ErrorCode, // 에러 코드 추가
@@ -66,25 +68,55 @@ public class MailController
     /// </summary>
     /// <param name="request">메일 보상 수령 요청 데이터</param>
     /// <returns>메일 보상 수령 응답 데이터</returns>
-    [HttpPost("claim")]
-    public async Task<ClaimMailResponse> ClaimMailRewardAsync([FromBody] ClaimMailRequest request)
+    [HttpPost("receive-reward")]
+    public async Task<ReceiveMailResponse> ReceiveRewardAsync([FromBody] ReceiveMailRequest request)
     {
-        var command = new ClaimMailCommand
+        var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
+        var input = new ReceiveMailInput
         {
             MailId = request.MailId,
-            AccountId = request.AccountId
+            AccountUid = userInfo.AccountUid
         };
-        var result = await _mailService.ClaimMailRewardAsync(command);
+        var result = await _mailService.ReceiveMailRewardAsync(input);
 
-
-        ClaimMailResponse response = new ClaimMailResponse
+        var response = new ReceiveMailResponse
         {
             ErrorCode = result.ErrorCode,
-            Rewards = result.Rewards // 보상 목록 추가
+            Reward = result.Reward // 보상 목록 추가
         };
 
         return response;
     }
+
+
+    // 모든 보상 한번에 받기 구현
+    // [HttpPost("claimAll")]
+    // public async Task<ClaimAllMailsResponse> ClaimAllMailRewardsAsync([FromBody] ClaimAllMailsRequest request)
+    // {
+    //     // 모든 메일 보상 일괄 수령
+    //     ClaimAllMailsCommand command = new ClaimAllMailsCommand
+    // 메일 삭제
+    // var command = new DeleteMailCommand
+    // {
+    //     MailId = request.MailId,
+    //     AccountId = request.AccountId
+    // };
+    // var result = await _mailService.DeleteMailAsync(command);
+
+    // var response = new DeleteMailResponse
+    // {
+    //     ErrorCode = result.ErrorCode
+    // };
+    // return response;
+    // }
+
+
+
+
+    
+
+
+    // 아래 기능은 유저는 사용할 수 없습니다.
 
     /// <summary>
     /// 메일 삭제 API
@@ -92,48 +124,22 @@ public class MailController
     /// </summary>
     /// <param name="request">메일 삭제 요청 데이터</param>
     /// <returns>메일 삭제 응답 데이터</returns>
-    [HttpPost("delete")]
-    public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
-    {
-        // 메일 삭제
-        DeleteMailCommand command = new DeleteMailCommand
-        {
-            MailId = request.MailId,
-            AccountId = request.AccountId
-        };
-        DeleteMailResult result = await _mailService.DeleteMailAsync(command);
-
-
-
-        DeleteMailResponse response = new DeleteMailResponse
-        {
-            ErrorCode = result.ErrorCode
-        };
-        return response;
-    }
-
-    /// <summary>
-    /// 모든 메일 보상 일괄 수령 API
-    /// 사용자의 메일함에 있는 모든 메일의 보상을 일괄 수령합니다.
-    /// </summary>
-    /// <param name="request">모든 메일 보상 수령 요청 데이터</param>
-    /// <returns>모든 메일 보상 수령 응답 데이터</returns>
-    // [HttpPost("claimAll")]
-    // public async Task<ClaimAllMailsResponse> ClaimAllMailRewardsAsync([FromBody] ClaimAllMailsRequest request)
+    // [HttpPost("delete")]
+    // public async Task<DeleteMailResponse> DeleteMailAsync([FromBody] DeleteMailRequest request)
     // {
-    //     // 모든 메일 보상 일괄 수령
-    //     ClaimAllMailsCommand command = new ClaimAllMailsCommand
+    //     // 메일 삭제
+    //     var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
+    //     var input = new DeleteMailInput
     //     {
-    //         AccountId = request.AccountId
+    //         MailId = request.MailId,
+    //         AccountUid = userInfo.AccountUid
     //     };
-    //     ClaimAllMailsResult result = await _mailService.ClaimAllMailRewardsAsync(command);
+    //     var result = await _mailService.DeleteMailAsync(input);
 
 
 
-    //     ClaimAllMailsResponse response = new ClaimAllMailsResponse
+    //     var response = new DeleteMailResponse
     //     {
-    //         TotalClaimed = result.TotalClaimed,
-    //         Rewards = result.Rewards,
     //         ErrorCode = result.ErrorCode
     //     };
     //     return response;

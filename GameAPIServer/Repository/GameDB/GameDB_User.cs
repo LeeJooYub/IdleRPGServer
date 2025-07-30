@@ -16,30 +16,20 @@ namespace GameAPIServer.Repository;
 public partial class GameDb : IGameDb
 {
 
-    public async Task<(ErrorCode, Int64)> FindUserByPlatformId(Int64 platformId)
+    public async Task<AccountInfo> FindUserByAccountId(Int64 AccountId)
     {
-        AccountInfo? result = await _queryFactory.Query("user")
-            .Where("platform_id", platformId)
+        var user = await _queryFactory.Query("user")
+            .Where("account_uid", AccountId)
             .FirstOrDefaultAsync<AccountInfo>(); // ★ 제네릭 타입 명시!
 
-        if (result == null)
-        {
-            return (ErrorCode.LoginFailUserNotExist, 0);
-        }
-
-        return (ErrorCode.None, result.account_id);
+        return user;
     }
 
-    public async Task<(ErrorCode, Int64)> CreateUser(AccountInfo userInfo)
+    public async Task<int> CreateUser(AccountInfo userInfo)
     {
-        Int64 result = await _queryFactory.Query("user").InsertAsync(userInfo);
-        if (result == 0)
-        {
-            return (ErrorCode.CreateUserFailException, 0);
-        }
+        var result = await _queryFactory.Query("user").InsertAsync(userInfo);
 
-        return (ErrorCode.None, result);
+        return result;
     }
-
 
 }

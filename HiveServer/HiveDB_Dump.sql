@@ -1,0 +1,14 @@
+use hive;
+
+DROP TABLE IF EXISTS account_info;
+CREATE TABLE account_info (
+    account_uid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL,
+    pwd VARCHAR(255) NOT NULL,
+    salt VARCHAR(255) NOT NULL,
+    create_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+

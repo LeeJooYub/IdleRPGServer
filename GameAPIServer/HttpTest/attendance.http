@@ -1,55 +1,11 @@
-﻿POST http://localhost:11500/Login
+﻿### 출석체크
+POST http://localhost:11500/attendance/check-today
+AppVersion: 1.0.0
+MasterDataVersion: 20250725
+Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
 Content-Type: application/json
 
 {
-  "PlatformId":1,
-  "PlatformToken":"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
-  "PlatformName":"hive"
+  "AttendanceBookId": 1,
+  "CheckNthDay" : 3
 }
-
-### Logout
-
-POST http://localhost:11500/Logout
-Content-Type: application/json
-
-{
-  "AccountId":1,
-  "GameServerToken":"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
-}
-
-###
-
-### Get Mail List
-POST http://localhost:11500/mail/list
-Content-Type: application/json
-
-{
-  "AccountId": 1,
-  "Cursor": "2027-10-01T00:00:00Z",
-  "Limit": 10
-}
-
-### Claim Mail Reward
-POST http://localhost:11500/mail/claim
-Content-Type: application/json
-
-{
-  "MailId": 8,
-  "AccountId": 1
-}
-
-### Delete Mail
-POST http://localhost:11500/mail/delete
-Content-Type: application/json
-
-{
-  "MailId": 1
-}
-
-# ### Claim All Mail Rewards
-# POST http://localhost:11500/mail/claimAll
-# Content-Type: application/json
-
-# {
-#   "AccountId": 12345
-# }

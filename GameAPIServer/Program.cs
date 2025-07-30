@@ -27,6 +27,7 @@ builder.Services.AddSingleton<IMasterDb, MasterDb>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserDataLoadService, UserDataLoadService>();
 builder.Services.AddTransient<IMailService, MailService>();
+builder.Services.AddTransient<IAttendanceService, AttendanceService>();
 builder.Services.AddControllers();
 
 // 3. 로깅 설정

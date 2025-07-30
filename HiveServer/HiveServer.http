@@ -1,29 +1,35 @@
 @HiveServer_HostAddress = http://localhost:11501
 ### Create Hive Account
+
+### Create Hive Account
 POST http://localhost:11501/CreateHiveAccount
 Content-Type: application/json
 
 {
-  "Email": "testuser@example.com",
+  "Email": "arthur@email.com",
   "Password": "testpassword"
 }
+
+### Login Hive
 
 ### Login Hive
 POST http://localhost:11501/LoginHive
 Content-Type: application/json
 
 {
-  "Email": "testuser@example.com",
+  "Email": "arthur@email.com",
   "Password": "testpassword"
 }
+
+### Verify Token
 
 ### Verify Token
 POST http://localhost:11501/VerifyToken
 Content-Type: application/json
 
 {
-  "AccountId": 1,
-  "HiveToken": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+  "Token": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+  "AccountUid": 1
 }
 
 ### Add Sample Category

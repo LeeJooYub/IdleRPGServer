@@ -13,6 +13,9 @@ using ZLogger;
 
 namespace HiveServer.Controllers;
 
+// 잘 사용하지 않는 컨트롤러
+// 게임 서버에서 해당 컨트롤러를 사용하지 않음
+// 게임 서버에서 주로 호출하는 것은 VerifyTokenController
 [ApiController]
 [Route("[controller]")]
 public class LoginHiveController : ControllerBase
@@ -35,9 +38,9 @@ public class LoginHiveController : ControllerBase
     public async Task<LoginHiveResponse> Login([FromBody] LoginHiveRequest request)
     {
         _logger.ZLogDebug($"[LoginHiveController] Called");
-        LoginHiveResponse response = new();
-        (response.Result, response.AccountId) = await _loginService.VerifyUser(request);
-        response.HiveToken = Security.MakeHashingToken(_saltValue, response.AccountId);
+        var response = new LoginHiveResponse();
+        (response.Result, response.AccountUid) = await _loginService.VerifyUser(request);
+        response.Token = Security.MakeHashingToken(_saltValue, response.AccountUid);
 
         return response;
 

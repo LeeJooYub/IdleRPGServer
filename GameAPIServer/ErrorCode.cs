@@ -3,63 +3,57 @@
 // 1000 ~ 19999
 public enum ErrorCode : UInt16
 {
+    // ====== 기본 ======
     None = 0,
 
-    // Common 1000 ~
-    TokenDoesNotExist = 1004,
-    UidDoesNotExist = 1005,
-    AuthTokenFailWrongAuthToken = 1006,
-    Hive_Fail_InvalidResponse = 1010,
-    InValidAppVersion = 1011,
-    InvalidMasterDataVersion = 1012,
+    // ====== 공통(Common) 100~199 ======
+    TokenDoesNotExist = 100,
+    UidDoesNotExist = 101,
+    AuthTokenFailWrongAuthToken = 102,
+    Hive_Fail_InvalidResponse = 103,
+    InValidAppVersion = 104,
+    InvalidMasterDataVersion = 105,
+    DatabaseError = 110,
+    NotFoundError = 120,
 
-    // Auth 2000 ~
-    CreateUserFailException = 2001,
-    LoginFailUserNotExist = 2005,
-    AuthTokenKeyNotFound = 2011,
-    AuthTokenFailSetNx = 2013,
-    LoginFailAddRedis = 2017,
-    LogoutRedisDelFailException= 2022,
-    
-    // Friend 2100
-    
+    // ====== 인증(Auth) 200~299 ======
+    CreateUserFailException = 200,
+    LoginFailUserNotExist = 201,
+    AuthTokenKeyNotFound = 202,
+    AuthTokenFailSetNx = 203,
+    LoginFailAddRedis = 204,
+    LogoutRedisDelFailException = 205,
+    ValidationError = 210,
 
-    // Game 2200
-    
+    // ====== 화폐/아이템(Currency/Item) 300~ ======
+    NoSuchCurrency = 300,
+    ItemInsertFailed = 301,
 
-    // Item 3000 ~
-   
+    // ====== 메일(Mail) 400~499 ======
+    MailReceiveFailAlreadyReceived = 400,
+    MailNotFound = 401,
+    MailReceiveFailNotFound = 402,
+    RewardNotExist = 403,
+    MailAlreadyClaimed = 404,
+
+    // ====== 출석부(Attendance) 500~599 ======
+    GameDbGetAttendanceBookError = 500,
+    MasterDbGetAttendanceBookError = 501,
+    MasterDbGetRewardInfoInAttendanceBookError = 502,
+    GameDbCheckInAttendanceBookError = 503,
+    GameDbUpdateUserFromRewardError = 504,
+    GameDbAlreadyCheckInAttendanceError = 505,
+    GameDbTryToCheckInFutureError = 506,
+    GameDbRefreshTimeNotReached = 507,
 
 
-    //GameDb 4000~ 
-  
 
-    // MasterDb 5000 ~
-    
 
-    // User
 
-    UserMoneyInfoFailException = 6002,
-    UserInventoryFailException = 6003,
 
-    InvetoryEmptyFailException = 6004, // 인벤토리 비어있음
-   
+    // ====== 리워드(Reward) 1000~1199 ======
+    InvalidRewardType = 1000,
 
-    // Mail
-
-    MailReceiveFailAlreadyReceived = 8003,
-    RewardNotExist = 8013, // 보상이 존재하지 않는 경우
-
-    // Attendance
-    
-
-    // Basic Errors 100 ~
-    DatabaseError = 101, // Generic database error
-    NotFoundError = 104, // Resource not found
-
-    // Basic Errors 200 ~
-    ValidationError = 203, // Input validation error
-
-    // Basic Errors 300 ~
-    
+    // ====== 기타(Reserved) ======
+    // (추가 에러코드 작성)
 }

@@ -13,8 +13,5 @@ namespace GameAPIServer.Services.Interfaces;
 
 public interface IUserDataLoadService
 {
-    Task<GetUserCurrencyResult> GetUserCurrencyAsync(GetUserCurrencyCommand command);
-    Task<GetUserInventoryResult> GetUserInventoryAsync(GetUserInventoryCommand command);
-    
-    //Task<GetUserCharacterInfoResult> GetUserCharacterInfoAsync(GetUserCharacterInfoCommand command);
+
 }
