@@ -30,7 +30,6 @@ public class MemoryDb : IMemoryDb
 
     public async Task<ErrorCode> SetTokenAsync(string token, Int64 account_uid)
     {
-        var key = MemoryDbKeyMaker.TokenKey(token);
         var result = ErrorCode.None;
 
         var user = new RdbAuthUserData
@@ -94,7 +93,7 @@ public class MemoryDb : IMemoryDb
         return (true, user.Value);
   
     }
-
+    // 토큰으로 유저 ID를 가져오는 메서드
     public async Task<(ErrorCode, Int64)> GetUserIdAsync(string token)
     {
         RedisString<RdbAuthUserData> redis = new(_redisConn, token, null);
