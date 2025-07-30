@@ -39,7 +39,7 @@ public class AttendanceController : ControllerBase
     {    
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
         var utcNow = DateTime.UtcNow;
-        var (errorCode, rewardData) = await _attendanceService.CheckTodayAsync(userInfo.AccountUid, request.AttendanceBookId, utcNow);
+        var (errorCode, rewardData) = await _attendanceService.CheckTodayAsync(userInfo.AccountUid, request.AttendanceBookId, request.CheckNthDay, utcNow);
         var response = new CheckTodayResponse
         {
             ErrorCode = errorCode,

@@ -29,6 +29,7 @@ namespace GameAPIServer.Repository
                 .Where("attendance_book_id", attendanceBookId);
             var result = (await query.IncrementAsync("attendance_continue_cnt", 1)) > 0;
 
+
             return result;
         }
 

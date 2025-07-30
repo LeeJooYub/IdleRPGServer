@@ -9,7 +9,7 @@ namespace GameAPIServer.Services.Interfaces
 {
     public interface IAttendanceService
     {
-        Task<(ErrorCode, RewardData)> CheckTodayAsync(long accountUid, long attendanceBookId, DateTime utcNow);
+        Task<(ErrorCode, RewardData)> CheckTodayAsync(long accountUid, long attendanceBookId, int checkNthDay, DateTime utcNow);
         // Task<int> UpdateAttendanceAsync(Attendance attendance);
         // Task<int> InsertAttendanceAsync(Attendance attendance);
         // Task<List<Attendance>> GetAttendanceListAsync(long accountUid);

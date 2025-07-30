@@ -66,6 +66,9 @@ public enum ErrorCode : UInt16
     MasterDbGetRewardInfoInAttendanceBookError = 10003, // 출석부 리워드 정보 조회 실패
     GameDbCheckInAttendanceBookError = 10004, // 출석 체크 실패
     GameDbUpdateUserFromRewardError = 10005, // 리워드 업데이트 실패
+    GameDbAlreadyCheckInAttendanceError = 10006, // 이미 출석한 경우
+    GameDbTryToCheckInFutureError = 10007, // 미래의 출석
+    GameDbRefreshTimeNotReached = 10008, // 출석 갱신 시간에 도달하지 않음
 
     // Basic Errors 100 ~
     DatabaseError = 101, // Generic database error
