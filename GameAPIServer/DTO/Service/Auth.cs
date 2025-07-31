@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GameAPIServer.DTO.ServiceDTO;
+namespace GameAPIServer.DTO.Service;
 
 public class LoginInput
 {

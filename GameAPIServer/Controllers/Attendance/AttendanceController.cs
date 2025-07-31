@@ -10,7 +10,8 @@ using GameAPIServer.Services.Interfaces;
 using GameAPIServer.Repository.Interfaces;
 
 using ZLogger;
-using GameAPIServer.DTO.Controller.DTO;
+using GameAPIServer.DTO.Controller;
+using GameAPIServer.DTO.Service;
 using GameAPIServer.Models;
 
 namespace GameAPIServer.Controllers.Attendance;
@@ -38,12 +39,20 @@ public class AttendanceController : ControllerBase
     public async Task<CheckTodayResponse> CheckTodayAttendance([FromBody] CheckTodayRequest request)
     {    
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
-        var utcNow = DateTime.UtcNow;
-        var (errorCode, rewardData) = await _attendanceService.CheckTodayAsync(userInfo.AccountUid, request.AttendanceBookId, request.CheckNthDay, utcNow);
+        var utcNow = DateTime.UtcNow; // 공정성 & 보안을 위해, 서버 기준의 현재시간을 기준으로 출석체크 유효성을 검증한다.
+        var checkTodayInput = new CheckTodayInput
+        {
+            AccountUid = userInfo.AccountUid,
+            AttendanceBookId = request.AttendanceBookId,
+            CheckNthDay = request.CheckNthDay,
+            Now = utcNow
+        };
+
+        var checkTodayOutput = await _attendanceService.CheckTodayAsync(checkTodayInput);
         var response = new CheckTodayResponse
         {
-            ErrorCode = errorCode,
-            Reward = rewardData
+            ErrorCode = checkTodayOutput.ErrorCode,
+            Reward = checkTodayOutput.Reward
         };
 
         return response;

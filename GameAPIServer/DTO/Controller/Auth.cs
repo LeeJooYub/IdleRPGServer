@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GameAPIServer.DTO.ControllerDTO;
+namespace GameAPIServer.DTO.Controller;
 
 public class LoginRequest 
 {

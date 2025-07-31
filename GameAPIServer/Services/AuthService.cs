@@ -12,7 +12,7 @@ using GameAPIServer.Models.GameDB;
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
 using GameAPIServer.DTO.ExternelAPI;
-using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.DTO.Service;
 
 namespace GameAPIServer.Services;
 
