@@ -1,0 +1,21 @@
+### 스테이지 클리어 테스트
+POST http://localhost:11500/stage/clearstage
+AppVersion: 1.0.0
+MasterDataVersion: 20250725
+Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
+Content-Type: application/json
+
+{
+  "StageId": 101
+}
+
+### 가이드 미션 클리어 테스트
+POST http://localhost:11500/mission/clearguidemission
+AppVersion: 1.0.0
+MasterDataVersion: 20250725
+Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
+Content-Type: application/json
+
+{
+  "GuideMissionSeq": 1
+}

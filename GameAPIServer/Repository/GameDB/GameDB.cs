@@ -13,8 +13,8 @@ using SqlKata.Extensions;
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Models.GameDB;
 using GameAPIServer.Models.MasterDB;
-using GameAPIServer.DTO.ServiceDTO;
-using GameAPIServer.DTO.ControllerDTO;
+using GameAPIServer.DTO.Service;
+using GameAPIServer.DTO.Controller;
 using System.Linq;
 using System.Runtime.CompilerServices;
 

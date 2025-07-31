@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
         var loginOutput = new LoginOutput();
         loginOutput = await _authService.Login(new LoginInput
         {
-            AccountUid = request.AccountUid,
+            PlayerUid = request.PlayerUid,
             Token = request.Token,
         });
 

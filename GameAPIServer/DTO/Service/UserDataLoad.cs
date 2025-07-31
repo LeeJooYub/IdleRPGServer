@@ -10,12 +10,12 @@ namespace GameAPIServer.DTO.Service;
 
 public class GetUserInfoInput
 {
-    public Int64 AccountUid { get; set; }
+    public Int64 PlayerUid { get; set; }
 }
 
 public class GetUserInfoOutput
 {
-    public Int64 AccountUid { get; set; }
+    public Int64 PlayerUid { get; set; }
     public string Nickname { get; set; }
     public int Level { get; set; }
     public int Exp { get; set; }
@@ -24,12 +24,12 @@ public class GetUserInfoOutput
 
 public class GetUserCurrencyInput
 {
-    public Int64 AccountUid { get; set; }
+    public Int64 PlayerUid { get; set; }
 }
 
 public class GetUserCurrencyOutput
 {
-    public Int64 AccountUid { get; set; }
+    public Int64 PlayerUid { get; set; }
     public List<UserCurrency> CurrencyList { get; set; } = new List<UserCurrency>();
     public ErrorCode ErrorCode { get; set; }
 }
@@ -37,26 +37,26 @@ public class GetUserCurrencyOutput
 
 public class GetUserInventoryInput
 {
-    public Int64 AccountUid { get; set; }
+    public Int64 PlayerUid { get; set; }
 }
 
 
 public class GetUserInventoryOutput
 {
-    public Int64 AccountUid { get; set; }
+    public Int64 PlayerUid { get; set; }
     public List<UserInventoryItem> InventoryItems { get; set; } = new List<UserInventoryItem>();
     public ErrorCode ErrorCode { get; set; }
 }
 
-public class GetUserCharacterInput
+public class GetUserCharacterStatusInput
 {
-    public Int64 AccountUid { get; set; }
+    public Int64 PlayerUid { get; set; }
 }
 
-public class GetUserCharacterInfoOutput
+public class GetUserCharacterStatusInfoOutput
 {
-    public Int64 AccountUid { get; set; }
-    public UserCharacter Character { get; set; } = new UserCharacter();
+    public Int64 PlayerUid { get; set; }
+    public UserCharacterStatus Character { get; set; } = new UserCharacterStatus();
     public ErrorCode ErrorCode { get; set; }
 }
 

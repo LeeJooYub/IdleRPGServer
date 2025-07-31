@@ -29,20 +29,27 @@ CREATE TABLE user_currency (
 );
 
 
--- UserCharacter 테이블
-DROP TABLE IF EXISTS user_character;
-CREATE TABLE user_character (
+-- UserCharacterStatus 테이블
+DROP TABLE IF EXISTS user_character_status;
+CREATE TABLE user_character_status (
     player_uid BIGINT NOT NULL, -- 사용자 계정 ID
     character_name VARCHAR(50) NOT NULL, -- 캐릭터 이름
     level INT NOT NULL DEFAULT 1, -- 캐릭터 레벨
-    create_dt DATETIME NOT NULL, -- 캐릭터 생성 날짜
-    last_login_dt DATETIME NOT NULL, -- 마지막 로그인 시간
     character_hp INT NOT NULL DEFAULT 100, -- 캐릭터 체력
     character_mp INT NOT NULL DEFAULT 50, -- 캐릭터 마나
     character_atk INT NOT NULL DEFAULT 10, -- 캐릭터 공격력
     character_def INT NOT NULL DEFAULT 5, -- 캐릭터 방어력
     character_job_cd VARCHAR(2) NOT NULL DEFAULT '01', -- 캐릭터 직업 코드 (예: '01': Warrior, '02': Mage, '03': Archer)
     PRIMARY KEY (player_uid, character_name)
+);
+
+DROP TABLE IF EXISTS user_character_progress;
+-- UserCharacterProgress 테이블
+CREATE TABLE user_character_progress (
+    player_uid BIGINT NOT NULL, -- 사용자 계정 ID
+    current_stage_id INT NOT NULL DEFAULT 0, -- 현재 스테이지 ID
+    current_guide_mission_seq INT NOT NULL DEFAULT 0, -- 현재 가이드 미션 시퀀스
+    PRIMARY KEY (player_uid)
 );
 
 DROP TABLE IF EXISTS user_inventory;
@@ -72,6 +79,8 @@ CREATE TABLE mail (
     reward_type_cd VARCHAR(2) NULL,               -- e.g., '01': gold, '02': item
     reward_qty INT NULL
 );
+
+
 
 INSERT INTO mail (player_uid, mail_type_cd, title, content, create_dt, expire_dt, receive_dt, reward_receive_yn, reward_id, reward_type_cd, reward_qty) VALUES
 (1, 'N',  'Welcome!', 'Welcome to the game!', '2025-07-29 09:00:00', NULL, NULL, 'N', 1, '01', 100),
@@ -108,13 +117,13 @@ INSERT INTO user_currency (player_uid, currency_id, amount, last_update_dt) VALU
 (3, 1, 200, '2025-07-27 10:15:00'),
 (1, 3, 10, '2025-07-29 11:20:00');
 
--- 예시 데이터: UserCharacter
-INSERT INTO user_character (player_uid, character_name, level, create_dt, last_login_dt, character_hp, character_mp, character_atk, character_def, character_job_cd) VALUES
-(1, 'Arthur', 10, '2025-07-01 10:00:00', '2025-07-29 09:00:00', 150, 80, 25, 12, '01'),
-(2, 'Merlin', 8, '2025-07-10 12:00:00', '2025-07-28 08:30:00', 120, 150, 15, 8, '02'),
-(3, 'Lancelot', 12, '2025-07-15 14:00:00', '2025-07-27 10:15:00', 180, 60, 30, 15, '01'),
-(4, 'Guinevere', 7, '2025-07-20 16:00:00', '2025-07-29 11:20:00', 110, 90, 18, 10, '03'),
-(5, 'Morgana', 9, '2025-07-25 18:00:00', '2025-07-26 07:45:00', 130, 140, 22, 9, '02');
+-- 예시 데이터: UserCharacterStatus
+INSERT INTO user_character_status (player_uid, character_name, level, character_hp, character_mp, character_atk, character_def, character_job_cd) VALUES
+(1, 'Arthur', 10, 150, 80, 25, 12, '01'),
+(2, 'Merlin', 8, 120, 150, 15, 8, '02'),
+(3, 'Lancelot', 12, 180, 60, 30, 15, '01'),
+(4, 'Guinevere', 7, 110, 90, 18, 10, '03'),
+(5, 'Morgana', 9, 130, 140, 22, 9, '02');
 
 -- 예시 데이터: UserInventory
 INSERT INTO user_inventory (player_uid, item_id, item_qty, acquire_dt, last_update_dt) VALUES
@@ -123,3 +132,11 @@ INSERT INTO user_inventory (player_uid, item_id, item_qty, acquire_dt, last_upda
 (2, 101, 2, '2025-07-28 08:30:00', '2025-07-28 08:30:00'),
 (3, 103, 5, '2025-07-27 10:15:00', '2025-07-27 10:15:00'),
 (1, 104, 10, '2025-07-29 11:20:00', '2025-07-29 11:20:00');
+
+INSERT INTO user_character_progress (player_uid, current_stage_id, current_guide_mission_seq) VALUES
+(1, 0, 0),
+(2, 0, 0),
+(3, 0, 0),
+(4, 0, 0),
+(5, 0, 0);
+

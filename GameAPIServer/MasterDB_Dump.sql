@@ -23,7 +23,7 @@ CREATE TABLE day_in_attendance_book (
     reward_id INT NOT NULL, -- 보상 ID
     reward_type_cd CHAR(2) NOT NULL, -- 보상 타입 (예: "01": gold, "02": item)
     reward_qty INT NOT NULL, -- 보상 수량
-    PRIMARY KEY (attendance_book_id, attendance_day)
+    PRIMARY KEY (attendance_book_id, attendance_day)E
 );
 
 DROP TABLE IF EXISTS currency;
@@ -45,6 +45,50 @@ CREATE TABLE item (
     rarity_cd CHAR(1) NOT NULL, -- 아이템 희귀도 (C: 일반, U: 희귀, H: 영웅, L: 전설, M: 신화)
     create_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP -- 생성일시
 );
+
+DROP TABLE IF EXISTS guide_mission;
+CREATE TABLE guide_mission (
+    guide_mission_seq INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    update_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 수정일시
+    reward_type_cd VARCHAR(2) NOT NULL,
+    reward_id INT NOT NULL,
+    reward_qty INT NOT NULL
+);
+
+DROP TABLE IF EXISTS stage;
+CREATE TABLE stage (
+    stage_id INT PRIMARY KEY,                -- 스테이지 ID (백의 자리: 챕터, 0~99: 스테이지)
+    boss_stage_yn CHAR(1) NOT NULL,          -- 보스 여부 (Y: 보스, N: 일반)
+    reward_type_cd VARCHAR(10) NOT NULL,     -- 리워드 타입 코드
+    reward_id INT NOT NULL,                  -- 리워드 ID
+    reward_qty INT NOT NULL                  -- 리워드 수량
+);
+
+INSERT INTO stage (stage_id, boss_stage_yn, reward_type_cd, reward_id, reward_qty) VALUES
+(101, 'N', '01', 1001, 100),   -- 1챕터 1스테이지
+(102, 'N', '01', 1002, 120),   -- 1챕터 2스테이지
+(103, 'N', '01', 1003, 140),   -- 1챕터 3스테이지
+(104, 'N', '01', 1004, 160),   -- 1챕터 4스테이지
+(105, 'Y', '01', 1005, 200),   -- 1챕터 5스테이지 (보스)
+(201, 'N', '01', 2001, 200),   -- 2챕터 1스테이지
+(202, 'N', '01', 2002, 220),   -- 2챕터 2스테이지
+(203, 'N', '01', 2003, 240),   -- 2챕터 3스테이지
+(204, 'N', '01', 2004, 260),   -- 2챕터 4스테이지
+(205, 'Y', '01', 2005, 300);   -- 2챕터 5스테이지 (보스)
+
+INSERT INTO guide_mission (title, description, reward_type_cd, reward_id, reward_qty) VALUES
+('튜토리얼 시작', '튜토리얼을 시작하세요.', '01', 1001, 100),
+('첫 전투 승리', '첫 전투에서 승리하세요.', '01', 1002, 200),
+('장비 착용', '장비를 한 번 착용하세요.', '02', 2001, 1),
+('친구 추가', '친구를 한 명 추가하세요.', '01', 1003, 300),
+('길드 가입', '길드에 가입하세요.', '01', 1004, 400),
+('스테이지 1 클리어', '스테이지 1을 클리어하세요.', '02', 2002, 2),
+('아이템 강화', '아이템을 한 번 강화하세요.', '01', 1005, 500),
+('퀘스트 완료', '퀘스트를 한 번 완료하세요.', '01', 1006, 600),
+('상점 이용', '상점을 한 번 이용하세요.', '02', 2003, 3),
+('캐릭터 레벨업', '캐릭터를 레벨업하세요.', '01', 1007, 700);
 
 -- version 테이블 임시 데이터
 INSERT INTO version (app_version, master_data_version) VALUES

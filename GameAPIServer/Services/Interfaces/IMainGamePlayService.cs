@@ -5,7 +5,7 @@ namespace GameAPIServer.Services.Interfaces
 {
     public interface IMainGamePlayService
     {
-        Task<> StageClear( );
-        Task<> ClearGuideMission( );
+        Task<ClearStageOutput> ClearStageAsync(ClearStageInput input);
+        Task<ClearGuideMissionOutput> ClearGuideMissionAsync(ClearGuideMissionInput input);
     }
 }

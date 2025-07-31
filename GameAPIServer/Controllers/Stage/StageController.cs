@@ -13,15 +13,15 @@ using ZLogger;
 namespace GameAPIServer.Controllers.GamePlay;
 
 [ApiController]
-[Route("main-game-play")]
-public class MainGamePlayController : ControllerBase
+[Route("stage")]
+public class StageController : ControllerBase
 {
-    private readonly ILogger<MainGamePlayController> _logger;
+    private readonly ILogger<StageController> _logger;
     private readonly IMainGamePlayService _mainGamePlayService;
     private readonly IMemoryDb _memoryDb;
 
-    public MainGamePlayController(
-        ILogger<MainGamePlayController> logger,
+    public StageController(
+        ILogger<StageController> logger,
         IMainGamePlayService mainGamePlayService,
         IMemoryDb memoryDb)
     {
@@ -30,37 +30,24 @@ public class MainGamePlayController : ControllerBase
         _memoryDb = memoryDb;
     }
 
-
-    [HttpPost("stage-clear")]
+    // 해당 스테이지에 대한 보상을 받고, 다음 스테이지로 넘거가는 API
+    [HttpPost("clearstage")]
     public async Task<StageClearResponse> StageClear([FromBody] StageClearRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
-        var stageClearOutput = await _mainGamePlayService.StageClear(new StageClearInput
+        var clearStageOutput = await _mainGamePlayService.ClearStageAsync(new ClearStageInput
         {
-            AccountUid = userInfo.AccountUid,
+            PlayerUid = userInfo.PlayerUid,
             StageId = request.StageId,
         });
 
         var response = new StageClearResponse
         {
-            ErrorCode = stageClearOutput.ErrorCode,
-            Reward = stageClearOutput.Reward,
+            ErrorCode = clearStageOutput.ErrorCode,
+            Reward = clearStageOutput.Reward,
         };
 
         return response;
-    }
-
-
-    [HttpPost("guide-mission-clear")]
-    public async Task<GuideMissionClearResponse> GuideMission([FromBody] GuideMissionClearRequest request)
-    {
-        var errorCode = await _mainGamePlayService.ClearGuideMission(new ClearGuideMissionInput
-        {
-            AccountUid = request.AccountUid,
-            MissionId = request.MissionId,
-        });
-
-        return errorCode;
     }
 }
 

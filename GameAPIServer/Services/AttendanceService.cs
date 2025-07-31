@@ -6,6 +6,7 @@ using GameAPIServer.Models.MasterDB;
 using GameAPIServer.Models;
 using GameAPIServer.DTO.Service;
 
+
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
 
@@ -39,7 +40,7 @@ public class AttendanceService : IAttendanceService
         // 내 특정 출석부 정보 가져오기 (출석부 ID, 현 출석 현황)
         try
         {
-            attendance = await _gameDb.GetAttendanceBookAsync(input.AccountUid, input.AttendanceBookId);
+            attendance = await _gameDb.GetAttendanceBookAsync(input.PlayerUid, input.AttendanceBookId);
         }
         catch (Exception e)
         {
@@ -106,7 +107,7 @@ public class AttendanceService : IAttendanceService
         // 출석 체크
         try
         {
-            await _gameDb.CheckInAttendanceBookAsync(input.AccountUid, input.AttendanceBookId);
+            await _gameDb.CheckInAttendanceBookAsync(input.PlayerUid, input.AttendanceBookId);
         }
         catch (Exception ex)
         {
@@ -116,7 +117,7 @@ public class AttendanceService : IAttendanceService
 
         try
         {
-            ErrorCode errorCode = await _gameDb.UpdateUserFromRewardAsync(input.AccountUid, rewardData);
+            ErrorCode errorCode = await _gameDb.UpdateUserFromRewardAsync(input.PlayerUid, rewardData);
             if (errorCode != ErrorCode.None)
             {
                 checkTodayOutput.ErrorCode = errorCode;

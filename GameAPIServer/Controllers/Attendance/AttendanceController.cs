@@ -35,14 +35,14 @@ public class AttendanceController : ControllerBase
     }
 
 
-    [HttpPost("check-today")]
+    [HttpPost("checkattendance")]
     public async Task<CheckTodayResponse> CheckTodayAttendance([FromBody] CheckTodayRequest request)
     {    
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
         var utcNow = DateTime.UtcNow; // 공정성 & 보안을 위해, 서버 기준의 현재시간을 기준으로 출석체크 유효성을 검증한다.
         var checkTodayInput = new CheckTodayInput
         {
-            AccountUid = userInfo.AccountUid,
+            PlayerUid = userInfo.PlayerUid,
             AttendanceBookId = request.AttendanceBookId,
             CheckNthDay = request.CheckNthDay,
             Now = utcNow

@@ -6,6 +6,6 @@ namespace GameAPIServer.Models;
 
 public class RdbAuthUserData
 {
-    public Int64 AccountUid { get; set; } = 0;
+    public Int64 PlayerUid { get; set; } = 0;
     public string TokenKey { get; set; } = "";
 }

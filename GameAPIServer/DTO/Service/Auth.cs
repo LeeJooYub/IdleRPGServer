@@ -6,7 +6,7 @@ namespace GameAPIServer.DTO.Service;
 public class LoginInput
 {
     [Required]
-    public Int64 AccountUid { get; set; } = 0;
+    public Int64 PlayerUid { get; set; } = 0;
 
     [Required]
     public string Token { get; set; } = "";

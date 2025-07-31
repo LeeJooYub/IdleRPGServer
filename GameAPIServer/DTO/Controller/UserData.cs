@@ -30,12 +30,12 @@ public class UserDataInventoryLoadResponse : ErrorCodeDTO
     public List<UserInventoryItem> InventoryItems { get; set; } = new List<UserInventoryItem>();
 }
 
-public class UserCharacterInfoLoadRequest
+public class UserCharacterStatusInfoLoadRequest
 {
     [Required] public string Token { get; set; } // 인증 토큰
 }
 
-public class UserCharacterInfoLoadResponse : ErrorCodeDTO
+public class UserCharacterStatusInfoLoadResponse : ErrorCodeDTO
 {
-    public UserCharacter Characters { get; set; } = new UserCharacter(); // 캐릭터 정보
+    public UserCharacterStatus Characters { get; set; } = new UserCharacterStatus(); // 캐릭터 정보
 }

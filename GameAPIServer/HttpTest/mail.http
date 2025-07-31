@@ -1,6 +1,6 @@
 ﻿
 ### Get Mail List
-POST http://localhost:11500/mail/list
+POST http://localhost:11500/mail/getlist
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ### Claim Mail Reward
-POST http://localhost:11500/mail/receive-reward
+POST http://localhost:11500/mail/getreward
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
@@ -22,22 +22,22 @@ Content-Type: application/json
   "MailId": 8
 }
 
-### Delete Mail
-POST http://localhost:11500/mail/delete
-AppVersion: 1.0.0
-MasterDataVersion: 20250725
-Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
-Content-Type: application/json
+# ### Delete Mail
+# POST http://localhost:11500/mail/delete
+# AppVersion: 1.0.0
+# MasterDataVersion: 20250725
+# Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
+# Content-Type: application/json
 
-{
-  "MailId": 9,
-}
+# {
+#   "MailId": 9,
+# }
 
-### Claim All Mail Rewards
-POST http://localhost:11500/mail/claim-all
-AppVersion: 1.0.0
-MasterDataVersion: 20250725
-Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
-Content-Type: application/json
-{
-}
+# ### Claim All Mail Rewards
+# POST http://localhost:11500/mail/claim-all
+# AppVersion: 1.0.0
+# MasterDataVersion: 20250725
+# Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
+# Content-Type: application/json
+# {
+# }

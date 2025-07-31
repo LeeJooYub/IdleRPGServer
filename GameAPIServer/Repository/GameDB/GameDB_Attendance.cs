@@ -9,10 +9,10 @@ namespace GameAPIServer.Repository
 {
     public partial class GameDb : IGameDb
     {
-        public async Task<Attendance> GetAttendanceBookAsync(Int64 accountUid, Int64 attendanceBookId)
+        public async Task<Attendance> GetAttendanceBookAsync(Int64 PlayerUid, Int64 attendanceBookId)
         {
             return await _queryFactory.Query("user_attendance")
-                .Where("player_uid", accountUid)
+                .Where("player_uid", PlayerUid)
                 .Where("attendance_book_id", attendanceBookId)
                 .FirstOrDefaultAsync<Attendance>();
         }
@@ -22,10 +22,10 @@ namespace GameAPIServer.Repository
             return await _queryFactory.Query("user_attendance").InsertAsync(attendance);
         }
 
-        public async Task<bool> CheckInAttendanceBookAsync(Int64 accountUid, Int64 attendanceBookId)
+        public async Task<bool> CheckInAttendanceBookAsync(Int64 PlayerUid, Int64 attendanceBookId)
         {
             var query = _queryFactory.Query("user_attendance")
-                .Where("player_uid", accountUid)
+                .Where("player_uid", PlayerUid)
                 .Where("attendance_book_id", attendanceBookId);
             var result = (await query.IncrementAsync("attendance_continue_cnt", 1)) > 0;
 
@@ -33,10 +33,10 @@ namespace GameAPIServer.Repository
             return result;
         }
 
-        // public async Task<List<Attendance>> GetAttendanceListAsync(Int64 accountUid)
+        // public async Task<List<Attendance>> GetAttendanceListAsync(Int64 PlayerUid)
         // {
         //     return await _queryFactory.Query("attendance")
-        //         .Where("player_uid", accountUid)
+        //         .Where("player_uid", PlayerUid)
         //         .GetAsync<Attendance>();
         // }
     }

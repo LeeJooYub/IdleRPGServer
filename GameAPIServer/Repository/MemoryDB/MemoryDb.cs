@@ -34,7 +34,7 @@ public class MemoryDb : IMemoryDb
 
         var user = new RdbAuthUserData
         {
-            AccountUid = player_uid,
+            PlayerUid = player_uid,
             TokenKey = token
         };
 
@@ -104,7 +104,7 @@ public class MemoryDb : IMemoryDb
             return (ErrorCode.AuthTokenKeyNotFound, 0);
         }
 
-        return (ErrorCode.None, user.Value.AccountUid);
+        return (ErrorCode.None, user.Value.PlayerUid);
     }
 
 
