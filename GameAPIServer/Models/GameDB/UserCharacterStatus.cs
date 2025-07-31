@@ -14,7 +14,6 @@ public class UserCharacterStatus
     public int character_mp { get; set; } = 50; // 캐릭터 마나
     public int character_atk { get; set; } = 10; // 캐릭터 공격력
     public int character_def { get; set; } = 5; // 캐릭터 방어력
-    public string character_job_cd { get; set; } = "01"; // 캐릭터 직업 코드 (예: "01": Warrior, "02": Mage, "03": Archer); 
 }
 
 

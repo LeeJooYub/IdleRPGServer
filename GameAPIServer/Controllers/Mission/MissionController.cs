@@ -31,7 +31,7 @@ public class MissionController : ControllerBase
     }
 
     // 해당 가이드 미션에 대한 보상을 받고, 다음 가이드 미션으로 넘어가는 API
-    [HttpPost("clearguidemission")]
+    [HttpPost("clear-guide-mission")]
     public async Task<GuideMissionClearResponse> ClearGuideMission([FromBody] GuideMissionClearRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;

@@ -38,7 +38,7 @@ public class MailController : ControllerBase
     /// </summary>
     /// <param name="request">메일 목록 요청 데이터</param>
     /// <returns>메일 목록 응답 데이터</returns>
-    [HttpPost("getlist")]
+    [HttpPost("get-list")]
     public async Task<MailListResponse> GetMailListAsync([FromBody] MailListRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
@@ -68,7 +68,7 @@ public class MailController : ControllerBase
     /// </summary>
     /// <param name="request">메일 보상 수령 요청 데이터</param>
     /// <returns>메일 보상 수령 응답 데이터</returns>
-    [HttpPost("getreward")]
+    [HttpPost("get-reward")]
     public async Task<ReceiveMailResponse> ReceiveRewardAsync([FromBody] ReceiveMailRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;

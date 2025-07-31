@@ -111,19 +111,19 @@ INSERT INTO user_attendance (player_uid, attendance_book_id, last_attendance_dt,
 
 -- 예시 데이터: UserCurrency
 INSERT INTO user_currency (player_uid, currency_id, amount, last_update_dt) VALUES
-(1, 1, 1000, '2025-07-29 09:00:00'),
+(1, 1, 4500, '2025-07-29 09:00:00'),
 (1, 2, 50, '2025-07-29 09:00:00'),
 (2, 1, 500, '2025-07-28 08:30:00'),
 (3, 1, 200, '2025-07-27 10:15:00'),
 (1, 3, 10, '2025-07-29 11:20:00');
 
 -- 예시 데이터: UserCharacterStatus
-INSERT INTO user_character_status (player_uid, character_name, level, character_hp, character_mp, character_atk, character_def, character_job_cd) VALUES
-(1, 'Arthur', 10, 150, 80, 25, 12, '01'),
-(2, 'Merlin', 8, 120, 150, 15, 8, '02'),
-(3, 'Lancelot', 12, 180, 60, 30, 15, '01'),
-(4, 'Guinevere', 7, 110, 90, 18, 10, '03'),
-(5, 'Morgana', 9, 130, 140, 22, 9, '02');
+INSERT INTO user_character_status (player_uid, character_name, level, character_hp, character_mp, character_atk, character_def) VALUES
+(1, 'Arthur', 10, 1, 1, 1, 1),
+(2, 'Merlin', 8, 1, 1, 1, 1),
+(3, 'Lancelot', 12, 1, 1, 1, 1),
+(4, 'Guinevere', 7, 1, 1, 1, 1),
+(5, 'Morgana', 9, 1, 1, 1, 1);
 
 -- 예시 데이터: UserInventory
 INSERT INTO user_inventory (player_uid, item_id, item_qty, acquire_dt, last_update_dt) VALUES
@@ -134,9 +134,9 @@ INSERT INTO user_inventory (player_uid, item_id, item_qty, acquire_dt, last_upda
 (1, 104, 10, '2025-07-29 11:20:00', '2025-07-29 11:20:00');
 
 INSERT INTO user_character_progress (player_uid, current_stage_id, current_guide_mission_seq) VALUES
-(1, 0, 0),
-(2, 0, 0),
-(3, 0, 0),
-(4, 0, 0),
-(5, 0, 0);
+(1, 101, 1),
+(2, 101, 1),
+(3, 101, 1),
+(4, 101, 1),
+(5, 101, 1);
 

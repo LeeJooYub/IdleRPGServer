@@ -33,7 +33,7 @@ public class AuthController : ControllerBase
     /// 로그인 API<br/>
     /// (로그인 정보가 클라이언트 캐시에 있는 상태) 자동 로그인을 시작합니다. 우선 플랫폼 ID와 플랫폼 토큰을 플랫폼에 보내 검증 후, 게임 ID와 게임 토큰을 발급합니다.
     /// </summary>
-    [HttpPost("Login")]
+    [HttpPost("login")]
     public async Task<LoginResponse> Login([FromBody] LoginRequest request)
     {
         var loginOutput = new LoginOutput();
@@ -57,7 +57,7 @@ public class AuthController : ControllerBase
     /// 로그아웃 API </br>
     /// 해당 유저의 토큰을 Redis에서 삭제합니다.
     /// </summary>
-    [HttpPost("Logout")]
+    [HttpPost("logout")]
     public async Task<ErrorCode> DeleteUserToken([FromBody] LogoutRequest request)
     {
         var errorCode = await _memoryDb.DelUserAuthAsync(request.Token);

@@ -32,16 +32,16 @@ C#과 .NET을 활용하여 개발한 방치형 액션 RPG 서버 모작 프로�
 |          |                | 버전체크                               | ✅              | ✅           | ✅           |
 | 4        | 우편함          | 우편 조회 / 보상 수령 / 삭제              | ✅             | ✅            | ✅        |
 | 5        | 출석 기능       | 출석 정보 조회 / 출석 체크               | ✅             | ✅            | ✅         |
-| 6       | 주 게임 컨텐츠 구현 | 스테이지 클리어, 보상 수령                      | ⬜             | ⬜            | ⬜         |
-| 7        |                 | 가이드 미션 해결 (주된 파밍 수단)                    | ⬜             | ⬜            | ⬜         |
-| 8       |                 | 캐릭터 체력, 공격력, 등등 훈련 (주된 성장 수단)               | ⬜             | ⬜            | ⬜         |
-| 9       |                  | 인벤토리 장비 장착/해제 (주된 정비 수단)    | ⬜             | ⬜            | ⬜         |
+| 6       | 주 게임 컨텐츠 구현 | 스테이지 클리어, 보상 수령                      | ✅             | ✅            | ✅        |
+| 7        |                 | 가이드 미션 해결 (주된 파밍 수단)                    | ✅             | ✅           | ✅         |
+| 8       |                 | 캐릭터 체력, 공격력, 등등 훈련 (주된 성장 수단)               | ✅             | ✅            |✅         |
 
 ## 기타 시스템
 ※ 밑에는 이후에 구현해볼 시스템 입니다
 | 우선순위 | 기능 영역       | 세부 기능                           | API 호출 성공 | DB 연동 성공 | 최종 완료 |
 |----------|----------------|------------------------------------|----------------|---------------|------------|
-| ?         |  영혼장비 가챠 시스템    | 구슬 영혼 장비 선택 보상 시스템 구현               | ⬜             | ⬜            | ⬜         |
+| ?       |                  | 인벤토리 장비 장착/해제 (주된 정비 수단)    | ⬜             | ⬜            | ⬜         |
+|          |  영혼장비 가챠 시스템    | 구슬 영혼 장비 선택 보상 시스템 구현               | ⬜             | ⬜            | ⬜         |
 |          |  스킬 시스템             | 스킬 레벨 상승                        | ⬜             | ⬜            | ⬜         |
 |          |                | 스킬 장착/ 해제                         | ⬜             | ⬜            | ⬜         |
 |        |  기타 가챠 시스템    | 스킬, 직업 등등 가챠 시스템 구현               | ⬜             | ⬜            | ⬜         |
@@ -95,7 +95,8 @@ C#과 .NET을 활용하여 개발한 방치형 액션 RPG 서버 모작 프로�
 
 ## 시퀸스 다이어 그램
 
-[Sequence Diagram](hiveauth.png)
+![Sequence Diagram](authenciation.drawio.png)
+
 
 ## 하이브 회원가입
 **컨텐츠 설명**
@@ -169,6 +170,12 @@ Content-Type: application/json
 
 ![로그인 화면1](gameserverlogin.png)
 
+## 시퀸스 다이어 그램
+
+![Sequence Diagram2](authenciation2.drawio.png)
+![Sequence Diagram3](authenciation3.drawio.png)
+
+
 ## 게임 서버 로그인
 **컨텐츠 설명**
 - 게임 서버에 로그인 합니다.
@@ -181,7 +188,7 @@ Content-Type: application/json
 
 **예시**
 ```
-POST http://localhost:11500/Login
+POST http://localhost:11500/login
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Content-Type: application/json
@@ -238,7 +245,7 @@ Content-Type: application/json
 
 **예시**
 ```
-POST http://localhost:11500/Logout
+POST http://localhost:11500/logout
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Content-Type: application/json
@@ -283,7 +290,7 @@ Content-Type: application/json
 
 **예시**
 ```
-POST http://localhost:11500/mail/list
+POST http://localhost:11500/mail/get-list
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
 Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
@@ -316,7 +323,7 @@ Content-Type: application/json
 
 **예시**
 ```
-POST http://localhost:11501/mail/receive-reward
+POST http://localhost:11501/mail/get-reward
 Content-Type: application/json
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
@@ -353,11 +360,11 @@ Content-Type: application/json
 **로직**
 1. Client가 출석부 id와 출석할 날짜 (순번) 값을 보냅니다.
 2. 서버는 해당 요청이 타당한가 여러가지 체크를 합니다 (출석부 유효성, 갱신 시간이 이후인지,)
-3. 해당 출석에 해당하는 결과를 받습니다.
+3. 해당 출석에 해당하는 보상 데이터를 받습니다.
 
 **예시**
 ```
-POST http://localhost:11501/attendance/check-today
+POST http://localhost:11501/attendance/check-attendance
 Content-Type: application/json
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
@@ -393,15 +400,15 @@ Content-Type: application/json
 **컨텐츠 설명**
 - 매 스테이지를 클리어할 때마다 보상을 받습니다.
 
-<!-- 
+
 **로직**
-1. Client가 출석부 id와 출석할 날짜 (순번) 값을 보냅니다.
-2. 서버는 해당 요청이 타당한가 여러가지 체크를 합니다 (출석부 유효성, 갱신 시간이 이후인지,)
-3. 해당 출석에 해당하는 결과를 받습니다.
+1. Client가 클리어한 스테이지에 대한 id를 보냅니다 (백의 자리는 챕터, 0~99는 해당 챕터 스테이지 번호) (예시 : 110은 1챕터의 10번 스테이지)
+2. 서버는 마스터 db의 스테이지 정보와 보상 정보등을 조회하고 유저의 gameDb를 업데이트 합니다.
+3. 해당 스테이지 클리어에 해당하는 보상을 받고, 다음 스테이지에 대한 정보를 리턴합니다.
 
 **예시**
 ```
-POST http://localhost:11501/attendance/check-today
+POST http://localhost:11501/stage/clear-stage
 Content-Type: application/json
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
@@ -409,8 +416,7 @@ Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 Content-Type: application/json
 
 {
-  "AttendanceBookId": 1,
-  "CheckNthDay" : 3
+  "StageId" : 101
 }
 ```
 
@@ -418,10 +424,11 @@ Content-Type: application/json
 
 ```
 {
-    "RewardData": [], 
+    "ClearedStage":[],
+    "NextStage": [], 
     "ErrorCode" : 0
 }
-```  -->
+``` 
 
 ## UI/UX
 
@@ -432,15 +439,13 @@ Content-Type: application/json
 - 가이드 미션을 클리어하고, 보상을 받습니다.
 
 
-<!--
 **로직**
-1. Client가 출석부 id와 출석할 날짜 (순번) 값을 보냅니다.
-2. 서버는 해당 요청이 타당한가 여러가지 체크를 합니다 (출석부 유효성, 갱신 시간이 이후인지,)
-3. 해당 출석에 해당하는 결과를 받습니다.
+1. Client가 클리어한 가이드 미션의 seq를 보냅니다.
+2. 서버는 보상 처리를 하고, 다음 가이드 미션에 대한 정보와, 클리어한 가이드 미션의 보상을 리턴합니다.
 
 **예시**
 ```
-POST http://localhost:11501/attendance/check-today
+POST http://localhost:11501/mission/clear-guide-mission
 Content-Type: application/json
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
@@ -448,8 +453,7 @@ Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 Content-Type: application/json
 
 {
-  "AttendanceBookId": 1,
-  "CheckNthDay" : 3
+  "GuideMissionSeq": 1,
 }
 ```
 
@@ -457,10 +461,10 @@ Content-Type: application/json
 
 ```
 {
-    "RewardData": [], 
-    "ErrorCode" : 0
+    "NextGuideMission": [], 
+    "RewardData" : []
 }
-```  -->
+``` 
 
 
 # 성장 시스템
@@ -473,15 +477,16 @@ Content-Type: application/json
 **컨텐츠 설명**
 - 캐릭터의 특정 능력을 올립니다.
 
-<!--
+
 **로직**
-1. Client가 출석부 id와 출석할 날짜 (순번) 값을 보냅니다.
-2. 서버는 해당 요청이 타당한가 여러가지 체크를 합니다 (출석부 유효성, 갱신 시간이 이후인지,)
+1. Client가 업그레이드를 원하는 능력치 id와 얼마나 업그레이드를 하고 싶은지를 보냅니다. (보통은 한번에 1업)
+2. 서버는 해당 요청이 타당한가 여러가지 체크를 합니다 (잔금, 가격)
+3. 서버가 해당 요청을 받아들여, 업그레이드를 시행한 후, 돈을 차감합니다.
 3. 해당 출석에 해당하는 결과를 받습니다.
 
 **예시**
 ```
-POST http://localhost:11501/attendance/check-today
+POST http://localhost:11501/attendance/upgrade-ability
 Content-Type: application/json
 AppVersion: 1.0.0
 MasterDataVersion: 20250725
@@ -489,8 +494,8 @@ Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
 Content-Type: application/json
 
 {
-  "AttendanceBookId": 1,
-  "CheckNthDay" : 3
+  "UpgradeId": 1,
+  "UpgradeLevel" : 3
 }
 ```
 
@@ -498,49 +503,6 @@ Content-Type: application/json
 
 ```
 {
-    "RewardData": [], 
-    "ErrorCode" : 0
+   "ErrorCode" : 0
 }
-```  -->
-
-# 인벤토리 장비 탈/부착
-## UI/UX
-
-![인벤토리 화면](InventoryManagement.png)
-
-
-## 인벤토리 장비 탈/부착
-**컨텐츠 설명**
-- 인벤토리 장비 (무기,머리,옷,장식,표정,장신구)
-
-<!--
-**로직**
-1. Client가 출석부 id와 출석할 날짜 (순번) 값을 보냅니다.
-2. 서버는 해당 요청이 타당한가 여러가지 체크를 합니다 (출석부 유효성, 갱신 시간이 이후인지,)
-3. 해당 출석에 해당하는 결과를 받습니다.
-
-**예시**
-```
-POST http://localhost:11501/attendance/check-today
-Content-Type: application/json
-AppVersion: 1.0.0
-MasterDataVersion: 20250725
-Token: e443169117a184f91186b401133b20be670c7c0896f9886075e5d9b81e9d076b
-Content-Type: application/json
-
-{
-  "AttendanceBookId": 1,
-  "CheckNthDay" : 3
-}
-```
-
-- 응답 예시
-
-```
-{
-    "RewardData": [], 
-    "ErrorCode" : 0
-}
-```  -->
-
----
+``` 
