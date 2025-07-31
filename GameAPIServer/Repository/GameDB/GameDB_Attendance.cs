@@ -12,7 +12,7 @@ namespace GameAPIServer.Repository
         public async Task<Attendance> GetAttendanceBookAsync(Int64 accountUid, Int64 attendanceBookId)
         {
             return await _queryFactory.Query("user_attendance")
-                .Where("account_uid", accountUid)
+                .Where("player_uid", accountUid)
                 .Where("attendance_book_id", attendanceBookId)
                 .FirstOrDefaultAsync<Attendance>();
         }
@@ -25,7 +25,7 @@ namespace GameAPIServer.Repository
         public async Task<bool> CheckInAttendanceBookAsync(Int64 accountUid, Int64 attendanceBookId)
         {
             var query = _queryFactory.Query("user_attendance")
-                .Where("account_uid", accountUid)
+                .Where("player_uid", accountUid)
                 .Where("attendance_book_id", attendanceBookId);
             var result = (await query.IncrementAsync("attendance_continue_cnt", 1)) > 0;
 
@@ -36,7 +36,7 @@ namespace GameAPIServer.Repository
         // public async Task<List<Attendance>> GetAttendanceListAsync(Int64 accountUid)
         // {
         //     return await _queryFactory.Query("attendance")
-        //         .Where("account_uid", accountUid)
+        //         .Where("player_uid", accountUid)
         //         .GetAsync<Attendance>();
         // }
     }

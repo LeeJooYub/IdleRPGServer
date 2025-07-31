@@ -28,20 +28,20 @@ public class MemoryDb : IMemoryDb
         _redisConn = new RedisConnection(config);
     }
 
-    public async Task<ErrorCode> SetTokenAsync(string token, Int64 account_uid)
+    public async Task<ErrorCode> SetTokenAsync(string token, Int64 player_uid)
     {
         var result = ErrorCode.None;
 
         var user = new RdbAuthUserData
         {
-            AccountUid = account_uid,
+            AccountUid = player_uid,
             TokenKey = token
         };
 
         var redis = new RedisString<RdbAuthUserData>(_redisConn, token, LoginTimeSpan());
         if (!await redis.SetAsync(user, LoginTimeSpan()))
         {
-            _logger.ZLogError($"[SetTokenRedisAsync] Uid:{account_uid}, Token:{token}, ErrorMessage:UserBasicAuth, RedisString set Error");
+            _logger.ZLogError($"[SetTokenRedisAsync] Uid:{player_uid}, Token:{token}, ErrorMessage:UserBasicAuth, RedisString set Error");
             result = ErrorCode.LoginFailAddRedis;
             return result;
         }

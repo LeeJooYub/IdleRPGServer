@@ -11,7 +11,7 @@ public class StageClearRequest
 {
     [Required]
     public int StageId { get; set; }
-    public int UserId { get; set; }
+    public Int64 AccountUid { get; set; }
 }
 
 public class StageClearResponse : ErrorCodeDTO
@@ -22,12 +22,12 @@ public class StageClearResponse : ErrorCodeDTO
 
 public class GuideMissionClearRequest
 {
-    public int MissionId { get; set; }
-    public int UserId { get; set; }
+    public int GuideMissionId { get; set; }
+    public Int64 AccountUid { get; set; }
 }
 
 public class GuideMissionClearResponse : ErrorCodeDTO
 {
-    public int MissionId { get; set; }
+    public int GuideMissionId { get; set; }
     public RewardData Reward { get; set; } // 보상 데이터
 }

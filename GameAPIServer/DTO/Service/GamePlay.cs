@@ -15,6 +15,7 @@ public class StageClearInput
 
 public class StageClearOutput : ErrorCodeDTO
 {
+    public int StageId { get; set; }
     public RewardData Reward { get; set; }
 }
 

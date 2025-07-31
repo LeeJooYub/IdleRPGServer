@@ -31,7 +31,7 @@ public class MainGamePlayController : ControllerBase
     }
 
 
-    [HttpPost("stageclear")]
+    [HttpPost("stage-clear")]
     public async Task<StageClearResponse> StageClear([FromBody] StageClearRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;

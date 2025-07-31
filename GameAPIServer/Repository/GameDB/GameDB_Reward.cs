@@ -22,7 +22,7 @@ namespace GameAPIServer.Repository
             if (reward.reward_type_cd == "01") // 화폐 리워드
             {
                 var affectedRows = await _queryFactory.Query("user_currency")
-                    .Where("account_uid", accountUid)
+                    .Where("player_uid", accountUid)
                     .Where("currency_id", reward.reward_id.Value)
                     .IncrementAsync("amount", reward.reward_qty.Value);
 
@@ -32,7 +32,7 @@ namespace GameAPIServer.Repository
             else if (reward.reward_type_cd == "02") // 아이템 리워드
             {
                 var affectedRows = await _queryFactory.Query("user_inventory")
-                    .Where("account_uid", accountUid)
+                    .Where("player_uid", accountUid)
                     .Where("item_id", reward.reward_id.Value)
                     .IncrementAsync("item_qty", reward.reward_qty.Value);
 
@@ -41,7 +41,7 @@ namespace GameAPIServer.Repository
                     var insertRows = await _queryFactory.Query("user_inventory")
                         .InsertAsync(new
                         {
-                            account_uid = accountUid,
+                            player_uid = accountUid,
                             item_id = reward.reward_id.Value,
                             item_qty = reward.reward_qty.Value,
                             acquire_dt = DateTime.UtcNow,

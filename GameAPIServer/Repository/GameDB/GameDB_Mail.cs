@@ -36,7 +36,7 @@ public partial class GameDb : IGameDb
     {
         // 쿼리 작성: 특정 계정의 메일을 가져오고, receive_dt 기준으로 정렬
         var query = _queryFactory.Query("mail")
-            .Where("account_uid", accountId)
+            .Where("player_uid", accountId)
             .Where("reward_receive_yn", "!=", "Y") // receive_yn이 'Y'가 아닌 상태
             .OrderByDesc("create_dt") // create_dt 기준으로 내림차순 정렬
             .Limit(limit);
@@ -78,7 +78,7 @@ public partial class GameDb : IGameDb
     {
         // 특정 accountUid에 대한 모든 메일 정보를 가져오기
         var mails = (await _queryFactory.Query("mail")
-            .Where("account_uid", accountUid)
+            .Where("player_uid", accountUid)
             .GetAsync<Mail>()).ToList();
 
         return mails;
@@ -101,7 +101,7 @@ public partial class GameDb : IGameDb
     public async Task<int> UpdateAllMailRewardStatusAsync(Int64 account_id , DateTime? now)
     {
         var affectedRows = await _queryFactory.Query("mail")
-            .Where("account_uid", account_id)
+            .Where("player_uid", account_id)
             .Where("expire_dt", ">=", now)
             .UpdateAsync(new { reward_receive_yn = 'Y', receive_dt = DateTime.UtcNow });
 

@@ -18,7 +18,7 @@ public partial class GameDb : IGameDb
     public async Task<List<UserInventoryItem>> GetUserInventoryItemListAsync(Int64 accountId)
     {
         var query = _queryFactory.Query("user_inventory")
-            .Where("account_uid", accountId);
+            .Where("player_uid", accountId);
         var userInventory = await query.GetAsync<UserInventoryItem>();
         var userInventoryList = userInventory.ToList();
 
@@ -28,7 +28,7 @@ public partial class GameDb : IGameDb
     public async Task<UserInventoryItem> GetUserInventoryItemAsync(Int64 accountId, int itemId)
     {
         var query = _queryFactory.Query("user_inventory")
-            .Where("account_uid", accountId)
+            .Where("player_uid", accountId)
             .Where("item_id", itemId)
             .FirstOrDefaultAsync<UserInventoryItem>();
         var userInventoryItem = await query;
@@ -41,7 +41,7 @@ public partial class GameDb : IGameDb
     public async Task<bool> UpdateUserInventoryItemAsync(Int64 accountId, int itemId, int deltaAmount)
     {
         var query = _queryFactory.Query("user_inventory")
-            .Where("account_uid", accountId)
+            .Where("player_uid", accountId)
             .Where("item_id", itemId);
 
         var result = await query.FirstOrDefaultAsync<UserInventoryItem>();
@@ -50,7 +50,7 @@ public partial class GameDb : IGameDb
             // 아이템이 존재하지 않는 경우, 새로 추가
             var newItem = new UserInventoryItem
             {
-                account_uid = accountId,
+                player_uid = accountId,
                 item_id = itemId,
                 item_qty = deltaAmount,
                 acquire_dt = DateTime.UtcNow,
