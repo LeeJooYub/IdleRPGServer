@@ -17,13 +17,13 @@ namespace GameAPIServer.Services
             _logger = logger;
         }
 
-        public async Task<StageClearOutput> StageClear(StageClearInput input)
+        public async Task<> StageClear(StageClearInput input)
         {
             // 비즈니스 로직 처리 및 레포지토리 호출
             return await _mainGamePlayRepository.StageClearAsync(input);
         }
 
-        public async Task<ErrorCode> ClearGuideMission(ClearGuideMissionInput input)
+        public async Task<> ClearGuideMission(ClearGuideMissionInput input)
         {
             // 비즈니스 로직 처리 및 레포지토리 호출
             return await _mainGamePlayRepository.ClearGuideMissionAsync(input);

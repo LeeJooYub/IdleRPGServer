@@ -6,6 +6,7 @@ using GameAPIServer.DTO.Controller;
 using GameAPIServer.DTO.Service;
 using GameAPIServer.Services.Interfaces;
 using GameAPIServer.Repository.Interfaces;
+using GameAPIServer.Models;
 
 using ZLogger;
 
@@ -33,15 +34,17 @@ public class MainGamePlayController : ControllerBase
     [HttpPost("stageclear")]
     public async Task<StageClearResponse> StageClear([FromBody] StageClearRequest request)
     {
+        var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
         var stageClearOutput = await _mainGamePlayService.StageClear(new StageClearInput
         {
-            AccountUid = request.AccountUid,
+            AccountUid = userInfo.AccountUid,
             StageId = request.StageId,
         });
 
         var response = new StageClearResponse
         {
             ErrorCode = stageClearOutput.ErrorCode,
+            Reward = stageClearOutput.Reward,
         };
 
         return response;
@@ -49,7 +52,7 @@ public class MainGamePlayController : ControllerBase
 
 
     [HttpPost("guide-mission-clear")]
-    public async Task<ErrorCode> GuideMission([FromBody] GuideMissionRequest request)
+    public async Task<GuideMissionClearResponse> GuideMission([FromBody] GuideMissionClearRequest request)
     {
         var errorCode = await _mainGamePlayService.ClearGuideMission(new ClearGuideMissionInput
         {
