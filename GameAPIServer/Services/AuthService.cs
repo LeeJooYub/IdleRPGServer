@@ -50,16 +50,16 @@ public class AuthService : IAuthService
         }
 
         // 유저 있는지 확인
-        var accountInfo = await _gameDb.FindUserByAccountId(input.AccountUid);
+        var user = await _gameDb.FindUserByAccountId(input.AccountUid);
         
         // 유저가 없으면 생성
-        if (accountInfo == null)
+        if (user == null)
         {
             try
             {
-                await _gameDb.CreateUser(new AccountInfo
+                await _gameDb.CreateUser(new User
                 {
-                    account_uid = input.AccountUid,
+                    player_uid = input.AccountUid,
                 });
             }
             catch (Exception ex)
@@ -68,11 +68,11 @@ public class AuthService : IAuthService
                 return loginOutput;
             }
         }
-        _logger.ZLogDebug($"[AuthService.Login] After CreateUser, AccountUid: {accountInfo.account_uid}");
+        _logger.ZLogDebug($"[AuthService.Login] After CreateUser, AccountUid: {user.player_uid}");
 
         // 토큰 Redis에 저장
         try{
-            errorCode = await _memoryDb.SetTokenAsync(input.Token, accountInfo.account_uid);
+            errorCode = await _memoryDb.SetTokenAsync(input.Token, user.player_uid);
         }
         catch (Exception ex)
         {

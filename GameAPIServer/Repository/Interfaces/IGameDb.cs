@@ -12,8 +12,8 @@ namespace GameAPIServer.Repository.Interfaces;
 public interface IGameDb
 {
     // User related methods
-    public Task<AccountInfo> FindUserByAccountId(Int64 AccountId);
-    public Task<int> CreateUser(AccountInfo userInfo);
+    public Task<User> FindUserByAccountId(Int64 AccountId);
+    public Task<int> CreateUser(User userInfo);
 
 
     // Mail related methods

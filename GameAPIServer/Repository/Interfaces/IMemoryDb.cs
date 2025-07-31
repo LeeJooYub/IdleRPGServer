@@ -8,7 +8,7 @@ namespace GameAPIServer.Repository.Interfaces;
 
 public interface IMemoryDb
 {
-    public Task<ErrorCode> SetTokenAsync(string token, Int64 account_uid);
+    public Task<ErrorCode> SetTokenAsync(string token, Int64 player_uid);
     public Task<ErrorCode> DelUserAuthAsync(string token);
 
     public Task<(bool, RdbAuthUserData)> GetUserAsync(string token);

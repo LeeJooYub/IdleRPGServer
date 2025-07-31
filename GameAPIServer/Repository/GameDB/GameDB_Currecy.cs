@@ -17,7 +17,7 @@ namespace GameAPIServer.Repository
         public async Task<List<UserCurrency>> GetUserCurrencyListAsync(Int64 accountId)
         {
             var query = _queryFactory.Query("user_currency")
-                .Where("account_uid", accountId);
+                .Where("player_uid", accountId);
             var userCurrency = await query.GetAsync<UserCurrency>();
             var userCurrencyList = userCurrency.ToList();
 
@@ -29,7 +29,7 @@ namespace GameAPIServer.Repository
         public async Task<UserCurrency> GetUserCurrencyAsync(Int64 accountId, int currencyId)
         {
             var query = _queryFactory.Query("user_currency")
-                .Where("account_uid", accountId)
+                .Where("player_uid", accountId)
                 .Where("currency_id", currencyId)
                 .FirstOrDefaultAsync<UserCurrency>();
             var userCurrency = await query;
@@ -39,7 +39,7 @@ namespace GameAPIServer.Repository
         public async Task<bool> UpdateUserCurrencyAsync(Int64 accountId, int currencyId, int deltaAmount)
         {
             var query = _queryFactory.Query("user_currency")
-                .Where("account_uid", accountId)
+                .Where("player_uid", accountId)
                 .Where("currency_cd", currencyId);
 
             var affectedRows = await query.IncrementAsync("amount", deltaAmount);

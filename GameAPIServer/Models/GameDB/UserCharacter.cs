@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace GameAPIServer.Models.GameDB;
 public class UserCharacter
 {
-    public Int64 account_uid { get; set; } // 사용자 계정 ID
+    public Int64 player_uid { get; set; } // 사용자 계정 ID
     public string character_name { get; set; } // 캐릭터 이름
     public int level { get; set; } = 1; // 캐릭터 레벨
     public DateTime create_dt { get; set; } = DateTime.UtcNow; // 캐릭터 생성 날짜

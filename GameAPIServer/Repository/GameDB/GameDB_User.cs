@@ -16,16 +16,16 @@ namespace GameAPIServer.Repository;
 public partial class GameDb : IGameDb
 {
 
-    public async Task<AccountInfo> FindUserByAccountId(Int64 AccountId)
+    public async Task<User> FindUserByAccountId(Int64 AccountId)
     {
         var user = await _queryFactory.Query("user")
-            .Where("account_uid", AccountId)
-            .FirstOrDefaultAsync<AccountInfo>(); // ★ 제네릭 타입 명시!
+            .Where("player_uid", AccountId)
+            .FirstOrDefaultAsync<User>(); // ★ 제네릭 타입 명시!
 
         return user;
     }
 
-    public async Task<int> CreateUser(AccountInfo userInfo)
+    public async Task<int> CreateUser(User userInfo)
     {
         var result = await _queryFactory.Query("user").InsertAsync(userInfo);
 
