@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.DTO.Service;
 
 namespace GameAPIServer.Services.Interfaces
 {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GameAPIServer.DTO.ServiceDTO;
-using GameAPIServer.DTO.ControllerDTO;
+using GameAPIServer.DTO.Service;
+using GameAPIServer.DTO.Controller;
 
 namespace GameAPIServer.Services.Interfaces
 {

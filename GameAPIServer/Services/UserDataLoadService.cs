@@ -5,8 +5,8 @@ using Microsoft.Extensions.Logging;
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
 
-using GameAPIServer.DTO.ControllerDTO;
-using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.DTO.Controller;
+using GameAPIServer.DTO.Service;
 using GameAPIServer.Models.GameDB;
 using GameAPIServer.Models.MasterDB;
 using System.Runtime.InteropServices;

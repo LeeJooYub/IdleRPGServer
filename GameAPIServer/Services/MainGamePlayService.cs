@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.DTO.Service;
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
 using Microsoft.Extensions.Logging;

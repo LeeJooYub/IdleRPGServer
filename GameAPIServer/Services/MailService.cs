@@ -14,8 +14,8 @@ using GameAPIServer.Models.GameDB;
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
 using GameAPIServer.DTO.ExternelAPI;
-using GameAPIServer.DTO.ControllerDTO;
-using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.DTO.Controller;
+using GameAPIServer.DTO.Service;
 using GameAPIServer.Models.MasterDB;
 using GameAPIServer.Models;
 

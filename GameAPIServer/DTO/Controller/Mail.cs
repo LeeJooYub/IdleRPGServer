@@ -8,7 +8,7 @@ using GameAPIServer.Models.GameDB;
 using GameAPIServer.Models.MasterDB;
 using GameAPIServer.Models;
 
-namespace GameAPIServer.DTO.ControllerDTO;
+namespace GameAPIServer.DTO.Controller;
 
 public class MailListRequest
 {

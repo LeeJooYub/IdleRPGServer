@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using GameAPIServer.Models.GameDB;
-using GameAPIServer.DTO.ServiceDTO;
-using GameAPIServer.DTO.ControllerDTO;
+using GameAPIServer.DTO.Controller;
 using GameAPIServer.Models;
 
 

@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-using GameAPIServer.DTO.ControllerDTO;
-using GameAPIServer.DTO.ServiceDTO;
+using GameAPIServer.DTO.Controller;
+using GameAPIServer.DTO.Service;
 using GameAPIServer.Models;
 using GameAPIServer.Services.Interfaces;
 using GameAPIServer.Repository.Interfaces;

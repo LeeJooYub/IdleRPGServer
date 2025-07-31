@@ -10,7 +10,7 @@ using GameAPIServer.Services.Interfaces;
 using GameAPIServer.Repository.Interfaces;
 
 using ZLogger;
-using GameAPIServer.DTO.Controller.DTO;
+using GameAPIServer.DTO.Controller;
 using GameAPIServer.Models;
 
 namespace GameAPIServer.Controllers.Attendance;
