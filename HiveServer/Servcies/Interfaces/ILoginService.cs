@@ -6,8 +6,8 @@ namespace HiveServer.Services.Interfaces
 {
     public interface ILoginService
     {
-        Task<LoginHiveResponse> Login(LoginHiveRequest request);
-        Task<(ErrorCode, Int64)> VerifyUser(LoginHiveRequest request);
+
+        Task<(ErrorCode, Int64)> Login(LoginHiveRequest request);
         //public VerifyTokenResponse Verify(VerifyTokenBody request);
     }
 }

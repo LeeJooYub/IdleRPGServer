@@ -74,11 +74,11 @@ public partial class GameDb : IGameDb
         return mail;
     }
 
-    public async Task<List<Mail>> GetAllMailsRewardAsync(Int64 accountUid)
+    public async Task<List<Mail>> GetAllMailsRewardAsync(Int64 PlayerUid)
     {
-        // 특정 accountUid에 대한 모든 메일 정보를 가져오기
+        // 특정 PlayerUid에 대한 모든 메일 정보를 가져오기
         var mails = (await _queryFactory.Query("mail")
-            .Where("player_uid", accountUid)
+            .Where("player_uid", PlayerUid)
             .GetAsync<Mail>()).ToList();
 
         return mails;

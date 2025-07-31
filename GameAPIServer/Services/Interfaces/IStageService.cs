@@ -3,9 +3,8 @@ using GameAPIServer.DTO.Service;
 
 namespace GameAPIServer.Services.Interfaces
 {
-    public interface IMainGamePlayService
+    public interface IStageService
     {
-        Task<> StageClear( );
-        Task<> ClearGuideMission( );
+        Task<ClearStageOutput> ClearStageAsync(ClearStageInput input);
     }
 }

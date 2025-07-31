@@ -13,6 +13,6 @@ namespace GameAPIServer.Services.Interfaces
         Task<CheckTodayOutput> CheckTodayAsync(CheckTodayInput input);
         // Task<int> UpdateAttendanceAsync(Attendance attendance);
         // Task<int> InsertAttendanceAsync(Attendance attendance);
-        // Task<List<Attendance>> GetAttendanceListAsync(long accountUid);
+        // Task<List<Attendance>> GetAttendanceListAsync(long PlayerUid);
     }
 }

@@ -39,7 +39,9 @@ public class LoginHiveController : ControllerBase
     {
         _logger.ZLogDebug($"[LoginHiveController] Called");
         var response = new LoginHiveResponse();
-        (response.Result, response.AccountUid) = await _loginService.VerifyUser(request);
+        (response.Result, response.AccountUid) = await _loginService.Login(request);
+        if (response.Result != ErrorCode.None)
+            return response;
         response.Token = Security.MakeHashingToken(_saltValue, response.AccountUid);
 
         return response;

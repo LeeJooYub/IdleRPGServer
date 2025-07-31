@@ -38,13 +38,13 @@ public class MailController : ControllerBase
     /// </summary>
     /// <param name="request">메일 목록 요청 데이터</param>
     /// <returns>메일 목록 응답 데이터</returns>
-    [HttpPost("list")]
+    [HttpPost("getlist")]
     public async Task<MailListResponse> GetMailListAsync([FromBody] MailListRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
         var input = new MailListInput
         {
-            AccountUid = userInfo.AccountUid,
+            PlayerUid = userInfo.PlayerUid,
             Cursor = request.Cursor, // Updated to ensure DateTime cursor is passed
             Limit = request.Limit
         };
@@ -68,14 +68,14 @@ public class MailController : ControllerBase
     /// </summary>
     /// <param name="request">메일 보상 수령 요청 데이터</param>
     /// <returns>메일 보상 수령 응답 데이터</returns>
-    [HttpPost("receive-reward")]
+    [HttpPost("getreward")]
     public async Task<ReceiveMailResponse> ReceiveRewardAsync([FromBody] ReceiveMailRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
         var input = new ReceiveMailInput
         {
             MailId = request.MailId,
-            AccountUid = userInfo.AccountUid
+            PlayerUid = userInfo.PlayerUid
         };
         var result = await _mailService.ReceiveMailRewardAsync(input);
 
@@ -132,7 +132,7 @@ public class MailController : ControllerBase
     //     var input = new DeleteMailInput
     //     {
     //         MailId = request.MailId,
-    //         AccountUid = userInfo.AccountUid
+    //         PlayerUid = userInfo.PlayerUid
     //     };
     //     var result = await _mailService.DeleteMailAsync(input);
 

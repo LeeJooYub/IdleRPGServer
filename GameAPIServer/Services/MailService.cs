@@ -47,7 +47,7 @@ namespace GameAPIServer.Services
     
             try
             {
-                (result.Mails, result.NextCursor) = await _gameDb.GetMailListAsync(input.AccountUid, input.Cursor, input.Limit);
+                (result.Mails, result.NextCursor) = await _gameDb.GetMailListAsync(input.PlayerUid, input.Cursor, input.Limit);
             }
             catch (Exception ex)
             {
@@ -97,11 +97,11 @@ namespace GameAPIServer.Services
             // 유저 상태 (돈,화폐) 업데이트
             try
             {
-                 result.ErrorCode = await _gameDb.UpdateUserFromRewardAsync(input.AccountUid, reward);
+                 result.ErrorCode = await _gameDb.UpdateUserFromRewardAsync(input.PlayerUid, reward);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating user state for AccountUid: {AccountUid}", input.AccountUid);
+                _logger.LogError(ex, "Error updating user state for PlayerUid: {PlayerUid}", input.PlayerUid);
                 result.ErrorCode = ErrorCode.DatabaseError;
                 return result;
             }
@@ -131,11 +131,11 @@ namespace GameAPIServer.Services
 
             try
             {
-                mails = await _gameDb.GetAllMailsRewardAsync(input.AccountUid);
+                mails = await _gameDb.GetAllMailsRewardAsync(input.PlayerUid);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error claiming all mail rewards for AccountUid: {AccountUid}", input.AccountUid);
+                _logger.LogError(ex, "Error claiming all mail rewards for PlayerUid: {PlayerUid}", input.PlayerUid);
                 result.ErrorCode = ErrorCode.DatabaseError;
                 return result;
             }
@@ -154,21 +154,21 @@ namespace GameAPIServer.Services
                     // 유저 상태 업데이트
                     if (reward.reward_type_cd == "01") // 화폐
                     {
-                        await _gameDb.UpdateUserCurrencyAsync(input.AccountUid, reward.reward_id.Value, reward.reward_qty.Value);
+                        await _gameDb.UpdateUserCurrencyAsync(input.PlayerUid, reward.reward_id.Value, reward.reward_qty.Value);
                     }
                     else if (reward.reward_type_cd == "02") // 아이템
                     {
-                        await _gameDb.UpdateUserInventoryItemAsync(input.AccountUid, reward.reward_id.Value, reward.reward_qty.Value);
+                        await _gameDb.UpdateUserInventoryItemAsync(input.PlayerUid, reward.reward_id.Value, reward.reward_qty.Value);
                     }
                     rewards.Add(reward);
                 }
 
-                await _gameDb.UpdateAllMailRewardStatusAsync(input.AccountUid, input.Now);
+                await _gameDb.UpdateAllMailRewardStatusAsync(input.PlayerUid, input.Now);
 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error claiming all mail rewards for AccountUid: {AccountUid}", input.AccountUid);
+                _logger.LogError(ex, "Error claiming all mail rewards for PlayerUid: {PlayerUid}", input.PlayerUid);
                 result.ErrorCode = ErrorCode.DatabaseError;
                 return result;
             }
