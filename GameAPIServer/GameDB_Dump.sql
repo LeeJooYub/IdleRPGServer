@@ -118,12 +118,12 @@ INSERT INTO user_currency (player_uid, currency_id, amount, last_update_dt) VALU
 (1, 3, 10, '2025-07-29 11:20:00');
 
 -- 예시 데이터: UserCharacterStatus
-INSERT INTO user_character_status (player_uid, character_name, level, character_hp, character_mp, character_atk, character_def, character_job_cd) VALUES
-(1, 'Arthur', 10, 150, 80, 25, 12, '01'),
-(2, 'Merlin', 8, 120, 150, 15, 8, '02'),
-(3, 'Lancelot', 12, 180, 60, 30, 15, '01'),
-(4, 'Guinevere', 7, 110, 90, 18, 10, '03'),
-(5, 'Morgana', 9, 130, 140, 22, 9, '02');
+INSERT INTO user_character_status (player_uid, character_name, level, character_hp, character_mp, character_atk, character_def) VALUES
+(1, 'Arthur', 10, 150, 80, 25, 12),
+(2, 'Merlin', 8, 120, 150, 15, 8),
+(3, 'Lancelot', 12, 180, 60, 30, 15),
+(4, 'Guinevere', 7, 110, 90, 18, 10),
+(5, 'Morgana', 9, 130, 140, 22, 9);
 
 -- 예시 데이터: UserInventory
 INSERT INTO user_inventory (player_uid, item_id, item_qty, acquire_dt, last_update_dt) VALUES
