@@ -7,13 +7,11 @@ namespace GameAPIServer.DTO.Controller;
 
 public class AbilityUpgradeRequest
 {
-    public int AbilityId { get; set; } // 능력치 업그레이드 ID
-    public int UpgradeLevel { get; set; } // 업그레이드 레벨
+    public int AbilityId { get; set; } // 업그레이드 대상 능력치 ID (1: ATK, 2: DEF, 3: CRIT 등)
+    public int Delta { get; set; } // 얼마나 업그레이드 할 것인지
 }
 public class AbilityUpgradeResponse : ErrorCodeDTO
 {
-    public string AbilityName { get; set; } // 능력치 이름
-    public int AfterUpgradeLevel { get; set; } // 업그레이드 이후 레벨
 }
 
 public class StatusUpgradeRequest
@@ -24,6 +22,4 @@ public class StatusUpgradeRequest
 
 public class StatusUpgradeResponse : ErrorCodeDTO
 {
-    public int UpgradeId { get; set; } // 업그레이드 ID
-    public int UpgradeLevel { get; set; } // 업그레이드 레벨
 }

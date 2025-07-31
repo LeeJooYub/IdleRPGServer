@@ -30,6 +30,7 @@ builder.Services.AddTransient<IMailService, MailService>();
 builder.Services.AddTransient<IAttendanceService, AttendanceService>();
 builder.Services.AddTransient<IStageService, StageService>();
 builder.Services.AddTransient<IMissionService, MissionService>();
+builder.Services.AddTransient<IGrowthService, GrowthService>();
 builder.Services.AddControllers();
 
 // 3. 로깅 설정

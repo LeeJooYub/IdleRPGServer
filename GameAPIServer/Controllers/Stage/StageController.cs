@@ -31,7 +31,7 @@ public class StageController : ControllerBase
     }
 
     // 해당 스테이지에 대한 보상을 받고, 다음 스테이지로 넘거가는 API
-    [HttpPost("clearstage")]
+    [HttpPost("clear-stage")]
     public async Task<StageClearResponse> StageClear([FromBody] StageClearRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;

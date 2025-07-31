@@ -40,7 +40,7 @@ namespace GameAPIServer.Repository
         {
             var query = _queryFactory.Query("user_currency")
                 .Where("player_uid", accountId)
-                .Where("currency_cd", currencyId);
+                .Where("currency_id", currencyId);
 
             var affectedRows = await query.IncrementAsync("amount", deltaAmount);
             var result = affectedRows > 0;

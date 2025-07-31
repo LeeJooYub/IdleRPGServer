@@ -66,6 +66,26 @@ CREATE TABLE stage (
     reward_qty INT NOT NULL                  -- 리워드 수량
 );
 
+DROP TABLE IF EXISTS ability;
+CREATE TABLE ability (
+    ability_id BIGINT PRIMARY KEY AUTO_INCREMENT,         -- 능력치 ID
+    name VARCHAR(50) NOT NULL,                            -- 능력치 이름
+    description VARCHAR(255) NOT NULL,                    -- 능력치 설명
+    required_character_level INT NOT NULL,                -- 업그레이드에 필요한 최소 레벨
+    max_level INT NOT NULL,                               -- 최대 레벨
+    init_cost INT NOT NULL,                               -- 초기 업그레이드 비용
+    cost_increment_delta INT NOT NULL,                    -- 업그레이드 비용 증가량
+    update_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP -- 수정일시
+);
+
+INSERT INTO ability (name, description, required_character_level, max_level, init_cost, cost_increment_delta)
+VALUES
+('ATK', '공격력 증가', 1, 10, 100, 20),
+('DEF', '방어력 증가', 1, 10, 100, 20),
+('HP', '체력 증가', 2, 15, 200, 30),
+('MP', '마나 증가', 2, 15, 200, 30),
+('CRIT', '치명타 확률 증가', 5, 5, 500, 100);
+
 INSERT INTO stage (stage_id, boss_stage_yn, reward_type_cd, reward_id, reward_qty) VALUES
 (101, 'N', '01', 1001, 100),   -- 1챕터 1스테이지
 (102, 'N', '01', 1002, 120),   -- 1챕터 2스테이지

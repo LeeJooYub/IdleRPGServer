@@ -28,6 +28,7 @@ public enum ErrorCode : UInt16
     // ====== 화폐/아이템(Currency/Item) 300~ ======
     NoSuchCurrency = 300,
     ItemInsertFailed = 301,
+    InsufficientCurrency = 302,
 
     // ====== 메일(Mail) 400~499 ======
     MailReceiveFailAlreadyReceived = 400,
@@ -62,10 +63,11 @@ public enum ErrorCode : UInt16
     GuideMissionNotFound = 700,
     GuideMissionNotYetReachableOrAlreadyCleared = 701,
 
-    // ====== 캐릭터(Character) 700~799 ======
-
-
-
+    // ====== 캐릭터(Character Status) 800~899 ======
+    GameDbGetUserCharacterStatusError = 800,
+    CharacterStatusUpdateFailed = 801,
+    MasterDbGetAbilityError = 802,
+    InvalidAbilityId = 803,
 
     // ====== 리워드(Reward) 1000~1199 ======
     InvalidRewardType = 1000,

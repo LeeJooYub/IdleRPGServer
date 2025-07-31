@@ -6,7 +6,7 @@ Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
 Content-Type: application/json
 
 {
-  "StageId": 103
+  "StageId": 101
 }
 
 ### 가이드 미션 클리어 테스트
@@ -17,5 +17,5 @@ Token: 6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b
 Content-Type: application/json
 
 {
-  "GuideMissionSeq": 3
+  "GuideMissionSeq": 1
 }

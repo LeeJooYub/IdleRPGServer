@@ -18,7 +18,11 @@ public interface IGameDb
 
     // CharacterStatus related methods
     public Task<ErrorCode> UpdateUserCharacterStatusAsync(Int64 PlayerUid, UserCharacterStatus status);
-
+    public Task<UserCharacterStatus> GetUserCharacterStatusAsync(Int64 PlayerUid);
+    public Task<ErrorCode> UpdateUserCharacterAtkAsync(Int64 PlayerUid, int delta);
+    public Task<ErrorCode> UpdateUserCharacterDefAsync(Int64 PlayerUid, int delta);
+    public Task<ErrorCode> UpdateUserCharacterHpAsync(Int64 PlayerUid, int delta);
+    public Task<ErrorCode> UpdateUserCharacterMpAsync(Int64 PlayerUid, int delta);
 
     // CharacterProgress related methods
     public Task<ErrorCode> UpdateUserCharacterStageProgressAsync(Int64 PlayerUid, int stageId);

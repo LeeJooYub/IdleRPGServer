@@ -10,6 +10,7 @@ namespace GameAPIServer.Services.Interfaces
 {
     public interface IGrowthService
     {
+        public Task<ErrorCode> UpgradeAbilityAsync(AbilityUpgradeInput input);
 
     }
 }

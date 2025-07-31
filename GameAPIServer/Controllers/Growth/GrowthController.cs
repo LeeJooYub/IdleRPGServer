@@ -36,16 +36,23 @@ public class GrowthController : ControllerBase
 
 
     [HttpPost("upgrade-ability")]
-    public async Task<CheckTodayResponse> UpgradeAbility([FromBody] CheckTodayRequest request)
+    public async Task<AbilityUpgradeResponse> UpgradeAbility([FromBody] AbilityUpgradeRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
-        var checkTodayInput = new CheckTodayInput
+        var abilityUpgradeInput = new AbilityUpgradeInput
         {
             PlayerUid = userInfo.PlayerUid,
-            AttendanceBookId = request.AttendanceBookId,
-            CheckNthDay = request.CheckNthDay
+            AbilityId = request.AbilityId,
+            Delta = request.Delta,
         };
+        var errorCode = await _growthService.UpgradeAbilityAsync(abilityUpgradeInput);
+        var response = new AbilityUpgradeResponse
+        {
+            ErrorCode = errorCode
+        };
+        return response;
     }
+
 
 
 

@@ -35,7 +35,7 @@ public class AttendanceController : ControllerBase
     }
 
 
-    [HttpPost("checkattendance")]
+    [HttpPost("check-attendance")]
     public async Task<CheckTodayResponse> CheckTodayAttendance([FromBody] CheckTodayRequest request)
     {    
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
