@@ -92,7 +92,7 @@ public class AuthService : IAuthService
             using var client = new HttpClient();
 
             var verifyTokenToHiveAddress = _hiveServerAPIAddress + "/verifytoken";
-            var hiveResponse = await client.PostAsJsonAsync(verifyTokenToHiveAddress, new { PlayerUid = PlayerUid, Token = token });
+            var hiveResponse = await client.PostAsJsonAsync(verifyTokenToHiveAddress, new { AccountUid = PlayerUid, Token = token });
             if (hiveResponse == null || !ValidateHiveResponse(hiveResponse))
             {
                 _logger.ZLogInformation($"[VerifyTokenToHive Service] ErrorCode:{ErrorCode.Hive_Fail_InvalidResponse}, PlayerID = {PlayerUid}, Token = {token}, StatusCode = {hiveResponse?.StatusCode}");

@@ -31,4 +31,14 @@ public partial class MasterDb : IMasterDb
         return rewardData;
     }
 
+    public async Task<Stage> GetStageAsync(int stageId)
+    {
+        var query = _queryFactory.Query("stage")
+            .Where("stage_id", stageId)
+            .FirstOrDefaultAsync<Stage>();
+        var stage = await query;
+
+        return stage;
+    }
+
 }

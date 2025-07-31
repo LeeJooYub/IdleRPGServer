@@ -22,10 +22,15 @@ public interface IMasterDb
     // 스테이지 관련 메소드
 
     public Task<RewardData> GetStageClearRewardAsync(int stageId);
+    public Task<Stage> GetStageAsync(int stageId);
+
+
 
 
     // 가이드 미션 관련 메소드
 
     public Task<RewardData> GetGuideMissionRewardAsync(int guideMissionSeq);
+
+    public Task<GuideMission> GetGuideMissionAsync(int guideMissionSeq);
 
 }

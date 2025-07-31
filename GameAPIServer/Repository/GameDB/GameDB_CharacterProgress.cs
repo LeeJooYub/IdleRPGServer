@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using GameAPIServer.Repository.Interfaces;
+using GameAPIServer.Models.GameDB;
 using SqlKata.Execution;
 
 namespace GameAPIServer.Repository;
@@ -40,6 +41,17 @@ public partial class GameDb : IGameDb
         }
 
         return ErrorCode.None;
+    }
+
+    public async Task<UserCharacterProgress> GetUserCharacterProgressAsync(Int64 PlayerUid)
+    {
+        var userCharacterProgress = await _queryFactory.Query("user_character_progress")
+            .Where("player_uid", PlayerUid)
+            .FirstAsync<UserCharacterProgress>();
+
+
+
+        return userCharacterProgress;
     }
 
 }

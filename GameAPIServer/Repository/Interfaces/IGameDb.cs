@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using GameAPIServer.Models.GameDB;
 using GameAPIServer.DTO.Controller;
 using GameAPIServer.Models;
+using GameAPIServer.Models.MasterDB;
 
 
 namespace GameAPIServer.Repository.Interfaces;
@@ -22,6 +23,7 @@ public interface IGameDb
     // CharacterProgress related methods
     public Task<ErrorCode> UpdateUserCharacterStageProgressAsync(Int64 PlayerUid, int stageId);
     public Task<ErrorCode> UpdateUserCharacterGuideMissionProgressAsync(Int64 PlayerUid, int guideMissionSeq);
+    public Task<UserCharacterProgress> GetUserCharacterProgressAsync(Int64 PlayerUid);
 
 
     // user data update methods

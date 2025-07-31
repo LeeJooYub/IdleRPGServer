@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using GameAPIServer.Models.GameDB;
 
+using SqlKata.Execution;
+
 using GameAPIServer.Repository.Interfaces;
 
 namespace GameAPIServer.Repository;

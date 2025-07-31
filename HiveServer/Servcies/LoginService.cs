@@ -22,17 +22,8 @@ public class LoginService : ILoginService
         _logger = logger;
         _hiveDb = hiveDb;
     }
-
-    public async Task<LoginHiveResponse> Login(LoginHiveRequest request)
-    {
-        LoginHiveResponse response = new();
-        (response.Result, response.AccountUid) = await VerifyUser(request);
-        response.Token = Security.MakeHashingToken(_saltValue, response.AccountUid);
-
-        return response;
-    }
-
-    public async Task<(ErrorCode, Int64)> VerifyUser(LoginHiveRequest request)
+    
+    public async Task<(ErrorCode, Int64)> Login(LoginHiveRequest request)
     {
         var userInfo = await _hiveDb.GetAccountByEmailAsync(request.Email);
         if (userInfo is null)

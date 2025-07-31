@@ -17,16 +17,16 @@ namespace GameAPIServer.Controllers.GamePlay;
 public class StageController : ControllerBase
 {
     private readonly ILogger<StageController> _logger;
-    private readonly IMainGamePlayService _mainGamePlayService;
+    private readonly IStageService _stageService;
     private readonly IMemoryDb _memoryDb;
 
     public StageController(
         ILogger<StageController> logger,
-        IMainGamePlayService mainGamePlayService,
+        IStageService stageService,
         IMemoryDb memoryDb)
     {
         _logger = logger;
-        _mainGamePlayService = mainGamePlayService;
+        _stageService = stageService;
         _memoryDb = memoryDb;
     }
 
@@ -35,7 +35,7 @@ public class StageController : ControllerBase
     public async Task<StageClearResponse> StageClear([FromBody] StageClearRequest request)
     {
         var userInfo = HttpContext.Items["userinfo"] as RdbAuthUserData;
-        var clearStageOutput = await _mainGamePlayService.ClearStageAsync(new ClearStageInput
+        var clearStageOutput = await _stageService.ClearStageAsync(new ClearStageInput
         {
             PlayerUid = userInfo.PlayerUid,
             StageId = request.StageId,
@@ -45,6 +45,8 @@ public class StageController : ControllerBase
         {
             ErrorCode = clearStageOutput.ErrorCode,
             Reward = clearStageOutput.Reward,
+            ClearedStage = clearStageOutput.ClearedStage,
+            NextStage = clearStageOutput.NextStage,
         };
 
         return response;

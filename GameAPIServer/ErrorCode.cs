@@ -46,7 +46,23 @@ public enum ErrorCode : UInt16
     GameDbTryToCheckInFutureError = 506,
     GameDbRefreshTimeNotReached = 507,
 
+    // ====== 스테이지(Stage) 600~699 ======
+    StageNotFound = 600,
+    StageClearRewardNotFound = 601,
+    StageClearUpdateFailed = 602,
+    StageClearRewardUpdateFailed = 603,
+    StageAlreadyCleared = 604,
+    StageNotCleared = 605,
+    StageAlreadyInProgress = 606,
+    StageNotInProgress = 607,
+    StageClearFailed = 608,
+    StageNotYetReachableOrCleared = 609,
 
+    // ====== 미션(Mission) 700~799 ======
+    GuideMissionNotFound = 700,
+    GuideMissionNotYetReachableOrAlreadyCleared = 701,
+
+    // ====== 캐릭터(Character) 700~799 ======
 
 
 

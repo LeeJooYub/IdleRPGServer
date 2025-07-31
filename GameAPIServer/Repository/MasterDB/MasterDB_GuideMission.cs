@@ -29,4 +29,14 @@ public partial class MasterDb : IMasterDb
 
         return rewardData;
     }
+
+    public async Task<GuideMission> GetGuideMissionAsync(int guideMissionSeq)
+    {
+        var query = _queryFactory.Query("guide_mission")
+            .Where("guide_mission_seq", guideMissionSeq)
+            .FirstOrDefaultAsync<GuideMission>();
+        var guideMission = await query;
+
+        return guideMission;
+    }
 }

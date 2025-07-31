@@ -23,7 +23,7 @@ CREATE TABLE day_in_attendance_book (
     reward_id INT NOT NULL, -- 보상 ID
     reward_type_cd CHAR(2) NOT NULL, -- 보상 타입 (예: "01": gold, "02": item)
     reward_qty INT NOT NULL, -- 보상 수량
-    PRIMARY KEY (attendance_book_id, attendance_day)E
+    PRIMARY KEY (attendance_book_id, attendance_day)
 );
 
 DROP TABLE IF EXISTS currency;

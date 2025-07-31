@@ -9,17 +9,6 @@ using GameAPIServer.Models.GameDB;
 
 namespace GameAPIServer.DTO.Service;
 
-public class ClearStageInput
-{
-    public Int64 PlayerUid { get; set; }
-    public int StageId { get; set; }
-}
-
-public class ClearStageOutput : ErrorCodeDTO
-{
-    public int StageId { get; set; }
-    public RewardData Reward { get; set; }
-}
 
 public class ClearGuideMissionInput
 {
@@ -30,5 +19,6 @@ public class ClearGuideMissionInput
 public class ClearGuideMissionOutput : ErrorCodeDTO
 {
     public int GuideMissionSeq { get; set; }
+    public GuideMission NextGuideMission { get; set; } // 다음 가이드 미션
     public RewardData Reward { get; set; }
 }
