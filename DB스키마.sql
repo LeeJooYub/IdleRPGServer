@@ -1,182 +1,174 @@
-USE game_db;
+use game_db;
 
--- 테이블 생성 SQL - user
-CREATE TABLE user
-(
-    `uid`                           BIGINT            NOT NULL    AUTO_INCREMENT COMMENT '유저아이디',
-    `nickname`						VARCHAR(30)		NOT NULL	COMMENT '닉네임',
-    `create_dt`                     DATETIME       NOT NULL    DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시', 
-    `recent_login_dt`               DATETIME       NOT NULL    DEFAULT CURRENT_TIMESTAMP COMMENT '최근 로그인 일시', 
-     PRIMARY KEY (uid),
-     UNIQUE KEY (nickname)
+DROP TABLE IF EXISTS user;
+-- User 테이블 (예시)
+CREATE TABLE user (
+    player_uid BIGINT PRIMARY KEY,
+    create_dt DATETIME NOT NULL,
+    last_login_dt DATETIME NOT NULL
+);
+
+DROP TABLE IF EXISTS user_attendance;
+-- Attendance 테이블
+CREATE TABLE user_attendance (
+    player_uid BIGINT NOT NULL,
+    attendance_book_id BIGINT NOT NULL,
+    last_attendance_dt DATETIME NOT NULL,
+    attendance_continue_cnt INT NOT NULL,
+    PRIMARY KEY (player_uid, attendance_book_id)
+);
+
+DROP TABLE IF EXISTS user_currency;
+-- UserCurrency 테이블
+CREATE TABLE user_currency (
+    player_uid BIGINT NOT NULL,
+    currency_id INT NOT NULL,
+    amount INT NOT NULL DEFAULT 0,
+    last_update_dt DATETIME NOT NULL,
+    PRIMARY KEY (player_uid, currency_id)
 );
 
 
--- -- -- 테이블 생성 SQL - user_money
--- CREATE TABLE user_money
--- (
---     `uid`         BIGINT    NOT NULL    COMMENT '유저아이디', 
---     `jewelry`     INT    NOT NULL    DEFAULT 0 COMMENT '보석', 
---     `gold_medal`  INT    NOT NULL    DEFAULT 0 COMMENT '금 메달', 
---     `cash`        INT    NOT NULL    DEFAULT 0 COMMENT '현금', 
---     `sunchip`     INT    NOT NULL    DEFAULT 0 COMMENT '썬칩', 
---      PRIMARY KEY (uid)
--- );
-
--- -- Foreign Key 설정 SQL - user_money(uid) -> user(uid)
--- ALTER TABLE user_money
---     ADD CONSTRAINT FK_user_money_uid_user_uid FOREIGN KEY (uid)
---         REFERENCES user (uid) 
---         ON DELETE RESTRICT 
---         ON UPDATE RESTRICT;
-
-
-
--- -- 테이블 생성 SQL - friend
--- CREATE TABLE friend
--- (
---     `uid`         BIGINT         NOT NULL    COMMENT '유저아이디', 
---     `friend_uid`  BIGINT         NOT NULL    COMMENT '친구 유저아이디', 
---     `friend_yn`   TINYINT     NOT NULL    DEFAULT 0  COMMENT '친구 여부', 
---     `create_dt`   DATETIME    NOT NULL    DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시', 
---      PRIMARY KEY (uid, friend_uid)
--- );
--- -- Foreign Key SQL - friend(uid) -> user(uid)
--- ALTER TABLE friend
---     ADD CONSTRAINT FK_friend_uid_user_uid FOREIGN KEY (uid)
---         REFERENCES user (uid) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- -- Foreign Key 설정 SQL - friend(friend_uid) -> user(uid)
--- ALTER TABLE friend
---     ADD CONSTRAINT FK_friend_friend_uid_user_uid FOREIGN KEY (friend_uid)
---         REFERENCES user (uid) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-
--- -- 테이블 생성 SQL - mailbox
--- CREATE TABLE mailbox
--- (
---     `mail_seq`    INT             NOT NULL    AUTO_INCREMENT COMMENT '우편 일련번호', 
---     `uid`         BIGINT             NOT NULL    COMMENT '유저아이디', 
---     `mail_title`  VARCHAR(100)    NOT NULL    COMMENT '우편 제목', 
---     `create_dt`   DATETIME        NOT NULL    COMMENT '생성 일시', 
---     `expire_dt`   DATETIME        NOT NULL    COMMENT '만료 일시', 
---     `receive_dt`  DATETIME        NOT NULL    DEFAULT CURRENT_TIMESTAMP COMMENT '수령 일시', 
---     `receive_yn`  TINYINT         NOT NULL    DEFAULT 0 COMMENT '수령 유무',
---      PRIMARY KEY (mail_seq)
--- );
--- -- Foreign Key 설정 SQL - mailbox(uid) -> user(uid)
--- ALTER TABLE mailbox
---     ADD CONSTRAINT FK_mailbox_uid_user_uid FOREIGN KEY (uid)
---         REFERENCES user (uid) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-
-
--- -- 테이블 생성 SQL - mailbox_reward
--- CREATE TABLE mailbox_reward
--- (
---     `mail_seq`     INT            NOT NULL    COMMENT '우편 일련번호', 
---     `reward_key`   INT            NOT NULL    COMMENT '보상 키', 
---     `reward_qty`   INT            NOT NULL    COMMENT '보상 수', 
---     `reward_type`  VARCHAR(20)    NOT NULL    COMMENT '보상 타입', 
---      PRIMARY KEY (mail_seq, reward_key)
--- );
-
--- -- Foreign Key 설정 SQL - mailbox_reward(mail_seq) -> mailbox(mail_seq)
--- ALTER TABLE mailbox_reward
---     ADD CONSTRAINT FK_mailbox_reward_mail_seq_mailbox_mail_seq FOREIGN KEY (mail_seq)
---         REFERENCES mailbox (mail_seq) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-
--- ## user_attendance 테이블
--- -- 유저의 출석 현황을 가지고 있는 테이블
--- -- 테이블 생성 SQL - user_attendance
--- CREATE TABLE user_attendance
--- (
---     `uid`                   BIGINT         NOT NULL    COMMENT '유저아이디', 
---     `attendance_cnt`        INT         NOT NULL    COMMENT '출석 횟수', 
---     `recent_attendance_dt`  DATETIME    NOT NULL    COMMENT '최근 출석 일시', 
---      PRIMARY KEY (uid)
--- );
--- -- Foreign Key 설정 SQL - user_attendance(uid) -> user(uid)
--- ALTER TABLE user_attendance
---     ADD CONSTRAINT FK_user_attendance_uid_user_uid FOREIGN KEY (uid)
---         REFERENCES user (uid) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
---     
-    
-USE master_db;
-# master DB
-## version 테이블
--- 앱버전과 데이터 버전을 가지고 있는 테이블
-
--- 테이블 생성 SQL - version 복합키로 기본키 구성
-CREATE TABLE version
-(
-    `app_version`            INT         NOT NULL    COMMENT '앱 버전', 
-    `master_data_version`    INT         NOT NULL    COMMENT '마스터 데이터 버전', 
-    PRIMARY KEY (app_version,master_data_version) 
+-- UserCharacterStatus 테이블
+DROP TABLE IF EXISTS user_character_status;
+CREATE TABLE user_character_status (
+    player_uid BIGINT NOT NULL, -- 사용자 계정 ID
+    character_name VARCHAR(50) NOT NULL, -- 캐릭터 이름
+    level INT NOT NULL DEFAULT 1, -- 캐릭터 레벨
+    character_hp INT NOT NULL DEFAULT 100, -- 캐릭터 체력
+    character_mp INT NOT NULL DEFAULT 50, -- 캐릭터 마나
+    character_atk INT NOT NULL DEFAULT 10, -- 캐릭터 공격력
+    character_def INT NOT NULL DEFAULT 5, -- 캐릭터 방어력
+    character_job_cd VARCHAR(2) NOT NULL DEFAULT '01', -- 캐릭터 직업 코드 (예: '01': Warrior, '02': Mage, '03': Archer)
+    PRIMARY KEY (player_uid, character_name)
 );
 
-      
+DROP TABLE IF EXISTS user_character_progress;
+-- UserCharacterProgress 테이블
+CREATE TABLE user_character_progress (
+    player_uid BIGINT NOT NULL, -- 사용자 계정 ID
+    current_stage_id INT NOT NULL DEFAULT 0, -- 현재 스테이지 ID
+    current_guide_mission_seq INT NOT NULL DEFAULT 0, -- 현재 가이드 미션 시퀀스
+    PRIMARY KEY (player_uid)
+);
 
--- ## master_gacha_reward 테이블
--- -- 가챠 보상의 확률 정보와 뽑는 수량을 가지고 있는 테이블
--- -- 테이블 생성 SQL - master_gacha_reward
--- CREATE TABLE master_gacha_reward
--- (
---     `gacha_reward_key`        INT            NOT NULL    COMMENT '가챠 보상 키', 
---     `gacha_reward_name`       VARCHAR(50)    NOT NULL    COMMENT '가챠 보상 이름', 
---     `char_prob_percent`       INT            NOT NULL    COMMENT '캐릭터 확률 퍼센트', 
---     `skin_prob_percent`       INT            NOT NULL    COMMENT '스킨 확률 퍼센트', 
---     `costume_prob_percent`    INT            NOT NULL    COMMENT '코스튬 확률 퍼센트', 
---     `food_prob_percent`       INT            NOT NULL    COMMENT '푸드 확률 퍼센트', 
---     `food_gear_prob_percent`  INT            NOT NULL    COMMENT '푸드 기어 확률 퍼센트', 
---     `gacha_count`             INT            NOT NULL    COMMENT '가챠 개수', 
---     `create_dt`               DATETIME       NOT NULL    COMMENT '생성 일시', 
---      PRIMARY KEY (gacha_reward_key)
--- );
+DROP TABLE IF EXISTS user_inventory;
+-- UserInventory 테이블
+CREATE TABLE user_inventory (
+    player_uid BIGINT NOT NULL,
+    item_id INT NOT NULL,
+    item_qty INT NOT NULL DEFAULT 0,
+    acquire_dt DATETIME NOT NULL,
+    last_update_dt DATETIME NOT NULL,
+    PRIMARY KEY (player_uid, item_id)
+);
 
-
--- ## master_gacha_reward_list 테이블
--- -- 가챠 보상에 포함되는 보상들의 정보를 가지고 있는 테이블
--- -- 테이블 생성 SQL - master_gacha_reward_list
--- CREATE TABLE master_gacha_reward_list
--- (
---     `gacha_reward_key`  INT            NOT NULL    COMMENT '가챠 보상 키', 
---     `reward_key`        INT            NOT NULL    COMMENT '보상 키', 
---     `reward_type`       VARCHAR(20)    NOT NULL    COMMENT '보상 종류',
---     `reward_qty`        INT             NOT NULL   DEFAULT 1 COMMENT '보상 수',
---     `create_dt`         DATETIME       NOT NULL    COMMENT '생성 일시', 
---      PRIMARY KEY (gacha_reward_key, reward_key)
--- );
--- -- Foreign Key 설정 SQL - master_gacha_reward_list(gacha_reward_key) -> master_gacha_reward(gacha_reward_key)
--- ALTER TABLE master_gacha_reward_list
---     ADD CONSTRAINT FK_master_gacha_reward_list_gacha_reward_key_master_gacha_reward FOREIGN KEY (gacha_reward_key)
---         REFERENCES master_gacha_reward (gacha_reward_key) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-
--- ## master_attendance_reward 테이블
--- -- 출석 보상 정보를 가지고 있는 테이블
--- -- 테이블 생성 SQL - master_attendance_reward
--- CREATE TABLE master_attendance_reward
--- (
---     `day_seq`     INT         NOT NULL    COMMENT '날짜 번호', 
---     `reward_key`  INT         NOT NULL    COMMENT '보상 키', 
---     `reward_qty`  INT         NOT NULL    DEFAULT 0 COMMENT '보상 수',
---     `reward_type` VARCHAR(20) NOT NULL    COMMENT '보상 종류',
---     `create_dt`   DATETIME    NOT NULL    COMMENT '생성 일시', 
---      PRIMARY KEY (day_seq)
--- );
+-- UserMail 테이블
+DROP TABLE IF EXISTS mail;
+CREATE TABLE mail (
+    mail_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    player_uid BIGINT NOT NULL,
+    mail_type_cd VARCHAR(2) NOT NULL DEFAULT 'N', -- e.g., 'N': normal, 'I': important
+    title VARCHAR(100) NOT NULL,
+    content TEXT,
+    create_dt DATETIME NOT NULL,
+    expire_dt DATETIME NULL,
+    receive_dt DATETIME NULL,
+    reward_receive_yn CHAR(1) NOT NULL DEFAULT 'N',      -- 'Y' or 'N'
+    reward_id INT NULL,
+    reward_type_cd VARCHAR(2) NULL,               -- e.g., '01': gold, '02': item
+    reward_qty INT NULL
+);
 
 
--- ## master_item_level 테이블
--- -- 아이템(캐릭터, 코스튬, 푸드) 레벨업을 위한 개수의 정보를 가지고 있는 테이블
--- -- 테이블 생성 SQL - master_item_level
--- CREATE TABLE master_item_level
--- (
---     `level`     INT            NOT NULL    COMMENT '레벨', 
---     `item_cnt`  INT  NOT NULL    DEFAULT 1 COMMENT '아이템 개수', 
---      PRIMARY KEY (level)
--- );
- 
-  
+use master_db;
+
+DROP TABLE IF EXISTS version;
+CREATE TABLE version (
+    app_version VARCHAR(50) NOT NULL PRIMARY KEY, -- 애플리케이션 버전
+    master_data_version VARCHAR(50) NOT NULL -- 마스터 데이터 버전
+);
+
+-- Attendance 테이블
+DROP TABLE IF EXISTS attendance_book;
+CREATE TABLE attendance_book (
+    attendance_book_id BIGINT NOT NULL PRIMARY KEY, -- 출석 ID
+    start_dt DATETIME NOT NULL, -- 출석 시작 날짜
+    end_dt DATETIME NOT NULL, -- 출석 종료 날짜
+    create_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP -- 생성일시
+);
+
+-- DayInAttendance 테이블
+DROP TABLE IF EXISTS day_in_attendance_book;
+CREATE TABLE day_in_attendance_book (
+    attendance_book_id BIGINT NOT NULL, -- 출석 ID
+    attendance_day INT NOT NULL, -- 출석 일수 (1부터 시작)
+    reward_id INT NOT NULL, -- 보상 ID
+    reward_type_cd CHAR(2) NOT NULL, -- 보상 타입 (예: "01": gold, "02": item)
+    reward_qty INT NOT NULL, -- 보상 수량
+    PRIMARY KEY (attendance_book_id, attendance_day)
+);
+
+DROP TABLE IF EXISTS currency;
+CREATE TABLE currency (
+    currency_id INT NOT NULL PRIMARY KEY, -- 화폐 ID
+    currency_name VARCHAR(50) NOT NULL, -- 화폐 이름
+    description VARCHAR(255) NOT NULL, -- 화폐 설명
+    premium_yn CHAR(1) NOT NULL DEFAULT 0, -- 프리미엄 여부 (0: 일반, 1: 프리미엄)
+    create_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP -- 생성일시
+);
+
+
+DROP TABLE IF EXISTS item;
+CREATE TABLE item (
+    item_id INT NOT NULL PRIMARY KEY, -- 아이템 ID
+    item_name VARCHAR(100) NOT NULL, -- 아이템 이름
+    item_description VARCHAR(255) NOT NULL, -- 아이템 설명
+    item_type_cd CHAR(2) NOT NULL, -- 아이템 타입 코드 (예: "WP": 무기, "AR": 방어구)
+    rarity_cd CHAR(1) NOT NULL, -- 아이템 희귀도 (C: 일반, U: 희귀, H: 영웅, L: 전설, M: 신화)
+    create_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP -- 생성일시
+);
+
+DROP TABLE IF EXISTS guide_mission;
+CREATE TABLE guide_mission (
+    guide_mission_seq INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    update_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 수정일시
+    reward_type_cd VARCHAR(2) NOT NULL,
+    reward_id INT NOT NULL,
+    reward_qty INT NOT NULL
+);
+
+DROP TABLE IF EXISTS stage;
+CREATE TABLE stage (
+    stage_id INT PRIMARY KEY,                -- 스테이지 ID (백의 자리: 챕터, 0~99: 스테이지)
+    boss_stage_yn CHAR(1) NOT NULL,          -- 보스 여부 (Y: 보스, N: 일반)
+    reward_type_cd VARCHAR(10) NOT NULL,     -- 리워드 타입 코드
+    reward_id INT NOT NULL,                  -- 리워드 ID
+    reward_qty INT NOT NULL                  -- 리워드 수량
+);
+
+DROP TABLE IF EXISTS ability;
+CREATE TABLE ability (
+    ability_id BIGINT PRIMARY KEY AUTO_INCREMENT,         -- 능력치 ID
+    name VARCHAR(50) NOT NULL,                            -- 능력치 이름
+    description VARCHAR(255) NOT NULL,                    -- 능력치 설명
+    required_character_level INT NOT NULL,                -- 업그레이드에 필요한 최소 레벨
+    max_level INT NOT NULL,                               -- 최대 레벨
+    init_cost INT NOT NULL,                               -- 초기 업그레이드 비용
+    cost_increment_delta INT NOT NULL,                    -- 업그레이드 비용 증가량
+    update_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP -- 수정일시
+);
+
+use hive;
+
+DROP TABLE IF EXISTS account_info;
+CREATE TABLE account_info (
+    account_uid BIGINT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL,
+    pwd VARCHAR(255) NOT NULL,
+    salt VARCHAR(255) NOT NULL,
+    create_dt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+

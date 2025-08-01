@@ -82,6 +82,17 @@ C#과 .NET을 활용하여 개발한 방치형 액션 RPG 서버 모작 프로�
 자유롭게 참고하실 수 있지만, PR은 받고있지 않습니다.  
   
 
+---
+
+# ERD 설계 
+
+- SQL 파일 : /DB스키마.sql 
+- 시각화 툴 (ERD Cloud) : https://www.erdcloud.com/d/MgxPfrAocdLZ5pog7
+![ERD](ERD.png)
+
+- ※ 각 프로젝트 폴더에 dump파일이 있으므로, 즉시 테스트 하시길 바라시면, 해당 dump파일 들을 실행시키면 됩니다. 
+
+
 
 ---     
 
@@ -172,8 +183,7 @@ Content-Type: application/json
 
 ## 시퀸스 다이어 그램
 
-![Sequence Diagram2](authenciation2.drawio.png)
-![Sequence Diagram3](authenciation3.drawio.png)
+![gameserverlogin](gameserverlogin.png)
 
 
 ## 게임 서버 로그인
@@ -266,8 +276,12 @@ Content-Type: application/json
 
 ---
 
+# 메인 API 
+
 
 # 하단의 기능들은 이제 Token도 헤더에 포함해야합니다.
+## 시퀸스 다이어 그램
+![middleware](middleware.png)
 
 
 ---
