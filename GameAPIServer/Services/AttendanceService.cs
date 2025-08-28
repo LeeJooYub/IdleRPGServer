@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using GameAPIServer.Models.GameDB;
 using GameAPIServer.Models.MasterDB;
 using GameAPIServer.Models;
 using GameAPIServer.DTO.Service;
-
-
 using GameAPIServer.Repository.Interfaces;
 using GameAPIServer.Services.Interfaces;
 
@@ -14,7 +11,6 @@ namespace GameAPIServer.Services;
 
 public class AttendanceService : IAttendanceService
 {
-
     private readonly IGameDb _gameDb;
     private readonly IMasterDb _masterDb;
 
@@ -24,114 +20,104 @@ public class AttendanceService : IAttendanceService
         _masterDb = masterDb;
     }
 
-    //TODO : 에러 코드들 정리
+    /// <summary>
+    /// WHY: 출석 체크 비즈니스 로직. 만료, 중복, 미래 체크 등 다양한 예외 상황을 처리함.
+    /// </summary>
     public async Task<CheckTodayOutput> CheckTodayAsync(CheckTodayInput input)
     {
-        // Call the repository method to get attendance data
-        var checkTodayOutput = new CheckTodayOutput
+        var output = new CheckTodayOutput
         {
-            ErrorCode = ErrorCode.None,
-            Reward = null
+            ErrorCode = ErrorCode.None
         };
-        var attendance = new Attendance();
-        var rewardData = new RewardData();
-        var attendanceBook = new AttendanceBook();
+
+        Attendance attendance;
+        AttendanceBook attendanceBook;
+        RewardData rewardData;
 
         // 내 특정 출석부 정보 가져오기 (출석부 ID, 현 출석 현황)
         try
         {
             attendance = await _gameDb.GetAttendanceBookAsync(input.PlayerUid, input.AttendanceBookId);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            checkTodayOutput.ErrorCode = ErrorCode.GameDbGetAttendanceBookError;
-            return checkTodayOutput;
+            output.ErrorCode = ErrorCode.GameDbGetAttendanceBookError;
+            return output;
         }
 
-        // 이미 만료된 출석부면 에러
+        // 출석부 만료 여부 확인
         try
         {
             attendanceBook = await _masterDb.GetAttendanceBookAsync(input.AttendanceBookId);
-            if (attendanceBook == null || attendanceBook.end_dt < input.Now)
+            if (attendanceBook is null || attendanceBook.end_dt < input.Now)
             {
-                checkTodayOutput.ErrorCode = ErrorCode.MasterDbGetAttendanceBookError;
-                return checkTodayOutput;
+                output.ErrorCode = ErrorCode.MasterDbGetAttendanceBookError;
+                return output;
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            checkTodayOutput.ErrorCode = ErrorCode.MasterDbGetAttendanceBookError;
-            return checkTodayOutput;
+            output.ErrorCode = ErrorCode.MasterDbGetAttendanceBookError;
+            return output;
         }
 
-
-        // 이미 출석했으면 에러. 
+        // 출석 체크 예외 처리 (중복, 미래 체크, refresh 시간 미도달)
         if (input.CheckNthDay <= attendance.attendance_continue_cnt)
         {
-            checkTodayOutput.ErrorCode = ErrorCode.GameDbAlreadyCheckInAttendanceError;
-            return checkTodayOutput;
+            output.ErrorCode = ErrorCode.GameDbAlreadyCheckInAttendanceError;
+            return output;
         }
-        // 순번을 밟지않고 미래의 출석을 미리 받으려는 경우 에러
-        else if (input.CheckNthDay > attendance.attendance_continue_cnt + 1)
+        if (input.CheckNthDay > attendance.attendance_continue_cnt + 1)
         {
-            // 출석부의 n번째 날이 현재 출석 현황보다 크면 에러
-            checkTodayOutput.ErrorCode = ErrorCode.GameDbTryToCheckInFutureError;
-            return checkTodayOutput;
+            output.ErrorCode = ErrorCode.GameDbTryToCheckInFutureError;
+            return output;
         }
-        // 출석하려는 날 == 지금까지 출석한 날 (카운트) + 1 일 경우.
-        else if (input.CheckNthDay == attendance.attendance_continue_cnt + 1)
+        if (input.CheckNthDay == attendance.attendance_continue_cnt + 1 && attendanceBook.refresh_time > input.Now.TimeOfDay)
         {
-            // 현재시간이 갱신 기준시 이후가 아니라면 에러 
-            if (attendanceBook.refresh_time > input.Now.TimeOfDay)
-            {
-                checkTodayOutput.ErrorCode = ErrorCode.GameDbRefreshTimeNotReached;
-                return checkTodayOutput;
-            }
+            output.ErrorCode = ErrorCode.GameDbRefreshTimeNotReached;
+            return output;
         }
 
-
-
-        // 마스터 데이터에서 해당 출석부, 특정 날짜에 대한 리워드 정보 가져오기 
+        // 마스터 데이터에서 해당 출석부, 특정 날짜에 대한 리워드 정보 가져오기
         try
         {
             rewardData = await _masterDb.GetRewardInfoInAttendanceBookAsync(input.AttendanceBookId, attendance.attendance_continue_cnt, input.Now);
-            checkTodayOutput.Reward = rewardData;
+            output.Reward = rewardData;
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            checkTodayOutput.ErrorCode = ErrorCode.MasterDbGetRewardInfoInAttendanceBookError;
-            return checkTodayOutput;
-
+            output.ErrorCode = ErrorCode.MasterDbGetRewardInfoInAttendanceBookError;
+            return output;
         }
 
-        // 출석 체크
+        // 출석 체크 DB 반영
         try
         {
             await _gameDb.CheckInAttendanceBookAsync(input.PlayerUid, input.AttendanceBookId);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            checkTodayOutput.ErrorCode = ErrorCode.GameDbCheckInAttendanceBookError;
-            return checkTodayOutput;
+            output.ErrorCode = ErrorCode.GameDbCheckInAttendanceBookError;
+            return output;
         }
 
+        // 리워드 지급 DB 반영
         try
         {
-            ErrorCode errorCode = await _gameDb.UpdateUserFromRewardAsync(input.PlayerUid, rewardData);
+            var errorCode = await _gameDb.UpdateUserFromRewardAsync(input.PlayerUid, rewardData);
             if (errorCode != ErrorCode.None)
             {
-                checkTodayOutput.ErrorCode = errorCode;
-                return checkTodayOutput;
+                output.ErrorCode = errorCode;
+                return output;
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            checkTodayOutput.ErrorCode = ErrorCode.GameDbUpdateUserFromRewardError;
-            return checkTodayOutput;
+            output.ErrorCode = ErrorCode.GameDbUpdateUserFromRewardError;
+            return output;
         }
 
-
-        return checkTodayOutput;
+        return output;
     }
 }
 

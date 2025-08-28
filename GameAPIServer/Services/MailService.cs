@@ -26,25 +26,21 @@ namespace GameAPIServer.Services
         private readonly ILogger<MailService> _logger;
         private readonly IGameDb _gameDb;
 
-        public MailService(
-            ILogger<MailService> logger,
-            IGameDb gameDb)
+        public MailService(ILogger<MailService> logger, IGameDb gameDb)
         {
             _logger = logger;
             _gameDb = gameDb;
         }
 
+        /// <summary>
+        /// WHY: 메일 리스트 조회. 커서 없을 시 현재 시간으로 기본값 설정
+        /// </summary>
         public async Task<MailListOutput> GetMailListAsync(MailListInput input)
         {
             var result = new MailListOutput();
-
-            // 커서가 없으면 현재 시간을 기본값으로 설정
             if (!input.Cursor.HasValue)
-            {
-                input.Cursor = DateTime.UtcNow; // 기본값으로 현재 시간을 설정
-            }
+                input.Cursor = DateTime.UtcNow;
 
-    
             try
             {
                 (result.Mails, result.NextCursor) = await _gameDb.GetMailListAsync(input.PlayerUid, input.Cursor, input.Limit);
@@ -57,34 +53,31 @@ namespace GameAPIServer.Services
             return result;
         }
 
-
-        //TODO : 트랜잭션으로 묶기?
+        /// <summary>
+        /// WHY: 메일 보상 수령. 이미 수령/존재하지 않는 메일 예외 처리, 보상 지급, 상태 업데이트
+        /// </summary>
         public async Task<ReceiveMailOutput> ReceiveMailRewardAsync(ReceiveMailInput input)
         {
             var result = new ReceiveMailOutput();
-            var reward = new RewardData();
 
-            // 메일 정보 조회
             var mail = await _gameDb.GetMailAsync(input.MailId);
-            if (mail == null)
+            if (mail is null)
             {
                 _logger.LogError("Mail not found for MailId: {MailId}", input.MailId);
                 result.ErrorCode = ErrorCode.MailNotFound;
                 return result;
             }
-            else if (mail.reward_receive_yn == 'Y') // 이미 수령한 메일
+            if (mail.reward_receive_yn == 'Y')
             {
                 _logger.LogWarning("Mail already claimed for MailId: {MailId}", input.MailId);
                 result.ErrorCode = ErrorCode.MailAlreadyClaimed;
                 return result;
             }
 
-
-            //리워드 받기
             try
             {
-                reward = await _gameDb.GetMailRewardAsync(input.MailId);
-                result.Reward = reward; // 보상 데이터 설정
+                var reward = await _gameDb.GetMailRewardAsync(input.MailId);
+                result.Reward = reward;
             }
             catch (Exception ex)
             {
@@ -93,11 +86,9 @@ namespace GameAPIServer.Services
                 return result;
             }
 
-
-            // 유저 상태 (돈,화폐) 업데이트
             try
             {
-                 result.ErrorCode = await _gameDb.UpdateUserFromRewardAsync(input.PlayerUid, reward);
+                result.ErrorCode = await _gameDb.UpdateUserFromRewardAsync(input.PlayerUid, result.Reward);
             }
             catch (Exception ex)
             {
@@ -106,10 +97,8 @@ namespace GameAPIServer.Services
                 return result;
             }
 
-            // 메일 수령 상태 업데이트
             try
             {
-
                 await _gameDb.UpdateMailRewardStatusAsync(input.MailId);
             }
             catch (Exception ex)
@@ -118,17 +107,17 @@ namespace GameAPIServer.Services
                 result.ErrorCode = ErrorCode.DatabaseError;
                 return result;
             }
-  
+
             return result;
         }
 
-
+        /// <summary>
+        /// WHY: 모든 메일 보상 일괄 수령. 각 보상별 유저 상태 업데이트, 메일 상태 일괄 업데이트
+        /// </summary>
         public async Task<ReceiveAllMailOutput> ReceiveAllMailRewardAsync(ReceiveAllMailInput input)
         {
             var result = new ReceiveAllMailOutput();
-            var mails = new List<Mail>();
-            var rewards = new List<RewardData>();
-
+            List<Mail> mails;
             try
             {
                 mails = await _gameDb.GetAllMailsRewardAsync(input.PlayerUid);
@@ -140,7 +129,6 @@ namespace GameAPIServer.Services
                 return result;
             }
 
-            // TODO : 하나하나 업데이트? -> 한번에 업데이트
             try
             {
                 foreach (var mail in mails)
@@ -151,20 +139,12 @@ namespace GameAPIServer.Services
                         reward_type_cd = mail.reward_type_cd,
                         reward_qty = mail.reward_qty
                     };
-                    // 유저 상태 업데이트
-                    if (reward.reward_type_cd == "01") // 화폐
-                    {
+                    if (reward.reward_type_cd == "01")
                         await _gameDb.UpdateUserCurrencyAsync(input.PlayerUid, reward.reward_id.Value, reward.reward_qty.Value);
-                    }
-                    else if (reward.reward_type_cd == "02") // 아이템
-                    {
+                    if (reward.reward_type_cd == "02")
                         await _gameDb.UpdateUserInventoryItemAsync(input.PlayerUid, reward.reward_id.Value, reward.reward_qty.Value);
-                    }
-                    rewards.Add(reward);
                 }
-
                 await _gameDb.UpdateAllMailRewardStatusAsync(input.PlayerUid, input.Now);
-
             }
             catch (Exception ex)
             {
@@ -176,29 +156,24 @@ namespace GameAPIServer.Services
             return result;
         }
 
-
-
+        /// <summary>
+        /// WHY: 메일 삭제. 삭제 결과에 따라 에러코드 반환
+        /// </summary>
         public async Task<DeleteMailOutput> DeleteMailAsync(DeleteMailInput input)
         {
-            var affectedRows = 0;
             var result = new DeleteMailOutput();
-
             try
             {
-                affectedRows = await _gameDb.DeleteMailAsync(input.MailId);
+                var affectedRows = await _gameDb.DeleteMailAsync(input.MailId);
                 result.ErrorCode = affectedRows == 1 ? ErrorCode.None : ErrorCode.DatabaseError;
             }
-
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting mail with MailId: {MailId}", input.MailId);
                 result.ErrorCode = ErrorCode.DatabaseError;
                 return result;
             }
-
             return result;
         }
-        
     }
-
 }
